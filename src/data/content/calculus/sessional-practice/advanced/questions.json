@@ -1,0 +1,272 @@
+[
+  {
+    "id": "fast-calc-adv-001",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "sessional-practice",
+    "subcategoryId": "advanced",
+    "title": "Slant Asymptotes & Curve Sketching",
+    "difficulty": "hard",
+    "latexExpression": "f(x) = \\frac{x^2 - 2x - 3}{x - 1} = x - 1 - \\frac{4}{x - 1}",
+    "statement": "Consider the rational function $f(x) = \\frac{x^2 - 2x - 3}{x - 1}$.\n(a) Find all vertical, horizontal, or slant (oblique) asymptotes.\n(b) Find the critical points and intervals of increase/decrease.\n(c) Sketch the overall graph behavior.",
+    "explanation": "Polynomial long division gives $f(x) = x - 1 - \\frac{4}{x - 1}$. Vertical asymptote: $x = 1$. Horizontal asymptote: none (degree of numerator is 1 greater than denominator). Slant asymptote: $y = x - 1$. Derivative: $f'(x) = 1 + \\frac{4}{(x-1)^2} > 0$ for all $x \\neq 1$. Since $f'(x) > 0$ everywhere in its domain, $f$ has no critical points and is strictly increasing on $(-\\infty, 1)$ and $(1, \\infty)$. Intercepts: $x$-intercepts at $(x-3)(x+1) = 0 \\implies x = 3, -1$. $y$-intercept at $f(0) = 3$.",
+    "tags": ["slant-asymptotes", "curve-sketching", "rational-functions", "division"],
+    "hints": [
+      "Perform polynomial long division on $\\frac{x^2 - 2x - 3}{x - 1}$.",
+      "The linear quotient gives the slant asymptote $y = x - 1$.",
+      "Notice that the derivative $1 + 4/(x-1)^2$ is strictly positive everywhere."
+    ]
+  },
+  {
+    "id": "fast-calc-adv-002",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "sessional-practice",
+    "subcategoryId": "advanced",
+    "title": "Cubic Rational Asymptotes & Local Extrema",
+    "difficulty": "hard",
+    "latexExpression": "f(x) = \\frac{x^3 + 1}{x^2 - 4} = x + \\frac{4x + 1}{x^2 - 4}",
+    "statement": "Find all vertical and slant asymptotes for the cubic rational function $f(x) = \\frac{x^3 + 1}{x^2 - 4}$, and identify any local extrema.",
+    "explanation": "Vertical asymptotes: $x^2 - 4 = 0 \\implies x = 2$ and $x = -2$. Long division: $x^3 + 1 = x(x^2 - 4) + (4x + 1) \\implies f(x) = x + \\frac{4x + 1}{x^2 - 4}$. Thus slant asymptote is $y = x$. First derivative: $f'(x) = \\frac{3x^2(x^2 - 4) - (x^3 + 1)(2x)}{(x^2 - 4)^2} = \\frac{3x^4 - 12x^2 - 2x^4 - 2x}{(x^2 - 4)^2} = \\frac{x^4 - 12x^2 - 2x}{(x^2 - 4)^2} = \\frac{x(x^3 - 12x - 2)}{(x^2 - 4)^2}$. Critical points where $f'(x) = 0$: $x = 0$ gives local maximum $f(0) = -1/4$. Roots of $x^3 - 12x - 2 = 0$ give local minimum near $x \\approx 3.52$ and local maximum near $x \\approx -3.35$.",
+    "tags": ["slant-asymptotes", "cubic-rational", "extrema", "quotient-rule"],
+    "hints": [
+      "Factor denominator $x^2 - 4$ for vertical asymptotes.",
+      "Divide numerator by denominator to find quotient $y = x$.",
+      "Use quotient rule to compute $f'(x)$ and set numerator to 0."
+    ]
+  },
+  {
+    "id": "fast-calc-adv-003",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "sessional-practice",
+    "subcategoryId": "advanced",
+    "title": "Box Folding Optimization (20 cm by 12 cm)",
+    "difficulty": "medium",
+    "latexExpression": "V(x) = x(20 - 2x)(12 - 2x) = 4x^3 - 64x^2 + 240x",
+    "statement": "A rectangular sheet of metal measuring $20\\text{ cm}$ by $12\\text{ cm}$ is to be fashioned into an open-topped box by cutting equal square patches of side length $x$ from each of the four corners and folding up the flaps. Find the optimal value of $x$ that maximizes the total volume of the box.",
+    "explanation": "Domain for $x$: $0 < x < 6$ (since $12 - 2x > 0$). Volume $V(x) = x(20 - 2x)(12 - 2x) = 4x(10 - x)(6 - x) = 4(x^3 - 16x^2 + 60x) = 4x^3 - 64x^2 + 240x$. $V'(x) = 12x^2 - 128x + 240 = 4(3x^2 - 32x + 60) = 0$. Using quadratic formula: $x = \\frac{32 \\pm \\sqrt{1024 - 720}}{6} = \\frac{32 \\pm \\sqrt{304}}{6} = \\frac{16 \\pm 2\\sqrt{19}}{3}$. Since $x < 6$, choose $x = \\frac{16 - 2\\sqrt{19}}{3} \\approx 2.43\\text{ cm}$. $V''(x) = 24x - 128 < 0$ at this value confirms maximum volume ($V \\approx 262.68\\text{ cm}^3$).",
+    "tags": ["optimization", "box-folding", "volume", "quadratic-formula"],
+    "hints": [
+      "Physical constraint requires $2x < 12 \\implies 0 < x < 6$.",
+      "Differentiate $V(x) = 4x^3 - 64x^2 + 240x$.",
+      "Solve $3x^2 - 32x + 60 = 0$ and pick the root in $(0, 6)$."
+    ]
+  },
+  {
+    "id": "fast-calc-adv-004",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "sessional-practice",
+    "subcategoryId": "advanced",
+    "title": "Capsule Storage Container Optimization",
+    "difficulty": "hard",
+    "latexExpression": "S = 4\\pi r^2 + 2\\pi r L = 400\\pi, \\quad V = \\frac{4}{3}\\pi r^3 + \\pi r^2 L",
+    "statement": "A cylindrical storage container with hemispherical ends (resembling a pill capsule) has a fixed total surface area of $S = 400\\pi\\text{ cm}^2$. Find the radius $r$ of the hemispherical ends and the length $L$ of the cylindrical midsection that maximize the total volume of the container.",
+    "explanation": "The two hemispherical ends form a complete sphere of radius $r$. Surface area $S = 4\\pi r^2 + 2\\pi r L = 400\\pi \\implies 2r^2 + r L = 200 \\implies L = \\frac{200 - 2r^2}{r}$. Volume $V = \\frac{4}{3}\\pi r^3 + \\pi r^2 L = \\frac{4}{3}\\pi r^3 + \\pi r^2 \\left(\\frac{200 - 2r^2}{r}\\right) = \\frac{4}{3}\\pi r^3 + 200\\pi r - 2\\pi r^3 = 200\\pi r - \\frac{2}{3}\\pi r^3$. Differentiating with respect to $r$: $V'(r) = 200\\pi - 2\\pi r^2 = 0 \\implies r^2 = 100 \\implies r = 10\\text{ cm}$. Substituting $r = 10$ into $L$: $L = \\frac{200 - 2(100)}{10} = 0\\text{ cm}$. This demonstrates that the maximum volume for a fixed surface area occurs when the capsule degenerates into a pure sphere of radius $r = 10\\text{ cm}$ ($L = 0$).",
+    "tags": ["optimization", "capsule", "geometry", "isoperimetric"],
+    "hints": [
+      "Sum the surface areas of the sphere ($4\\pi r^2$) and cylinder sides ($2\\pi r L$).",
+      "Solve for $L$ in terms of $r$ and substitute into the total volume.",
+      "Differentiate $V(r)$ and interpret the resulting $L = 0$ (sphere is optimal)."
+    ]
+  },
+  {
+    "id": "fast-calc-adv-005",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "sessional-practice",
+    "subcategoryId": "advanced",
+    "title": "Modified Friction Force Optimization",
+    "difficulty": "medium",
+    "latexExpression": "F(\\theta) = \\frac{\\mu W}{\\cos\\theta + \\mu\\sin\\theta}, \\quad W = 300\\text{ lb}, \\; \\mu = 0.5",
+    "statement": "The dragging force is given by $F = \\frac{\\mu W}{\\cos\\theta + \\mu\\sin\\theta}$. Suppose $W = 300\\text{ lb}$ and $\\mu = 0.5$.\n(a) Find $\\frac{dF}{d\\theta}$ when $\\theta = 60^\\circ$ (in pounds/degree).\n(b) Verify algebraically the optimal angle condition for minimum force.",
+    "explanation": "Derivative with respect to radians $\\theta$: $\\frac{dF}{d\\theta} = \\frac{\\mu W(\\sin\\theta - \\mu\\cos\\theta)}{(\\cos\\theta + \\mu\\sin\\theta)^2}$. For $\\theta = 60^\\circ = \\pi/3$: $\\sin 60^\\circ = \\frac{\\sqrt{3}}{2} \\approx 0.866$, $\\cos 60^\\circ = 0.5$. Denominator: $0.5 + 0.5(0.866) = 0.933$. Numerator: $0.5(300)(0.866 - 0.5(0.5)) = 150(0.616) = 92.4$. $\\frac{dF}{d\\theta} = \\frac{92.4}{0.933^2} \\approx 106.15\\text{ lb/rad}$. In lb/degree: $106.15 \\times \\frac{\\pi}{180} \\approx 1.85\\text{ lb/deg}$. (b) Minimum force requires denominator $g(\\theta) = \\cos\\theta + \\mu\\sin\\theta$ to be maximized: $g'(\\theta) = -\\sin\\theta + \\mu\\cos\\theta = 0 \\implies \\mu = \\tan\\theta$. Since $g''(\\theta) = -\\cos\\theta - \\mu\\sin\\theta < 0$, this is a true maximum of denominator, hence minimum of $F$.",
+    "tags": ["optimization", "mechanics", "derivatives", "friction-angle"],
+    "hints": [
+      "Differentiate $F$ using quotient/chain rule with respect to radians.",
+      "Convert to lb/deg via factor $\\pi/180$.",
+      "Maximizing the denominator minimizes the force."
+    ]
+  },
+  {
+    "id": "fast-calc-adv-006",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "sessional-practice",
+    "subcategoryId": "advanced",
+    "title": "Related Rates: Sand Pile Height Growth",
+    "difficulty": "medium",
+    "latexExpression": "V = \\frac{\\pi}{3}r^2 h = \\frac{\\pi}{12}h^3, \\quad h = 2r",
+    "statement": "Dry sand is pouring from a chute at a constant rate of $12\\text{ ft}^3/\\text{min}$, forming a conical pile on the ground whose height is always maintained at exactly twice its base radius ($h = 2r$). How fast is the height of the sand pile increasing when the pile is $8\\text{ ft}$ high?",
+    "explanation": "Since $h = 2r$, $r = h/2$. Volume $V = \\frac{\\pi}{3}\\left(\\frac{h}{2}\\right)^2 h = \\frac{\\pi}{12}h^3$. Differentiating with respect to time $t$: $\\frac{dV}{dt} = \\frac{3\\pi}{12} h^2 \\frac{dh}{dt} = \\frac{\\pi}{4} h^2 \\frac{dh}{dt}$. Given $\\frac{dV}{dt} = 12\\text{ ft}^3/\\text{min}$ and $h = 8\\text{ ft}$: $12 = \\frac{\\pi}{4}(8)^2 \\frac{dh}{dt} = 16\\pi \\frac{dh}{dt} \\implies \\frac{dh}{dt} = \\frac{12}{16\\pi} = \\frac{3}{4\\pi}\\text{ ft/min} \\approx 0.239\\text{ ft/min}$.",
+    "tags": ["related-rates", "sand-pile", "conical-geometry", "chain-rule"],
+    "hints": [
+      "Substitute $r = h/2$ into the cone volume formula.",
+      "Differentiate $V = \\frac{\\pi}{12}h^3$ with respect to time.",
+      "Solve for $dh/dt$ at $h = 8$."
+    ]
+  },
+  {
+    "id": "fast-calc-adv-007",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "sessional-practice",
+    "subcategoryId": "advanced",
+    "title": "Related Rates: Rotating Lighthouse Searchlight",
+    "difficulty": "hard",
+    "latexExpression": "x = 30\\tan\\theta \\implies \\frac{dx}{dt} = 30\\sec^2\\theta \\frac{d\\theta}{dt}",
+    "statement": "A lighthouse searchlight is located $30\\text{ meters}$ off a straight shoreline. If the light rotates at a constant rate of $2\\text{ rad/min}$, how fast is the light beam sweeping along the shoreline when it is $40\\text{ meters}$ away from the point closest to the lighthouse?",
+    "explanation": "Let $x$ be the distance along the shore from the perpendicular point, and $\\theta$ the beam angle: $\\tan\\theta = \\frac{x}{30} \\implies x = 30\\tan\\theta$. When $x = 40\\text{ m}$, the hypotenuse is $\\sqrt{30^2 + 40^2} = 50\\text{ m}$. Thus $\\sec\\theta = \\frac{50}{30} = \\frac{5}{3}$, so $\\sec^2\\theta = \\frac{25}{9}$. Differentiating with respect to $t$: $\\frac{dx}{dt} = 30\\sec^2\\theta \\frac{d\\theta}{dt} = 30 \\left(\\frac{25}{9}\\right)(2) = \\frac{500}{3} \\approx 166.67\\text{ m/min}$.",
+    "tags": ["related-rates", "trigonometry", "lighthouse", "searchlight"],
+    "hints": [
+      "Set up right triangle: adjacent $= 30$, opposite $= x$.",
+      "Compute $\\sec\\theta = 50/30 = 5/3$.",
+      "Use $\\frac{dx}{dt} = 30\\sec^2\\theta \\frac{d\\theta}{dt}$."
+    ]
+  },
+  {
+    "id": "fast-calc-adv-008",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "sessional-practice",
+    "subcategoryId": "advanced",
+    "title": "Linear Approximation of Root Sum",
+    "difficulty": "medium",
+    "latexExpression": "g(x) = \\sqrt{x^2 + 9}, \\quad L(x) = g(4) + g'(4)(x - 4)",
+    "statement": "Find the linear approximation of $g(x) = \\sqrt{x^2 + 9}$ at $x = 4$. Use it to approximate the value of $\\sqrt{(4.05)^2 + 9}$, and compare your approximation with the exact calculator value.",
+    "explanation": "$g(4) = \\sqrt{4^2 + 9} = \\sqrt{25} = 5$. Derivative: $g'(x) = \\frac{2x}{2\\sqrt{x^2 + 9}} = \\frac{x}{\\sqrt{x^2 + 9}}$. At $x = 4$: $g'(4) = \\frac{4}{5} = 0.8$. Linearization: $L(x) = 5 + 0.8(x - 4)$. For $x = 4.05$: $L(4.05) = 5 + 0.8(0.05) = 5 + 0.04 = 5.04$. Exact value: $\\sqrt{4.05^2 + 9} = \\sqrt{16.4025 + 9} = \\sqrt{25.4025} \\approx 5.03999$. The linear approximation is remarkably close with an error of less than $0.00001$.",
+    "tags": ["linear-approximation", "differentials", "estimation", "chain-rule"],
+    "hints": [
+      "Evaluate $g(4) = 5$.",
+      "Find $g'(4) = 4/5 = 0.8$.",
+      "Compute $L(4.05) = 5 + 0.8(0.05)$."
+    ]
+  },
+  {
+    "id": "fast-calc-adv-009",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "sessional-practice",
+    "subcategoryId": "advanced",
+    "title": "Differentials: Cube Surface Area & Volume Percentage Error",
+    "difficulty": "easy",
+    "latexExpression": "\\frac{dA}{A} = 2\\frac{dx}{x}, \\quad \\frac{dV}{V} = 3\\frac{dx}{x}",
+    "statement": "The edge length of a cube is measured to be $10\\text{ cm}$ with a maximum possible measurement error of $0.05\\text{ cm}$. Use differentials to estimate the maximum percentage error in calculating the total surface area and the volume of the cube.",
+    "explanation": "Relative edge error: $\\frac{dx}{x} = \\frac{0.05}{10} = 0.005 = 0.5\\%$. Surface area: $A = 6x^2 \\implies dA = 12x\\,dx \\implies \\frac{dA}{A} = \\frac{12x\\,dx}{6x^2} = 2\\frac{dx}{x} = 2(0.5\\%) = 1.0\\%$. Volume: $V = x^3 \\implies dV = 3x^2\\,dx \\implies \\frac{dV}{V} = \\frac{3x^2\\,dx}{x^3} = 3\\frac{dx}{x} = 3(0.5\\%) = 1.5\\%$. Maximum percentage error in surface area is $1\\%$ and in volume is $1.5\\%$.",
+    "tags": ["differentials", "percentage-error", "cube", "geometry"],
+    "hints": [
+      "Compute relative error $dx/x = 0.05 / 10 = 0.005$.",
+      "Surface area error scales as $2(dx/x)$.",
+      "Volume error scales as $3(dx/x)$."
+    ]
+  },
+  {
+    "id": "fast-calc-adv-010",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "sessional-practice",
+    "subcategoryId": "advanced",
+    "title": "Advanced Limits: Indeterminate Trig Difference Form",
+    "difficulty": "medium",
+    "latexExpression": "\\lim_{x \\to 0} \\left( \\frac{1}{\\sin x} - \\frac{1}{x} \\right) = 0",
+    "statement": "Evaluate $\\lim_{x \\to 0} \\left( \\frac{1}{\\sin x} - \\frac{1}{x} \\right)$.",
+    "explanation": "Form $\\infty - \\infty$. Combine fractions: $\\lim_{x \\to 0} \\frac{x - \\sin x}{x\\sin x}$ ($0/0$ form). Apply L'Hôpital's Rule: $\\lim_{x \\to 0} \\frac{1 - \\cos x}{\\sin x + x\\cos x}$ ($0/0$ form). Apply L'Hôpital again: $\\lim_{x \\to 0} \\frac{\\sin x}{\\cos x + \\cos x - x\\sin x} = \\lim_{x \\to 0} \\frac{\\sin x}{2\\cos x - x\\sin x} = \\frac{0}{2(1) - 0} = 0$.",
+    "tags": ["limits", "lhopital", "trigonometry", "indeterminate-forms"],
+    "hints": [
+      "Combine into $\\frac{x - \\sin x}{x\\sin x}$.",
+      "Differentiate numerator and denominator (product rule in denominator).",
+      "Apply L'Hôpital's rule a second time."
+    ]
+  },
+  {
+    "id": "fast-calc-adv-011",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "sessional-practice",
+    "subcategoryId": "advanced",
+    "title": "Advanced Limits: Exponential Tangent Form",
+    "difficulty": "hard",
+    "latexExpression": "\\lim_{x \\to 0^+} (\\tan x)^x = 1",
+    "statement": "Evaluate $\\lim_{x \\to 0^+} (\\tan x)^x$.",
+    "explanation": "Form $0^0$. Let $y = (\\tan x)^x$, so $\\ln y = x\\ln(\\tan x) = \\frac{\\ln(\\tan x)}{1/x}$ ($-\\infty/\\infty$ form). Apply L'Hôpital's Rule: derivative of numerator is $\\frac{\\sec^2 x}{\\tan x} = \\frac{1}{\\sin x\\cos x}$; derivative of denominator is $-1/x^2$. Thus $\\lim_{x \\to 0^+} \\frac{-x^2}{\\sin x\\cos x} = -\\lim_{x \\to 0^+} \\left( \\frac{x}{\\sin x} \\right) \\left( \\frac{x}{\\cos x} \\right) = -(1)(0) = 0$. Since $\\lim_{x \\to 0^+} \\ln y = 0$, the limit is $e^0 = 1$.",
+    "tags": ["limits", "lhopital", "exponential-form", "trigonometry"],
+    "hints": [
+      "Rewrite as $y = (\\tan x)^x \\implies \\ln y = \\frac{\\ln(\\tan x)}{1/x}$.",
+      "Apply L'Hôpital's rule to the quotient.",
+      "Factor into standard limits $(x / \\sin x) \\cdot (x / \\cos x)$."
+    ]
+  },
+  {
+    "id": "fast-calc-adv-012",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "sessional-practice",
+    "subcategoryId": "advanced",
+    "title": "Algebraic Indeterminate Cubic Limit",
+    "difficulty": "medium",
+    "latexExpression": "\\lim_{x \\to 1} \\frac{x^3 - 3x + 2}{x^3 - x^2 - x + 1}",
+    "statement": "Evaluate $\\lim_{x \\to 1} \\frac{x^3 - 3x + 2}{x^3 - x^2 - x + 1}$.",
+    "explanation": "Both numerator and denominator evaluate to $0$ at $x = 1$ ($0/0$ form). Method 1 (L'Hôpital): Derivative of numerator is $3x^2 - 3$; derivative of denominator is $3x^2 - 2x - 1$. At $x = 1$, both are still $0$. Apply L'Hôpital again: numerator derivative is $6x$; denominator derivative is $6x - 2$. At $x = 1$: $\\frac{6(1)}{6(1) - 2} = \\frac{6}{4} = \\frac{3}{2}$. Method 2 (Factoring): Numerator factors as $(x - 1)^2(x + 2)$ and denominator as $(x - 1)^2(x + 1)$. Canceling $(x - 1)^2$ leaves $\\frac{x + 2}{x + 1} = \\frac{3}{2}$.",
+    "tags": ["limits", "lhopital", "factoring", "algebraic-limits"],
+    "hints": [
+      "Notice that $x = 1$ is a double root of both numerator and denominator.",
+      "Apply L'Hôpital's rule twice or factor out $(x - 1)^2$.",
+      "The result is $3/2$."
+    ]
+  },
+  {
+    "id": "fast-calc-adv-013",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "sessional-practice",
+    "subcategoryId": "advanced",
+    "title": "Complex Piecewise Continuity Across Entire Domain",
+    "difficulty": "hard",
+    "latexExpression": "f(x) = \\begin{cases} ax + b, & x < -1 \\\\ 3x^2, & -1 \\le x \\le 2 \\\\ ax - b + 6, & x > 2 \\end{cases}",
+    "statement": "Find the values of constants $a$ and $b$ that make the piecewise function $f(x)$ continuous across its entire domain:\n$$f(x) = \\begin{cases} ax + b, & x < -1 \\\\ 3x^2, & -1 \\le x \\le 2 \\\\ ax - b + 6, & x > 2 \\end{cases}$$",
+    "explanation": "At boundary $x = -1$: Left limit is $a(-1) + b = -a + b$. Right limit and value is $3(-1)^2 = 3$. Equation (1): $-a + b = 3$. At boundary $x = 2$: Left limit and value is $3(2)^2 = 12$. Right limit is $a(2) - b + 6 = 2a - b + 6$. Equation (2): $2a - b + 6 = 12 \\implies 2a - b = 6$. Adding (1) and (2): $(-a + b) + (2a - b) = 3 + 6 \\implies a = 9$. From (1): $-9 + b = 3 \\implies b = 12$. Check (2): $2(9) - 12 = 6$ (verified). Thus $a = 9, b = 12$.",
+    "tags": ["continuity", "piecewise-functions", "system-of-equations", "limits"],
+    "hints": [
+      "Set up continuity equations at $x = -1$ and $x = 2$.",
+      "Form the linear system: $-a + b = 3$ and $2a - b = 6$.",
+      "Solve for $a$ and $b$ simultaneously."
+    ]
+  },
+  {
+    "id": "fast-calc-adv-014",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "sessional-practice",
+    "subcategoryId": "advanced",
+    "title": "Discontinuity Analysis: Sinc Trigonometric Function",
+    "difficulty": "easy",
+    "latexExpression": "f(x) = \\begin{cases} \\frac{\\sin(3x)}{x}, & x \\neq 0 \\\\ 5, & x = 0 \\end{cases}",
+    "statement": "Analyze the continuity of the function $f(x) = \\begin{cases} \\frac{\\sin(3x)}{x}, & x \\neq 0 \\\\ 5, & x = 0 \\end{cases}$. Identify the type of discontinuity at $x = 0$ and state the continuous extension function if it is removable.",
+    "explanation": "Evaluate the limit: $\\lim_{x \\to 0} \\frac{\\sin(3x)}{x} = 3\\lim_{x \\to 0} \\frac{\\sin(3x)}{3x} = 3(1) = 3$. The function value is given as $f(0) = 5$. Since $\\lim_{x \\to 0} f(x) = 3 \\neq f(0) = 5$, $f(x)$ has a removable discontinuity at $x = 0$. The continuous extension function redefines the value at $0$ to match the limit: $F(x) = \\frac{\\sin(3x)}{x}$ for $x \\neq 0$, and $F(0) = 3$.",
+    "tags": ["continuity", "removable-discontinuity", "sinc", "continuous-extension"],
+    "hints": [
+      "Use the well-known limit $\\lim_{u \\to 0} \\frac{\\sin u}{u} = 1$.",
+      "Compare the limit value ($3$) with the given value $f(0) = 5$.",
+      "A removable discontinuity occurs when the limit exists but does not match the function value."
+    ]
+  },
+  {
+    "id": "fast-calc-adv-015",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "sessional-practice",
+    "subcategoryId": "advanced",
+    "title": "Removable Discontinuity Extension for Difference of Cubes",
+    "difficulty": "easy",
+    "latexExpression": "f(x) = \\frac{x^3 - 8}{x - 2}, \\quad x \\neq 2",
+    "statement": "Given the function $f(x) = \\frac{x^3 - 8}{x - 2}$ for $x \\neq 2$, find the value of $f(2)$ that removes the discontinuity at $x = 2$, and write the fully simplified continuous extension formula.",
+    "explanation": "Difference of cubes: $x^3 - 8 = (x - 2)(x^2 + 2x + 4)$. For $x \\neq 2$, $f(x) = \\frac{(x - 2)(x^2 + 2x + 4)}{x - 2} = x^2 + 2x + 4$. The limit as $x \\to 2$ is $\\lim_{x \\to 2} (x^2 + 2x + 4) = 2^2 + 2(2) + 4 = 12$. Setting $f(2) = 12$ removes the discontinuity. The continuous extension formula is $F(x) = x^2 + 2x + 4$ for all $x \\in \\mathbb{R}$.",
+    "tags": ["continuity", "removable-discontinuity", "difference-of-cubes", "algebraic-limits"],
+    "hints": [
+      "Factor the numerator as a difference of cubes: $a^3 - b^3 = (a - b)(a^2 + ab + b^2)$.",
+      "Cancel $(x - 2)$ and substitute $x = 2$.",
+      "The defining value is $f(2) = 12$."
+    ]
+  }
+]

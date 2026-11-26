@@ -1,0 +1,72 @@
+{
+  "id": "calculus",
+  "name": "Calculus & Analytical Geometry",
+  "shortName": "CALC",
+  "description": "FAST NUCES MT-1003 Calculus & Analytical Geometry curriculum covering limits, continuity, differentiation, optimization, related rates, and applications.",
+  "categories": [
+    {
+      "id": "sessional-practice",
+      "name": "Sessional Practice Sets",
+      "subcategories": [
+        {
+          "id": "set-1",
+          "name": "Practice Set 1 (Core 15)"
+        },
+        {
+          "id": "advanced",
+          "name": "Advanced Practice Set (15)"
+        }
+      ]
+    },
+    {
+      "id": "optimization",
+      "name": "Optimization",
+      "subcategories": [
+        {
+          "id": "25-practice",
+          "name": "25 Optimization Problems"
+        }
+      ]
+    },
+    {
+      "id": "related-rates",
+      "name": "Related Rates",
+      "subcategories": [
+        {
+          "id": "25-practice",
+          "name": "25 Related Rates Problems"
+        }
+      ]
+    },
+    {
+      "id": "limits-continuity",
+      "name": "Limits & Continuity",
+      "subcategories": [
+        {
+          "id": "25-practice",
+          "name": "25 Limits, L'Hôpital & Continuity"
+        }
+      ]
+    },
+    {
+      "id": "derivatives-apps",
+      "name": "Derivatives & Applications",
+      "subcategories": [
+        {
+          "id": "25-practice",
+          "name": "25 Derivatives & Applications"
+        }
+      ]
+    },
+    {
+      "id": "tricky-derivatives",
+      "name": "Tricky & Trap Questions",
+      "subcategories": [
+        {
+          "id": "25-practice",
+          "name": "25 Tricky & Trap Derivative Questions"
+        }
+      ]
+    }
+  ]
+}

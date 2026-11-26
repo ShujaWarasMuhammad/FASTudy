@@ -1,0 +1,51 @@
+[
+  {
+    "id": "calc-limits-001",
+    "type": "math_input",
+    "subjectId": "calculus",
+    "categoryId": "limits",
+    "subcategoryId": "basic-limits",
+    "title": "Direct Limit Substitution",
+    "difficulty": "easy",
+    "latexExpression": "\\lim_{x \\to 3} \\left( x^2 + 2x - 1 \\right)",
+    "expectedOutput": "14",
+    "statement": "Evaluate the limit as x approaches 3:",
+    "explanation": "Direct substitution yields: $3^2 + 2(3) - 1 = 9 + 6 - 1 = 14$.",
+    "tags": [
+      "limits",
+      "polynomial",
+      "integer-answer"
+    ],
+    "hints": [
+      "Substitute x = 3 directly into the polynomial expression"
+    ]
+  },
+  {
+    "id": "calc-limits-002",
+    "type": "math_input",
+    "subjectId": "calculus",
+    "categoryId": "limits",
+    "subcategoryId": "basic-limits",
+    "title": "Difference of Squares Limit",
+    "difficulty": "medium",
+    "latexExpression": "\\lim_{x \\to 2} \\frac{x^2 - 4}{x - 2}",
+    "expectedOutput": "4",
+    "statement": "Calculate the value of the algebraic limit:",
+    "explanation": "Factor numerator as $(x - 2)(x + 2)$. Cancel $(x - 2)$. Then evaluate $2 + 2 = 4$.",
+    "tags": [
+      "limits",
+      "factoring",
+      "integer-answer"
+    ],
+    "hints": [
+      "Factor the numerator: $x^2 - 4 = (x - 2)(x + 2)$",
+      "Cancel the common factor before substituting"
+    ],
+    "visualization": {
+      "type": "latex",
+      "title": "Algebraic Simplification & Limit Evaluation Steps",
+      "content": "\\begin{aligned} \\lim_{x \\to 2} \\frac{x^2 - 4}{x - 2} &= \\lim_{x \\to 2} \\frac{(x - 2)(x + 2)}{x - 2} \\\\[6pt] &= \\lim_{x \\to 2} (x + 2) \\\\[6pt] &= 2 + 2 = \\mathbf{4} \\end{aligned}",
+      "caption": "Visualizing difference of squares cancellation to remove the 0/0 removable discontinuity at x = 2."
+    }
+  }
+]

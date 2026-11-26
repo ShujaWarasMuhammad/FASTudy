@@ -1,0 +1,576 @@
+[
+  {
+    "id": "fast-calc-diffapp-001",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "derivatives-apps",
+    "subcategoryId": "25-practice",
+    "title": "Implicit Differentiation (Folium of Descartes)",
+    "difficulty": "medium",
+    "latexExpression": "x^3 + y^3 = 6xy \\implies \\frac{dy}{dx} = \\frac{2y - x^2}{y^2 - 2x}",
+    "statement": "Find $\\frac{dy}{dx}$ for the implicit curve $x^3 + y^3 = 6xy$.",
+    "explanation": "Differentiate both sides with respect to $x$: $3x^2 + 3y^2 \\frac{dy}{dx} = 6\\left(1 \\cdot y + x \\frac{dy}{dx}\\right) = 6y + 6x \\frac{dy}{dx}$. Divide by 3: $x^2 + y^2 \\frac{dy}{dx} = 2y + 2x \\frac{dy}{dx}$. Group $\\frac{dy}{dx}$ terms: $(y^2 - 2x)\\frac{dy}{dx} = 2y - x^2 \\implies \\frac{dy}{dx} = \\frac{2y - x^2}{y^2 - 2x}$.",
+    "tags": [
+      "implicit-differentiation",
+      "derivatives",
+      "product-rule",
+      "curves"
+    ],
+    "hints": [
+      "Differentiate carefully using power, product, quotient, or chain rule.",
+      "For applied problems, connect derivatives to velocity, slope, or rate of change.",
+      "Evaluate at the specified points or values."
+    ]
+  },
+  {
+    "id": "fast-calc-diffapp-002",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "derivatives-apps",
+    "subcategoryId": "25-practice",
+    "title": "Higher-Order Derivative f^(4)(x)",
+    "difficulty": "easy",
+    "latexExpression": "f(x) = x^4 - 5x^3 + 2x^2 - x + 7 \\implies f^{(4)}(x) = 24",
+    "statement": "Find the fourth derivative $f^{(4)}(x)$ of $f(x) = x^4 - 5x^3 + 2x^2 - x + 7$.",
+    "explanation": "$f'(x) = 4x^3 - 15x^2 + 4x - 1$. $f''(x) = 12x^2 - 30x + 4$. $f'''(x) = 24x - 30$. $f^{(4)}(x) = 24$. (In general, the $n$-th derivative of $a x^n$ is $a \\cdot n! = 1 \\cdot 4! = 24$).",
+    "tags": [
+      "higher-order-derivatives",
+      "power-rule",
+      "polynomials"
+    ],
+    "hints": [
+      "Differentiate carefully using power, product, quotient, or chain rule.",
+      "For applied problems, connect derivatives to velocity, slope, or rate of change.",
+      "Evaluate at the specified points or values."
+    ]
+  },
+  {
+    "id": "fast-calc-diffapp-003",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "derivatives-apps",
+    "subcategoryId": "25-practice",
+    "title": "Tangent Line Equation with Radical Quotient",
+    "difficulty": "medium",
+    "latexExpression": "y = \\frac{\\sqrt{x}}{1 + x^2} \\text{ at } \\left(1, \\frac{1}{2}\\right) \\implies y - \\frac{1}{2} = -\\frac{1}{4}(x - 1)",
+    "statement": "Find the equation of the tangent line to the curve $y = \\frac{\\sqrt{x}}{1 + x^2}$ at the point $\\left(1, \\frac{1}{2}\\right)$.",
+    "explanation": "Differentiate using quotient rule: $y' = \\frac{\\frac{1}{2\\sqrt{x}}(1 + x^2) - \\sqrt{x}(2x)}{(1 + x^2)^2}$. Evaluating at $x = 1$: numerator is $\\frac{1}{2}(2) - 1(2) = 1 - 2 = -1$; denominator is $(1 + 1)^2 = 4$. Thus slope $m = -1/4$. Tangent line equation: $y - \\frac{1}{2} = -\\frac{1}{4}(x - 1) \\implies y = -\\frac{1}{4}x + \\frac{1}{4} + \\frac{1}{2} \\implies y = -\\frac{1}{4}x + \\frac{3}{4}$, or $x + 4y = 3$.",
+    "tags": [
+      "tangent-line",
+      "quotient-rule",
+      "derivatives",
+      "radicals"
+    ],
+    "hints": [
+      "Differentiate carefully using power, product, quotient, or chain rule.",
+      "For applied problems, connect derivatives to velocity, slope, or rate of change.",
+      "Evaluate at the specified points or values."
+    ]
+  },
+  {
+    "id": "fast-calc-diffapp-004",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "derivatives-apps",
+    "subcategoryId": "25-practice",
+    "title": "Friction Force Derivative Rate (W = 150 lb, mu = 0.3)",
+    "difficulty": "medium",
+    "latexExpression": "F(\\theta) = \\frac{\\mu W}{\\cos\\theta + \\mu\\sin\\theta}, \\quad \\theta = 30^\\circ",
+    "statement": "The force $F$ (in pounds) needed to drag a crate is given by $F = \\frac{\\mu W}{\\cos\\theta + \\mu\\sin\\theta}$. Given $W = 150\\text{ lb}$ and $\\mu = 0.3$, find $\\frac{dF}{d\\theta}$ when $\\theta = 30^\\circ$.",
+    "explanation": "Derivative with respect to radians: $\\frac{dF}{d\\theta} = \\frac{\\mu W(\\sin\\theta - \\mu\\cos\\theta)}{(\\cos\\theta + \\mu\\sin\\theta)^2}$. At $\\theta = 30^\\circ = \\pi/6$: $\\sin 30^\\circ = 0.5$, $\\cos 30^\\circ = \\frac{\\sqrt{3}}{2} \\approx 0.866$. Numerator: $0.3(150)[0.5 - 0.3(0.866)] = 45(0.5 - 0.2598) = 45(0.2402) = 10.809$. Denominator: $[0.866 + 0.3(0.5)]^2 = [0.866 + 0.15]^2 = (1.016)^2 \\approx 1.032$. Thus $\\frac{dF}{d\\theta} = \\frac{10.809}{1.032} \\approx 10.47\\text{ lb/rad}$. In pounds/degree: $10.47 \\times \\frac{\\pi}{180} \\approx 0.183\\text{ lb/deg}$.",
+    "tags": [
+      "applied-derivatives",
+      "mechanics",
+      "trigonometry",
+      "friction"
+    ],
+    "hints": [
+      "Differentiate carefully using power, product, quotient, or chain rule.",
+      "For applied problems, connect derivatives to velocity, slope, or rate of change.",
+      "Evaluate at the specified points or values."
+    ]
+  },
+  {
+    "id": "fast-calc-diffapp-005",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "derivatives-apps",
+    "subcategoryId": "25-practice",
+    "title": "Linear Approximation of Fourth Root",
+    "difficulty": "medium",
+    "latexExpression": "g(z) = \\sqrt[4]{z} \\text{ at } z = 2 \\implies L(z) = \\sqrt[4]{2} + \\frac{1}{4(2)^{3/4}}(z - 2)",
+    "statement": "Find the linear approximation of $g(z) = \\sqrt[4]{z}$ at $z = 2$, and use it to approximate $\\sqrt[4]{3}$ and $\\sqrt[4]{10}$.",
+    "explanation": "$g(2) = 2^{1/4} \\approx 1.1892$. Derivative: $g'(z) = \\frac{1}{4}z^{-3/4} = \\frac{1}{4(2^{3/4})} \\approx \\frac{1}{4(1.6818)} \\approx 0.1486$. Linear approximation: $L(z) = 2^{1/4} + \\frac{2^{1/4}}{8}(z - 2)$. For $z = 3$: $L(3) = 1.1892 + 0.1486(1) \\approx 1.3378$ (exact $3^{1/4} \\approx 1.3161$). For $z = 10$: $L(10) = 1.1892 + 0.1486(8) \\approx 2.378$ (exact $10^{1/4} \\approx 1.778$, showing linear approximation breaks down far from the base point $z=2$).",
+    "tags": [
+      "linear-approximation",
+      "differentials",
+      "roots",
+      "error-analysis"
+    ],
+    "hints": [
+      "Differentiate carefully using power, product, quotient, or chain rule.",
+      "For applied problems, connect derivatives to velocity, slope, or rate of change.",
+      "Evaluate at the specified points or values."
+    ]
+  },
+  {
+    "id": "fast-calc-diffapp-006",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "derivatives-apps",
+    "subcategoryId": "25-practice",
+    "title": "Linear Approximation Square Root Estimation",
+    "difficulty": "easy",
+    "latexExpression": "f(x) = \\sqrt{x} \\text{ at } a = 100 \\implies L(x) = 10 + \\frac{1}{20}(x - 100)",
+    "statement": "Find the linear approximation of $f(x) = \\sqrt{x}$ at $x = 100$, and use it to estimate $\\sqrt{103}$.",
+    "explanation": "$f(100) = 10$. $f'(x) = \\frac{1}{2\\sqrt{x}} \\implies f'(100) = \\frac{1}{20} = 0.05$. Tangent line: $L(x) = 10 + 0.05(x - 100)$. For $x = 103$: $L(103) = 10 + 0.05(3) = 10 + 0.15 = 10.15$. Exact calculator value: $\\sqrt{103} \\approx 10.14889$. The approximation error is less than $0.0011$.",
+    "tags": [
+      "linear-approximation",
+      "square-root",
+      "estimation",
+      "tangent-line"
+    ],
+    "hints": [
+      "Differentiate carefully using power, product, quotient, or chain rule.",
+      "For applied problems, connect derivatives to velocity, slope, or rate of change.",
+      "Evaluate at the specified points or values."
+    ]
+  },
+  {
+    "id": "fast-calc-diffapp-007",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "derivatives-apps",
+    "subcategoryId": "25-practice",
+    "title": "Differentials & Percentage Error of Cube Volume",
+    "difficulty": "easy",
+    "latexExpression": "V = x^3 \\implies \\frac{dV}{V} = 3\\frac{dx}{x}",
+    "statement": "The side length of a cube is measured as $x = 5\\text{ cm}$ with a maximum error of $0.02\\text{ cm}$. Use differentials to estimate the maximum percentage error in calculating its volume.",
+    "explanation": "Relative measurement error: $\\frac{dx}{x} = \\frac{0.02}{5} = 0.004 = 0.4\\%$. Volume differential: $dV = 3x^2 dx$. Relative volume error: $\\frac{dV}{V} = \\frac{3x^2 dx}{x^3} = 3\\frac{dx}{x} = 3(0.004) = 0.012 = 1.2\\%$. The maximum estimated percentage error in the volume calculation is $1.2\\%$.",
+    "tags": [
+      "differentials",
+      "percentage-error",
+      "cube",
+      "volume"
+    ],
+    "hints": [
+      "Differentiate carefully using power, product, quotient, or chain rule.",
+      "For applied problems, connect derivatives to velocity, slope, or rate of change.",
+      "Evaluate at the specified points or values."
+    ]
+  },
+  {
+    "id": "fast-calc-diffapp-008",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "derivatives-apps",
+    "subcategoryId": "25-practice",
+    "title": "Mean Value Theorem Verification for Cubic",
+    "difficulty": "medium",
+    "latexExpression": "f'(c) = \\frac{f(2) - f(0)}{2 - 0} \\implies 3c^2 - 1 = 3",
+    "statement": "Verify the Mean Value Theorem for $f(x) = x^3 - x$ on the interval [0, 2], and find all values of $c$ in (0, 2) that satisfy the conclusion.",
+    "explanation": "$f(x)$ is continuous on $[0, 2]$ and differentiable on $(0, 2)$ as a polynomial. $f(0) = 0$, $f(2) = 2^3 - 2 = 6$. Average rate of change: $\\frac{f(2) - f(0)}{2 - 0} = \\frac{6 - 0}{2} = 3$. Derivative: $f'(x) = 3x^2 - 1$. Setting $f'(c) = 3$: $3c^2 - 1 = 3 \\implies 3c^2 = 4 \\implies c^2 = 4/3 \\implies c = \\frac{2}{\\sqrt{3}} = \\frac{2\\sqrt{3}}{3} \\approx 1.155$. Since $1.155 \\in (0, 2)$, the MVT is fully verified with $c = \\frac{2\\sqrt{3}}{3}$.",
+    "tags": [
+      "mean-value-theorem",
+      "theorems",
+      "cubic",
+      "derivatives"
+    ],
+    "hints": [
+      "Differentiate carefully using power, product, quotient, or chain rule.",
+      "For applied problems, connect derivatives to velocity, slope, or rate of change.",
+      "Evaluate at the specified points or values."
+    ]
+  },
+  {
+    "id": "fast-calc-diffapp-009",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "derivatives-apps",
+    "subcategoryId": "25-practice",
+    "title": "Rolle's Theorem Verification for Parabola",
+    "difficulty": "easy",
+    "latexExpression": "f(1) = f(3) = 0 \\implies f'(c) = 2c - 4 = 0 \\implies c = 2",
+    "statement": "Verify Rolle's Theorem for $f(x) = x^2 - 4x + 3$ on the interval [1, 3], and find the exact value of $c$.",
+    "explanation": "1. $f(x)$ is continuous on $[1, 3]$. 2. $f(x)$ is differentiable on $(1, 3)$. 3. $f(1) = 1 - 4 + 3 = 0$ and $f(3) = 9 - 12 + 3 = 0$, so $f(1) = f(3)$. All three hypotheses of Rolle's Theorem are satisfied. Derivative: $f'(x) = 2x - 4$. Setting $f'(c) = 0 \\implies 2c - 4 = 0 \\implies c = 2$. Clearly $c = 2 \\in (1, 3)$.",
+    "tags": [
+      "rolles-theorem",
+      "theorems",
+      "parabola",
+      "critical-points"
+    ],
+    "hints": [
+      "Differentiate carefully using power, product, quotient, or chain rule.",
+      "For applied problems, connect derivatives to velocity, slope, or rate of change.",
+      "Evaluate at the specified points or values."
+    ]
+  },
+  {
+    "id": "fast-calc-diffapp-010",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "derivatives-apps",
+    "subcategoryId": "25-practice",
+    "title": "Critical Points of Fractional Power Function",
+    "difficulty": "medium",
+    "latexExpression": "f'(x) = \\frac{4(x - 1)}{3x^{2/3}} = 0",
+    "statement": "Find all critical numbers of the function $f(x) = x^{4/3} - 4x^{1/3}$.",
+    "explanation": "Domain: all real numbers $\\mathbb{R}$. Derivative: $f'(x) = \\frac{4}{3}x^{1/3} - \\frac{4}{3}x^{-2/3} = \\frac{4}{3}\\left(x^{1/3} - \\frac{1}{x^{2/3}}\\right) = \\frac{4(x - 1)}{3x^{2/3}}$. Critical numbers occur where $f'(x) = 0$ or $f'(x)$ does not exist: 1. $f'(x) = 0 \\implies x - 1 = 0 \\implies x = 1$. 2. $f'(x)$ is undefined where denominator is zero $\\implies x = 0$. Since both $0$ and $1$ belong to the domain of $f$, the critical numbers are $x = 0$ and $x = 1$.",
+    "tags": [
+      "critical-points",
+      "fractional-exponents",
+      "domain",
+      "derivatives"
+    ],
+    "hints": [
+      "Differentiate carefully using power, product, quotient, or chain rule.",
+      "For applied problems, connect derivatives to velocity, slope, or rate of change.",
+      "Evaluate at the specified points or values."
+    ]
+  },
+  {
+    "id": "fast-calc-diffapp-011",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "derivatives-apps",
+    "subcategoryId": "25-practice",
+    "title": "Increasing and Decreasing Intervals for Cubic",
+    "difficulty": "easy",
+    "latexExpression": "f'(x) = 3(x - 3)(x + 1)",
+    "statement": "Find the intervals on which $f(x) = x^3 - 3x^2 - 9x + 5$ is increasing and decreasing.",
+    "explanation": "Derivative: $f'(x) = 3x^2 - 6x - 9 = 3(x^2 - 2x - 3) = 3(x - 3)(x + 1)$. Critical numbers: $x = -1$ and $x = 3$. Testing test intervals: For $x < -1$ (e.g. $x=-2$): $f'(-2) = 3(-5)(-1) = 15 > 0$ (Increasing). For $-1 < x < 3$ (e.g. $x=0$): $f'(0) = -9 < 0$ (Decreasing). For $x > 3$ (e.g. $x=4$): $f'(4) = 3(1)(5) = 15 > 0$ (Increasing). Intervals of increase: $(-\\infty, -1) \\cup (3, \\infty)$. Interval of decrease: $(-1, 3)$.",
+    "tags": [
+      "increasing-decreasing",
+      "monotonicity",
+      "first-derivative",
+      "cubic"
+    ],
+    "hints": [
+      "Differentiate carefully using power, product, quotient, or chain rule.",
+      "For applied problems, connect derivatives to velocity, slope, or rate of change.",
+      "Evaluate at the specified points or values."
+    ]
+  },
+  {
+    "id": "fast-calc-diffapp-012",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "derivatives-apps",
+    "subcategoryId": "25-practice",
+    "title": "First Derivative Test for Relative Extrema",
+    "difficulty": "easy",
+    "latexExpression": "f'(x) = 3(x - 2)(x + 2)",
+    "statement": "Find all relative extrema of $f(x) = x^3 - 12x + 1$ using the First Derivative Test.",
+    "explanation": "Derivative: $f'(x) = 3x^2 - 12 = 3(x^2 - 4) = 3(x - 2)(x + 2)$. Critical numbers: $x = -2$ and $x = 2$. At $x = -2$: $f'$ changes from positive to negative, so $f(-2) = (-2)^3 - 12(-2) + 1 = -8 + 24 + 1 = 17$ is a relative maximum. At $x = 2$: $f'$ changes from negative to positive, so $f(2) = 2^3 - 12(2) + 1 = 8 - 24 + 1 = -15$ is a relative minimum.",
+    "tags": [
+      "first-derivative-test",
+      "extrema",
+      "relative-max",
+      "relative-min"
+    ],
+    "hints": [
+      "Differentiate carefully using power, product, quotient, or chain rule.",
+      "For applied problems, connect derivatives to velocity, slope, or rate of change.",
+      "Evaluate at the specified points or values."
+    ]
+  },
+  {
+    "id": "fast-calc-diffapp-013",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "derivatives-apps",
+    "subcategoryId": "25-practice",
+    "title": "Concavity Intervals & Inflection Points for Quartic",
+    "difficulty": "medium",
+    "latexExpression": "f''(x) = 12x(3x - 2)",
+    "statement": "Determine the intervals of concavity and inflection points for $f(x) = 3x^4 - 4x^3 + 1$.",
+    "explanation": "$f'(x) = 12x^3 - 12x^2$. Second derivative: $f''(x) = 36x^2 - 24x = 12x(3x - 2)$. Potential inflection points at $f''(x) = 0$: $x = 0$ and $x = 2/3$. Sign chart for $f''(x)$: On $(-\\infty, 0)$: $f'' > 0$ (Concave Up). On $(0, 2/3)$: $f'' < 0$ (Concave Down). On $(2/3, \\infty)$: $f'' > 0$ (Concave Up). Since concavity changes at both values, the inflection points are $(0, f(0)) = (0, 1)$ and $(2/3, f(2/3)) = (2/3, 11/27)$.",
+    "tags": [
+      "concavity",
+      "second-derivative",
+      "inflection-points",
+      "quartic"
+    ],
+    "hints": [
+      "Differentiate carefully using power, product, quotient, or chain rule.",
+      "For applied problems, connect derivatives to velocity, slope, or rate of change.",
+      "Evaluate at the specified points or values."
+    ]
+  },
+  {
+    "id": "fast-calc-diffapp-014",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "derivatives-apps",
+    "subcategoryId": "25-practice",
+    "title": "Second Derivative Test for Critical Points",
+    "difficulty": "easy",
+    "latexExpression": "f''(x) = 12x - 12",
+    "statement": "Use the Second Derivative Test to classify the critical points of $f(x) = 2x^3 - 6x^2 + 3$.",
+    "explanation": "First derivative: $f'(x) = 6x^2 - 12x = 6x(x - 2) = 0 \\implies x = 0$ and $x = 2$. Second derivative: $f''(x) = 12x - 12$. Testing $x = 0$: $f''(0) = -12 < 0 \\implies$ local maximum at $(0, 3)$. Testing $x = 2$: $f''(2) = 12(2) - 12 = 12 > 0 \\implies$ local minimum at $(2, f(2)) = (2, 2(8) - 6(4) + 3) = (2, -5)$.",
+    "tags": [
+      "second-derivative-test",
+      "classification",
+      "extrema",
+      "cubic"
+    ],
+    "hints": [
+      "Differentiate carefully using power, product, quotient, or chain rule.",
+      "For applied problems, connect derivatives to velocity, slope, or rate of change.",
+      "Evaluate at the specified points or values."
+    ]
+  },
+  {
+    "id": "fast-calc-diffapp-015",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "derivatives-apps",
+    "subcategoryId": "25-practice",
+    "title": "Curve Sketching Rational Analysis: (x^2 + 1)/x",
+    "difficulty": "medium",
+    "latexExpression": "f(x) = x + \\frac{1}{x}",
+    "statement": "Analyze and sketch $f(x) = \\frac{x^2 + 1}{x}$ by finding critical points, monotonicity, concavity, extrema, and intercepts.",
+    "explanation": "Domain: $x \\neq 0$. Odd function $f(-x) = -f(x)$. Vertical asymptote: $x = 0$. Slant asymptote: $y = x$. Rewrite $f(x) = x + 1/x$. $f'(x) = 1 - 1/x^2 = \\frac{x^2 - 1}{x^2} = 0 \\implies x = \\pm 1$. Increasing on $(-\\infty, -1) \\cup (1, \\infty)$, decreasing on $(-1, 0) \\cup (0, 1)$. Local max at $(-1, -2)$, local min at $(1, 2)$. Second derivative: $f''(x) = 2/x^3$. Concave down on $(-\\infty, 0)$, concave up on $(0, \\infty)$. No real $x$-intercepts ($x^2 + 1 \\neq 0$).",
+    "tags": [
+      "curve-sketching",
+      "rational-functions",
+      "slant-asymptotes",
+      "extrema"
+    ],
+    "hints": [
+      "Differentiate carefully using power, product, quotient, or chain rule.",
+      "For applied problems, connect derivatives to velocity, slope, or rate of change.",
+      "Evaluate at the specified points or values."
+    ]
+  },
+  {
+    "id": "fast-calc-diffapp-016",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "derivatives-apps",
+    "subcategoryId": "25-practice",
+    "title": "Logarithmic Differentiation: y = x^(sin x)",
+    "difficulty": "hard",
+    "latexExpression": "\\frac{dy}{dx} = x^{\\sin x}\\left(\\cos x \\ln x + \\frac{\\sin x}{x}\\right)",
+    "statement": "Find $\\frac{dy}{dx}$ for $y = x^{\\sin x}$ using logarithmic differentiation.",
+    "explanation": "Take natural logarithm of both sides: $\\ln y = \\sin x \\ln x$. Differentiate implicitly with respect to $x$: $\\frac{1}{y} \\frac{dy}{dx} = \\frac{d}{dx}[\\sin x]\\ln x + \\sin x \\frac{d}{dx}[\\ln x] = \\cos x \\ln x + \\frac{\\sin x}{x}$. Multiply by $y$: $\\frac{dy}{dx} = y\\left(\\cos x \\ln x + \\frac{\\sin x}{x}\\right) = x^{\\sin x}\\left(\\cos x \\ln x + \\frac{\\sin x}{x}\\right)$.",
+    "tags": [
+      "logarithmic-differentiation",
+      "derivatives",
+      "chain-rule",
+      "trigonometry"
+    ],
+    "hints": [
+      "Differentiate carefully using power, product, quotient, or chain rule.",
+      "For applied problems, connect derivatives to velocity, slope, or rate of change.",
+      "Evaluate at the specified points or values."
+    ]
+  },
+  {
+    "id": "fast-calc-diffapp-017",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "derivatives-apps",
+    "subcategoryId": "25-practice",
+    "title": "Parametric First and Second Derivatives",
+    "difficulty": "medium",
+    "latexExpression": "\\frac{dy}{dx} = \\frac{3t^2 - 1}{2t - 3}, \\quad \\frac{d^2y}{dx^2} = \\frac{6t^2 - 18t + 2}{(2t - 3)^3}",
+    "statement": "Find $\\frac{dy}{dx}$ and $\\frac{d^2y}{dx^2}$ for the parametric curve given by $x = t^2 - 3t$ and $y = t^3 - t$.",
+    "explanation": "$\\frac{dx}{dt} = 2t - 3$, $\\frac{dy}{dt} = 3t^2 - 1$. First derivative: $\\frac{dy}{dx} = \\frac{dy/dt}{dx/dt} = \\frac{3t^2 - 1}{2t - 3}$. Second derivative: $\\frac{d^2y}{dx^2} = \\frac{\\frac{d}{dt}\\left[\\frac{dy}{dx}\\right]}{\\frac{dx}{dt}} = \\frac{\\frac{6t(2t - 3) - (3t^2 - 1)(2)}{(2t - 3)^2}}{2t - 3} = \\frac{12t^2 - 18t - 6t^2 + 2}{(2t - 3)^3} = \\frac{6t^2 - 18t + 2}{(2t - 3)^3}$.",
+    "tags": [
+      "parametric-equations",
+      "second-derivative",
+      "chain-rule",
+      "curves"
+    ],
+    "hints": [
+      "Differentiate carefully using power, product, quotient, or chain rule.",
+      "For applied problems, connect derivatives to velocity, slope, or rate of change.",
+      "Evaluate at the specified points or values."
+    ]
+  },
+  {
+    "id": "fast-calc-diffapp-018",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "derivatives-apps",
+    "subcategoryId": "25-practice",
+    "title": "Rate of Change with Chain Rule: y(u(x))",
+    "difficulty": "easy",
+    "latexExpression": "\\frac{dy}{dx} = (3u^2 + 2)\\cos x \\text{ at } x = \\frac{\\pi}{6}",
+    "statement": "Given $y = u^3 + 2u$ and $u = \\sin x$, find $\\frac{dy}{dx}$ at $x = \\frac{\\pi}{6}$.",
+    "explanation": "Chain rule: $\\frac{dy}{dx} = \\frac{dy}{du} \\cdot \\frac{du}{dx}$. Differentiating: $\\frac{dy}{du} = 3u^2 + 2$, and $\\frac{du}{dx} = \\cos x$. When $x = \\pi/6$: $u = \\sin(\\pi/6) = 1/2$. Then $\\frac{dy}{du} = 3(1/4) + 2 = 3/4 + 2 = 11/4$. $\\cos(\\pi/6) = \\frac{\\sqrt{3}}{2}$. Therefore, $\\frac{dy}{dx} = \\left(\\frac{11}{4}\\right)\\left(\\frac{\\sqrt{3}}{2}\\right) = \\frac{11\\sqrt{3}}{8} \\approx 2.382$.",
+    "tags": [
+      "chain-rule",
+      "rate-of-change",
+      "derivatives",
+      "composition"
+    ],
+    "hints": [
+      "Differentiate carefully using power, product, quotient, or chain rule.",
+      "For applied problems, connect derivatives to velocity, slope, or rate of change.",
+      "Evaluate at the specified points or values."
+    ]
+  },
+  {
+    "id": "fast-calc-diffapp-019",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "derivatives-apps",
+    "subcategoryId": "25-practice",
+    "title": "Derivative of Inverse Function (f^(-1))'(4)",
+    "difficulty": "medium",
+    "latexExpression": "(f^{-1})'(4) = \\frac{1}{f'(1)} = \\frac{1}{5}",
+    "statement": "Let $f(x) = x^3 + 2x + 1$. Find $(f^{-1})'(4)$ without explicitly finding $f^{-1}(x)$.",
+    "explanation": "Theorem for derivative of inverse: $(f^{-1})'(b) = \\frac{1}{f'(a)}$ where $f(a) = b$. Here $b = 4$. Solve $x^3 + 2x + 1 = 4 \\implies x^3 + 2x - 3 = 0$. By inspection, $x = 1$ is a solution (and the only real root since $f'(x) = 3x^2 + 2 > 0$ strictly increases). Compute $f'(x) = 3x^2 + 2$. At $x = 1$: $f'(1) = 3(1)^2 + 2 = 5$. Therefore, $(f^{-1})'(4) = \\frac{1}{f'(1)} = \\frac{1}{5}$.",
+    "tags": [
+      "inverse-function",
+      "derivatives",
+      "theorems",
+      "calculus"
+    ],
+    "hints": [
+      "Differentiate carefully using power, product, quotient, or chain rule.",
+      "For applied problems, connect derivatives to velocity, slope, or rate of change.",
+      "Evaluate at the specified points or values."
+    ]
+  },
+  {
+    "id": "fast-calc-diffapp-020",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "derivatives-apps",
+    "subcategoryId": "25-practice",
+    "title": "Slant Asymptote via Derivatives & Long Division",
+    "difficulty": "medium",
+    "latexExpression": "f(x) = \\frac{x^2 - 2x - 3}{x - 1} = x - 1 - \\frac{4}{x - 1}",
+    "statement": "Find the slant asymptote and test for monotonicity of $f(x) = \\frac{x^2 - 2x - 3}{x - 1}$.",
+    "explanation": "Dividing $x^2 - 2x - 3$ by $x - 1$: quotient is $x - 1$ with remainder $-4$. Slant asymptote: $y = x - 1$. Derivative: $f'(x) = \\frac{d}{dx}\\left[x - 1 - 4(x-1)^{-1}\\right] = 1 + \\frac{4}{(x-1)^2}$. Since $(x-1)^2 > 0$ for all $x \\neq 1$, $f'(x) \\ge 1 > 0$ everywhere in the domain. The function is strictly increasing on $(-\\infty, 1)$ and $(1, \\infty)$ with no local extrema.",
+    "tags": [
+      "slant-asymptotes",
+      "monotonicity",
+      "rational-functions",
+      "division"
+    ],
+    "hints": [
+      "Differentiate carefully using power, product, quotient, or chain rule.",
+      "For applied problems, connect derivatives to velocity, slope, or rate of change.",
+      "Evaluate at the specified points or values."
+    ]
+  },
+  {
+    "id": "fast-calc-diffapp-021",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "derivatives-apps",
+    "subcategoryId": "25-practice",
+    "title": "Orthogonal Trajectories Proof",
+    "difficulty": "hard",
+    "latexExpression": "m_1 \\cdot m_2 = \\left(\\frac{2y}{x}\\right)\\left(-\\frac{x}{2y}\\right) = -1",
+    "statement": "Show that the family of curves $y = kx^2$ is orthogonal to the family $x^2 + 2y^2 = c$.",
+    "explanation": "Family 1: $y = kx^2 \\implies k = \\frac{y}{x^2}$. Differentiating: $\\frac{dy}{dx} = 2kx = 2\\left(\\frac{y}{x^2}\\right)x = \\frac{2y}{x}$ (slope $m_1$). Family 2: $x^2 + 2y^2 = c$. Differentiating: $2x + 4y \\frac{dy}{dx} = 0 \\implies \\frac{dy}{dx} = -\\frac{2x}{4y} = -\\frac{x}{2y}$ (slope $m_2$). Product of slopes: $m_1 \\cdot m_2 = \\left(\\frac{2y}{x}\\right)\\left(-\\frac{x}{2y}\\right) = -1$. Because the product of their tangent slopes is $-1$ at every intersection point, the two families of curves are orthogonal trajectories.",
+    "tags": [
+      "orthogonal-trajectories",
+      "implicit-differentiation",
+      "geometry",
+      "differential-equations"
+    ],
+    "hints": [
+      "Differentiate carefully using power, product, quotient, or chain rule.",
+      "For applied problems, connect derivatives to velocity, slope, or rate of change.",
+      "Evaluate at the specified points or values."
+    ]
+  },
+  {
+    "id": "fast-calc-diffapp-022",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "derivatives-apps",
+    "subcategoryId": "25-practice",
+    "title": "Extreme Value Theorem on Closed Interval [-1, 2]",
+    "difficulty": "medium",
+    "latexExpression": "f(x) = 3x^4 - 4x^3 \\text{ on } [-1, 2]",
+    "statement": "Find the absolute maximum and minimum values of $f(x) = 3x^4 - 4x^3$ on the closed interval $[-1, 2]$.",
+    "explanation": "Derivative: $f'(x) = 12x^3 - 12x^2 = 12x^2(x - 1) = 0 \\implies$ critical points $x = 0$ and $x = 1$. Both lie in $[-1, 2]$. Evaluate $f$ at critical numbers and endpoints: $f(-1) = 3(-1)^4 - 4(-1)^3 = 3 + 4 = 7$. $f(0) = 0$. $f(1) = 3(1) - 4(1) = -1$. $f(2) = 3(16) - 4(8) = 48 - 32 = 16$. Absolute maximum value is $16$ (at $x = 2$). Absolute minimum value is $-1$ (at $x = 1$).",
+    "tags": [
+      "extreme-value-theorem",
+      "absolute-extrema",
+      "closed-interval",
+      "quartic"
+    ],
+    "hints": [
+      "Differentiate carefully using power, product, quotient, or chain rule.",
+      "For applied problems, connect derivatives to velocity, slope, or rate of change.",
+      "Evaluate at the specified points or values."
+    ]
+  },
+  {
+    "id": "fast-calc-diffapp-023",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "derivatives-apps",
+    "subcategoryId": "25-practice",
+    "title": "Kinematics Word Problem: Velocity & Total Distance",
+    "difficulty": "medium",
+    "latexExpression": "s(t) = t^3 - 6t^2 + 9t, \\quad v(t) = 3(t - 1)(t - 3)",
+    "statement": "The position of a particle is given by $s(t) = t^3 - 6t^2 + 9t$. Find the times when the particle is at rest and its total distance traveled during the first 5 seconds.",
+    "explanation": "Velocity $v(t) = s'(t) = 3t^2 - 12t + 9 = 3(t^2 - 4t + 3) = 3(t - 1)(t - 3)$. The particle is at rest when $v(t) = 0 \\implies t = 1\\text{ s}$ and $t = 3\\text{ s}$. Positions: $s(0) = 0$, $s(1) = 1 - 6 + 9 = 4$, $s(3) = 27 - 54 + 27 = 0$, $s(5) = 125 - 150 + 45 = 20$. Total distance: $|s(1) - s(0)| + |s(3) - s(1)| + |s(5) - s(3)| = |4 - 0| + |0 - 4| + |20 - 0| = 4 + 4 + 20 = 28\\text{ units}$.",
+    "tags": [
+      "kinematics",
+      "total-distance",
+      "velocity",
+      "particle-motion"
+    ],
+    "hints": [
+      "Differentiate carefully using power, product, quotient, or chain rule.",
+      "For applied problems, connect derivatives to velocity, slope, or rate of change.",
+      "Evaluate at the specified points or values."
+    ]
+  },
+  {
+    "id": "fast-calc-diffapp-024",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "derivatives-apps",
+    "subcategoryId": "25-practice",
+    "title": "Algebraic Proof of Optimal Friction Dragging Angle",
+    "difficulty": "medium",
+    "latexExpression": "\\frac{d}{d\\theta}[\\cos\\theta + \\mu\\sin\\theta] = 0 \\implies \\mu = \\tan\\theta",
+    "statement": "Show algebraically that $F = \\frac{\\mu W}{\\cos\\theta + \\mu\\sin\\theta}$ is minimized when $\\mu = \\tan\\theta$.",
+    "explanation": "Let $g(\\theta) = \\cos\\theta + \\mu\\sin\\theta$. Since numerator $\\mu W > 0$ is constant, minimizing $F$ is equivalent to maximizing the positive denominator $g(\\theta)$. Differentiating: $g'(\\theta) = -\\sin\\theta + \\mu\\cos\\theta$. Setting $g'(\\theta) = 0 \\implies \\mu\\cos\\theta = \\sin\\theta \\implies \\mu = \\frac{\\sin\\theta}{\\cos\\theta} = \\tan\\theta$. Second derivative: $g''(\\theta) = -\\cos\\theta - \\mu\\sin\\theta$. In the practical range $0 \\le \\theta \\le \\pi/2$, both $\\cos\\theta$ and $\\sin\\theta$ are non-negative, so $g''(\\theta) < 0$. This guarantees a global maximum for the denominator, and hence the absolute minimum dragging force $F$.",
+    "tags": [
+      "mechanics",
+      "optimization",
+      "algebraic-proof",
+      "friction-angle"
+    ],
+    "hints": [
+      "Differentiate carefully using power, product, quotient, or chain rule.",
+      "For applied problems, connect derivatives to velocity, slope, or rate of change.",
+      "Evaluate at the specified points or values."
+    ]
+  },
+  {
+    "id": "fast-calc-diffapp-025",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "derivatives-apps",
+    "subcategoryId": "25-practice",
+    "title": "Implicit Second Derivative for Circle at (3, 4)",
+    "difficulty": "medium",
+    "latexExpression": "x^2 + y^2 = 25 \\implies \\frac{d^2y}{dx^2} = -\\frac{25}{y^3} = -\\frac{25}{64}",
+    "statement": "Find $\\frac{d^2y}{dx^2}$ for the circle $x^2 + y^2 = 25$ at the point (3, 4).",
+    "explanation": "Differentiating $x^2 + y^2 = 25$: $2x + 2y y' = 0 \\implies y' = -\\frac{x}{y}$. Differentiating again using quotient rule: $y'' = -\\frac{1 \\cdot y - x y'}{y^2} = -\\frac{y - x(-x/y)}{y^2} = -\\frac{y^2 + x^2}{y^3}$. Since $x^2 + y^2 = 25$, this simplifies to $y'' = -\\frac{25}{y^3}$. At the point $(3, 4)$, $y = 4$: $\\frac{d^2y}{dx^2} = -\\frac{25}{4^3} = -\\frac{25}{64} \\approx -0.390625$.",
+    "tags": [
+      "implicit-differentiation",
+      "second-derivative",
+      "circle",
+      "analytic-geometry"
+    ],
+    "hints": [
+      "Differentiate carefully using power, product, quotient, or chain rule.",
+      "For applied problems, connect derivatives to velocity, slope, or rate of change.",
+      "Evaluate at the specified points or values."
+    ]
+  }
+]

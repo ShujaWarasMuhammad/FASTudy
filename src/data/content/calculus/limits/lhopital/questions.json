@@ -1,0 +1,23 @@
+[
+  {
+    "id": "calc-limits-003",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "limits",
+    "subcategoryId": "lhopital",
+    "title": "L'Hopital's Rule for Indeterminate Forms",
+    "difficulty": "medium",
+    "latexExpression": "\\lim_{x \\to 0} \\frac{\\sin(3x)}{x} = \\lim_{x \\to 0} \\frac{\\frac{d}{dx}[\\sin(3x)]}{\\frac{d}{dx}[x]} = \\lim_{x \\to 0} \\frac{3\\cos(3x)}{1} = 3",
+    "statement": "Study the standard derivation of L'Hopital's Rule for the 0/0 indeterminate trigonometric limit:",
+    "explanation": "Because evaluating at $x = 0$ results in the indeterminate form $\\frac{0}{0}$, differentiate numerator and denominator independently with respect to $x$.",
+    "tags": [
+      "lhopital",
+      "derivation",
+      "study-card"
+    ],
+    "hints": [
+      "Verify the indeterminate form 0/0 first",
+      "Differentiate numerator and denominator separately"
+    ]
+  }
+]

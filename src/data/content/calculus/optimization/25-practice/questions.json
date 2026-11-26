@@ -1,0 +1,578 @@
+[
+  {
+    "id": "fast-calc-opt-001",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "optimization",
+    "subcategoryId": "25-practice",
+    "title": "Basic Area and Perimeter Optimization",
+    "difficulty": "easy",
+    "latexExpression": "2x + 2y = 100 \\implies A(x) = x(50 - x)",
+    "statement": "Find the dimensions of a rectangle with a fixed perimeter of 100 meters that yield the maximum possible area.",
+    "explanation": "Perimeter $2x + 2y = 100 \\implies y = 50 - x$. Area $A(x) = x(50 - x) = 50x - x^2$. $A'(x) = 50 - 2x = 0 \\implies x = 25\\text{ m}$. Then $y = 25\\text{ m}$. $A''(x) = -2 < 0$ confirms a maximum. The optimal shape is a square with side length 25 meters, giving an area of $625\\text{ m}^2$.",
+    "tags": [
+      "optimization",
+      "rectangle",
+      "perimeter",
+      "area",
+      "quadratic"
+    ],
+    "hints": [
+      "Identify the objective function and constraint.",
+      "Express the objective in terms of a single variable.",
+      "Differentiate, set to zero, and verify using the second derivative test."
+    ]
+  },
+  {
+    "id": "fast-calc-opt-002",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "optimization",
+    "subcategoryId": "25-practice",
+    "title": "Box Folding Variant (16 cm by 10 cm)",
+    "difficulty": "medium",
+    "latexExpression": "V(x) = x(16 - 2x)(10 - 2x) = 4x^3 - 52x^2 + 160x",
+    "statement": "A rectangular sheet of cardboard measuring 16 cm by 10 cm is to be made into an open box by cutting equal squares of side $x$ from each corner and folding up the sides. Find the value of $x$ that maximizes the volume.",
+    "explanation": "Domain: $0 < x < 5$. Volume $V(x) = x(16 - 2x)(10 - 2x) = 4x^3 - 52x^2 + 160x$. $V'(x) = 12x^2 - 104x + 160 = 4(3x^2 - 26x + 40) = 0$. Factoring: $(3x - 20)(x - 2) = 0$. Roots are $x = 20/3 \\approx 6.67$ (outside domain) and $x = 2$. $V''(2) = 24(2) - 104 = -56 < 0$ confirms maximum. Optimal cut is $x = 2\\text{ cm}$, giving volume $V = 2(12)(6) = 144\\text{ cm}^3$.",
+    "tags": [
+      "optimization",
+      "box-folding",
+      "volume",
+      "derivatives"
+    ],
+    "hints": [
+      "Identify the objective function and constraint.",
+      "Express the objective in terms of a single variable.",
+      "Differentiate, set to zero, and verify using the second derivative test."
+    ]
+  },
+  {
+    "id": "fast-calc-opt-003",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "optimization",
+    "subcategoryId": "25-practice",
+    "title": "Open Cylindrical Container Surface Minimization",
+    "difficulty": "medium",
+    "latexExpression": "A(r) = \\pi r^2 + \\frac{1000}{r}, \\quad V = 500\\text{ cm}^3",
+    "statement": "A cylindrical container with an open top is designed to hold 500 cm³ of liquid. Find the radius $r$ and height $h$ that minimize the total surface area used.",
+    "explanation": "Volume $V = \\pi r^2 h = 500 \\implies h = \\frac{500}{\\pi r^2}$. Surface area (base + sides) $A = \\pi r^2 + 2\\pi rh = \\pi r^2 + \\frac{1000}{r}$. $A'(r) = 2\\pi r - \\frac{1000}{r^2} = 0 \\implies 2\\pi r^3 = 1000 \\implies r = \\sqrt[3]{\\frac{500}{\\pi}} \\approx 5.42\\text{ cm}$. Height $h = \\frac{500}{\\pi r^2} = r \\approx 5.42\\text{ cm}$. In an open top can, minimal surface occurs when height equals radius ($h = r$).",
+    "tags": [
+      "optimization",
+      "cylinder",
+      "surface-area",
+      "calculus"
+    ],
+    "hints": [
+      "Identify the objective function and constraint.",
+      "Express the objective in terms of a single variable.",
+      "Differentiate, set to zero, and verify using the second derivative test."
+    ]
+  },
+  {
+    "id": "fast-calc-opt-004",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "optimization",
+    "subcategoryId": "25-practice",
+    "title": "Closed Cylindrical Container (1 Liter)",
+    "difficulty": "medium",
+    "latexExpression": "A(r) = 2\\pi r^2 + \\frac{2000}{r}, \\quad V = 1000\\text{ cm}^3",
+    "statement": "A closed cylindrical can is to hold 1 liter (1000 cm³) of oil. Find the dimensions ($r$ and $h$) that minimize the total surface area.",
+    "explanation": "Volume $\\pi r^2 h = 1000 \\implies h = \\frac{1000}{\\pi r^2}$. Total area $A = 2\\pi r^2 + 2\\pi rh = 2\\pi r^2 + \\frac{2000}{r}$. $A'(r) = 4\\pi r - \\frac{2000}{r^2} = 0 \\implies r^3 = \\frac{500}{\\pi} \\implies r = \\sqrt[3]{\\frac{500}{\\pi}} \\approx 5.42\\text{ cm}$. Height $h = 2r = 2\\sqrt[3]{\\frac{500}{\\pi}} \\approx 10.84\\text{ cm}$.",
+    "tags": [
+      "optimization",
+      "cylinder",
+      "surface-area",
+      "closed-can"
+    ],
+    "hints": [
+      "Identify the objective function and constraint.",
+      "Express the objective in terms of a single variable.",
+      "Differentiate, set to zero, and verify using the second derivative test."
+    ]
+  },
+  {
+    "id": "fast-calc-opt-005",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "optimization",
+    "subcategoryId": "25-practice",
+    "title": "Fencing Along a River",
+    "difficulty": "easy",
+    "latexExpression": "2x + y = 400 \\implies A(x) = x(400 - 2x)",
+    "statement": "A farmer has 400 meters of fencing to enclose a rectangular pasture along a straight river. If no fencing is required along the river, find the dimensions that maximize the enclosed area.",
+    "explanation": "Let $x$ be the length of the two sides perpendicular to the river, and $y$ parallel: $2x + y = 400 \\implies y = 400 - 2x$. Area $A(x) = x(400 - 2x) = 400x - 2x^2$. $A'(x) = 400 - 4x = 0 \\implies x = 100\\text{ m}$. Then $y = 400 - 200 = 200\\text{ m}$. Dimensions: 100 m by 200 m, maximum area $= 20,000\\text{ m}^2$.",
+    "tags": [
+      "optimization",
+      "fencing",
+      "river",
+      "rectangle"
+    ],
+    "hints": [
+      "Identify the objective function and constraint.",
+      "Express the objective in terms of a single variable.",
+      "Differentiate, set to zero, and verify using the second derivative test."
+    ]
+  },
+  {
+    "id": "fast-calc-opt-006",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "optimization",
+    "subcategoryId": "25-practice",
+    "title": "Poster Margins Optimization",
+    "difficulty": "medium",
+    "latexExpression": "A(x) = (x + 4)\\left(\\frac{50}{x} + 8\\right)",
+    "statement": "A rectangular poster is to contain 50 in² of picture area, with a 4-inch margin at the top and bottom and a 2-inch margin on each side. Find the overall dimensions of the poster that minimize the total paper area.",
+    "explanation": "Let the printed area have width $x$ and height $y$: $xy = 50 \\implies y = 50/x$. Total poster width is $W = x + 2(2) = x + 4$, and height is $H = y + 2(4) = y + 8 = 50/x + 8$. Total area $A(x) = (x + 4)(50/x + 8) = 50 + 8x + 200/x + 32 = 82 + 8x + 200/x$. Differentiating: $A'(x) = 8 - 200/x^2 = 0 \\implies x^2 = 25 \\implies x = 5\\text{ in}$. Then printed height $y = 10\\text{ in}$. Total dimensions: width $W = 5 + 4 = 9\\text{ in}$, height $H = 10 + 8 = 18\\text{ in}$.",
+    "tags": [
+      "optimization",
+      "poster",
+      "margins",
+      "area-minimization"
+    ],
+    "hints": [
+      "Identify the objective function and constraint.",
+      "Express the objective in terms of a single variable.",
+      "Differentiate, set to zero, and verify using the second derivative test."
+    ]
+  },
+  {
+    "id": "fast-calc-opt-007",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "optimization",
+    "subcategoryId": "25-practice",
+    "title": "Closest Point on Parabola to (0, 3)",
+    "difficulty": "medium",
+    "latexExpression": "d^2(x) = x^2 + (x^2 - 3)^2",
+    "statement": "Find the point on the parabola $y = x^2$ that is closest to the point (0, 3).",
+    "explanation": "Square of distance: $S(x) = (x - 0)^2 + (y - 3)^2 = x^2 + (x^2 - 3)^2 = x^2 + x^4 - 6x^2 + 9 = x^4 - 5x^2 + 9$. Differentiating: $S'(x) = 4x^3 - 10x = 2x(2x^2 - 5) = 0$. Critical numbers: $x = 0$ (distance $3$) or $x^2 = 5/2 \\implies x = \\pm \\sqrt{5/2}$. For $x = \\pm \\sqrt{2.5}$, $y = 2.5$. $S''(x) = 12x^2 - 10$; at $x^2 = 2.5$, $S'' = 20 > 0$ (minimum). The closest points are $(\\pm\\sqrt{5/2}, 5/2) = (\\pm\\sqrt{10}/2, 2.5)$.",
+    "tags": [
+      "optimization",
+      "distance",
+      "parabola",
+      "analytic-geometry"
+    ],
+    "hints": [
+      "Identify the objective function and constraint.",
+      "Express the objective in terms of a single variable.",
+      "Differentiate, set to zero, and verify using the second derivative test."
+    ]
+  },
+  {
+    "id": "fast-calc-opt-008",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "optimization",
+    "subcategoryId": "25-practice",
+    "title": "Mechanics Friction Force Angle Minimization",
+    "difficulty": "medium",
+    "latexExpression": "F(\\theta) = \\frac{\\mu W}{\\cos\\theta + \\mu\\sin\\theta}, \\quad W = 250\\text{ lb}, \\; \\mu = 0.4",
+    "statement": "The force $F$ required to drag a crate of weight $W$ along a horizontal surface is given by $F = \\frac{\\mu W}{\\cos\\theta + \\mu\\sin\\theta}$, where $\\mu$ is the coefficient of friction. Given $W = 250\\text{ lb}$ and $\\mu = 0.4$, find the angle $\\theta$ ($0 \\le \\theta \\le \\pi/2$) that minimizes the force $F$.",
+    "explanation": "To minimize $F$, maximize the denominator $g(\\theta) = \\cos\\theta + \\mu\\sin\\theta$. $g'(\\theta) = -\\sin\\theta + \\mu\\cos\\theta = 0 \\implies \\mu = \\tan\\theta$. Thus $\\tan\\theta = 0.4 \\implies \\theta = \\arctan(0.4) \\approx 0.3805\\text{ rad} \\approx 21.8^\\circ$. The second derivative $g''(\\theta) = -\\cos\\theta - \\mu\\sin\\theta < 0$ confirms a maximum of the denominator, yielding the minimum dragging force.",
+    "tags": [
+      "optimization",
+      "friction",
+      "mechanics",
+      "trigonometry"
+    ],
+    "hints": [
+      "Identify the objective function and constraint.",
+      "Express the objective in terms of a single variable.",
+      "Differentiate, set to zero, and verify using the second derivative test."
+    ]
+  },
+  {
+    "id": "fast-calc-opt-009",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "optimization",
+    "subcategoryId": "25-practice",
+    "title": "Semicircular Window Frame (Norman Window)",
+    "difficulty": "hard",
+    "latexExpression": "P = 2r + 2h + \\pi r = 24, \\quad A = 2rh + \\frac{1}{2}\\pi r^2",
+    "statement": "A Norman window is constructed by cementing a semicircle on top of a rectangular window. If the total perimeter of the frame is fixed at 24 feet, find the dimensions $r$ and $h$ that maximize the total area of the window.",
+    "explanation": "Perimeter $P = 2r + 2h + \\pi r = 24 \\implies 2h = 24 - (2 + \\pi)r \\implies h = 12 - \\left(1 + \\frac{\\pi}{2}\\right)r$. Area $A = 2rh + \\frac{1}{2}\\pi r^2 = 2r\\left[12 - \\left(1 + \\frac{\\pi}{2}\\right)r\\right] + \\frac{1}{2}\\pi r^2 = 24r - 2r^2 - \\frac{\\pi}{2}r^2 = 24r - \\left(2 + \\frac{\\pi}{2}\\right)r^2$. Differentiating: $A'(r) = 24 - 2\\left(2 + \\frac{\\pi}{2}\\right)r = 24 - (4 + \\pi)r = 0 \\implies r = \\frac{24}{4 + \\pi}\\text{ ft} \\approx 3.36\\text{ ft}$. Then $h = \\frac{24}{4 + \\pi} = r \\approx 3.36\\text{ ft}$.",
+    "tags": [
+      "optimization",
+      "norman-window",
+      "perimeter",
+      "area"
+    ],
+    "hints": [
+      "Identify the objective function and constraint.",
+      "Express the objective in terms of a single variable.",
+      "Differentiate, set to zero, and verify using the second derivative test."
+    ]
+  },
+  {
+    "id": "fast-calc-opt-010",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "optimization",
+    "subcategoryId": "25-practice",
+    "title": "Inscribed Rectangle in Semicircle (R = 6 cm)",
+    "difficulty": "medium",
+    "latexExpression": "A(x) = 2x\\sqrt{36 - x^2}",
+    "statement": "A rectangle is inscribed inside a semicircle of radius $R = 6\\text{ cm}$ with one side lying along the diameter. Find the dimensions that maximize the area of the rectangle.",
+    "explanation": "Area $A = 2x y = 2x\\sqrt{36 - x^2}$. Maximize $f(x) = A^2 = 4x^2(36 - x^2) = 144x^2 - 4x^4$. $f'(x) = 288x - 16x^3 = 0 \\implies 16x(18 - x^2) = 0 \\implies x = \\sqrt{18} = 3\\sqrt{2}\\text{ cm}$. Height $y = \\sqrt{36 - 18} = 3\\sqrt{2}\\text{ cm}$. Length $= 2x = 6\\sqrt{2}\\text{ cm} \\approx 8.49\\text{ cm}$, height $= 3\\sqrt{2}\\text{ cm} \\approx 4.24\\text{ cm}$. Maximum area $= 36\\text{ cm}^2$.",
+    "tags": [
+      "optimization",
+      "semicircle",
+      "inscribed-rectangle",
+      "geometry"
+    ],
+    "hints": [
+      "Identify the objective function and constraint.",
+      "Express the objective in terms of a single variable.",
+      "Differentiate, set to zero, and verify using the second derivative test."
+    ]
+  },
+  {
+    "id": "fast-calc-opt-011",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "optimization",
+    "subcategoryId": "25-practice",
+    "title": "Inscribed Rectangle in Right Triangle",
+    "difficulty": "medium",
+    "latexExpression": "\\frac{y}{5} = \\frac{10 - x}{10} \\implies A(x) = x\\left(5 - \\frac{x}{2}\\right)",
+    "statement": "A rectangle is inscribed in a right-angled triangle with base 10 cm and height 5 cm, such that one corner of the rectangle lies on the hypotenuse. Maximize the area of this rectangle.",
+    "explanation": "Place triangle with vertices $(0, 0)$, $(10, 0)$, $(0, 5)$. The hypotenuse has equation $\\frac{x}{10} + \\frac{y}{5} = 1 \\implies y = 5 - \\frac{1}{2}x$. Area of inscribed rectangle $A(x) = xy = x\\left(5 - \\frac{1}{2}x\\right) = 5x - \\frac{1}{2}x^2$. Differentiating: $A'(x) = 5 - x = 0 \\implies x = 5\\text{ cm}$. Then $y = 5 - 2.5 = 2.5\\text{ cm}$. Maximum area $= 5 \\times 2.5 = 12.5\\text{ cm}^2$ (exactly half the area of the triangle).",
+    "tags": [
+      "optimization",
+      "right-triangle",
+      "inscribed-rectangle",
+      "geometry"
+    ],
+    "hints": [
+      "Identify the objective function and constraint.",
+      "Express the objective in terms of a single variable.",
+      "Differentiate, set to zero, and verify using the second derivative test."
+    ]
+  },
+  {
+    "id": "fast-calc-opt-012",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "optimization",
+    "subcategoryId": "25-practice",
+    "title": "Pipeline Construction Cost Minimization",
+    "difficulty": "hard",
+    "latexExpression": "C(x) = 5000\\sqrt{4 + x^2} + 3000(6 - x)",
+    "statement": "An oil refinery is located on the north bank of a straight river 2 miles wide. A storage tank is located on the south bank, 6 miles east of the refinery. Cost to lay pipe underwater is $5000/mile and on land is $3000/mile. Where should the pipe land on the south bank to minimize total cost?",
+    "explanation": "Let $x$ be the distance east of the point directly opposite the refinery where the pipe emerges on the south bank ($0 \\le x \\le 6$). Underwater distance: $\\sqrt{2^2 + x^2} = \\sqrt{4 + x^2}$. Land distance: $6 - x$. Total cost: $C(x) = 5000\\sqrt{4 + x^2} + 3000(6 - x)$. $C'(x) = 5000 \\frac{x}{\\sqrt{4 + x^2}} - 3000 = 0 \\implies 5x = 3\\sqrt{4 + x^2} \\implies 25x^2 = 9(4 + x^2) = 36 + 9x^2 \\implies 16x^2 = 36 \\implies x = \\frac{6}{4} = 1.5\\text{ miles}$. The pipe should land 1.5 miles east of the refinery (4.5 miles west of the tank).",
+    "tags": [
+      "optimization",
+      "cost-minimization",
+      "pipeline",
+      "applied-calculus"
+    ],
+    "hints": [
+      "Identify the objective function and constraint.",
+      "Express the objective in terms of a single variable.",
+      "Differentiate, set to zero, and verify using the second derivative test."
+    ]
+  },
+  {
+    "id": "fast-calc-opt-013",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "optimization",
+    "subcategoryId": "25-practice",
+    "title": "Minimizing Travel Time Across River",
+    "difficulty": "hard",
+    "latexExpression": "T(x) = \\frac{\\sqrt{9 + x^2}}{3} + \\frac{5 - x}{5}",
+    "statement": "A runner is at a point A on the bank of a straight river 3 km wide. She wants to reach point B, which is 5 km downstream on the opposite bank. She can run at 5 km/h and swim at 3 km/h. Find the landing point that minimizes total travel time.",
+    "explanation": "Let $x$ be distance downstream to landing point. Swim distance: $\\sqrt{3^2 + x^2} = \\sqrt{9 + x^2}$. Run distance: $5 - x$. Time: $T(x) = \\frac{\\sqrt{9 + x^2}}{3} + \\frac{5 - x}{5}$. $T'(x) = \\frac{x}{3\\sqrt{9 + x^2}} - \\frac{1}{5} = 0 \\implies 5x = 3\\sqrt{9 + x^2} \\implies 25x^2 = 9(9 + x^2) = 81 + 9x^2 \\implies 16x^2 = 81 \\implies x = \\frac{9}{4} = 2.25\\text{ km}$. The runner should land 2.25 km downstream from point A.",
+    "tags": [
+      "optimization",
+      "snells-law",
+      "travel-time",
+      "velocity"
+    ],
+    "hints": [
+      "Identify the objective function and constraint.",
+      "Express the objective in terms of a single variable.",
+      "Differentiate, set to zero, and verify using the second derivative test."
+    ]
+  },
+  {
+    "id": "fast-calc-opt-014",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "optimization",
+    "subcategoryId": "25-practice",
+    "title": "Cone Inscribed in Sphere (R = 9 cm)",
+    "difficulty": "hard",
+    "latexExpression": "V(h) = \\frac{\\pi}{3}(18h^2 - h^3)",
+    "statement": "Find the height and base radius of the right circular cone of maximum volume that can be inscribed in a sphere of radius $R = 9\\text{ cm}$.",
+    "explanation": "Let the distance from center of sphere to base of cone be $x$ ($0 \\le x < 9$). Height $h = R + x = 9 + x$. Base radius $r^2 = R^2 - x^2 = 81 - x^2$. Volume $V = \\frac{\\pi}{3}r^2 h = \\frac{\\pi}{3}(81 - x^2)(9 + x)$. Expanding or differentiating: $V'(x) = \\frac{\\pi}{3}[-2x(9 + x) + (81 - x^2)] = \\frac{\\pi}{3}[-3x^2 - 18x + 81] = -\\pi(x^2 + 6x - 27) = -\\pi(x + 9)(x - 3) = 0$. For $x > 0$, $x = 3\\text{ cm}$. Height $h = 9 + 3 = 12\\text{ cm}$. Base radius $r = \\sqrt{81 - 9} = \\sqrt{72} = 6\\sqrt{2}\\text{ cm} \\approx 8.49\\text{ cm}$.",
+    "tags": [
+      "optimization",
+      "sphere",
+      "cone",
+      "volume-maximization"
+    ],
+    "hints": [
+      "Identify the objective function and constraint.",
+      "Express the objective in terms of a single variable.",
+      "Differentiate, set to zero, and verify using the second derivative test."
+    ]
+  },
+  {
+    "id": "fast-calc-opt-015",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "optimization",
+    "subcategoryId": "25-practice",
+    "title": "Cylinder Inscribed in Sphere (R = 6 cm)",
+    "difficulty": "hard",
+    "latexExpression": "V(h) = \\pi\\left(36h - \\frac{h^3}{4}\\right)",
+    "statement": "Find the radius and height of the right circular cylinder of maximum volume that can be inscribed in a sphere of radius $R = 6\\text{ cm}$.",
+    "explanation": "Radius $r$ and height $h$ satisfy $r^2 + (h/2)^2 = R^2 = 36 \\implies r^2 = 36 - h^2/4$. Volume $V = \\pi r^2 h = \\pi\\left(36 - \\frac{h^2}{4}\\right)h = \\pi\\left(36h - \\frac{h^3}{4}\\right)$. $V'(h) = \\pi\\left(36 - \\frac{3h^2}{4}\\right) = 0 \\implies 3h^2 = 144 \\implies h^2 = 48 \\implies h = \\sqrt{48} = 4\\sqrt{3}\\text{ cm} \\approx 6.93\\text{ cm}$. Radius $r = \\sqrt{36 - 12} = \\sqrt{24} = 2\\sqrt{6}\\text{ cm} \\approx 4.90\\text{ cm}$.",
+    "tags": [
+      "optimization",
+      "cylinder",
+      "sphere",
+      "inscribed-solid"
+    ],
+    "hints": [
+      "Identify the objective function and constraint.",
+      "Express the objective in terms of a single variable.",
+      "Differentiate, set to zero, and verify using the second derivative test."
+    ]
+  },
+  {
+    "id": "fast-calc-opt-016",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "optimization",
+    "subcategoryId": "25-practice",
+    "title": "Cylinder Inscribed in Cone",
+    "difficulty": "medium",
+    "latexExpression": "\\frac{r}{4} = \\frac{12 - h}{12} \\implies V(r) = \\pi r^2(12 - 3r)",
+    "statement": "A right circular cylinder is inscribed inside a cone of height 12 cm and base radius 4 cm. Find the dimensions of the cylinder that maximize its volume.",
+    "explanation": "By similar triangles, $\\frac{4 - r}{4} = \\frac{h}{12} \\implies h = 12 - 3r$. Volume $V(r) = \\pi r^2 h = \\pi r^2 (12 - 3r) = 3\\pi(4r^2 - r^3)$. $V'(r) = 3\\pi(8r - 3r^2) = 3\\pi r(8 - 3r) = 0$. For $r > 0$: $r = 8/3\\text{ cm} \\approx 2.67\\text{ cm}$. Height $h = 12 - 3(8/3) = 12 - 8 = 4\\text{ cm}$. Maximum volume $V = \\pi (64/9)(4) = \\frac{256\\pi}{9}\\text{ cm}^3$.",
+    "tags": [
+      "optimization",
+      "cone",
+      "cylinder",
+      "similar-triangles"
+    ],
+    "hints": [
+      "Identify the objective function and constraint.",
+      "Express the objective in terms of a single variable.",
+      "Differentiate, set to zero, and verify using the second derivative test."
+    ]
+  },
+  {
+    "id": "fast-calc-opt-017",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "optimization",
+    "subcategoryId": "25-practice",
+    "title": "Minimizing Ladder Length Over Fence",
+    "difficulty": "hard",
+    "latexExpression": "L(\\theta) = \\frac{8}{\\sin\\theta} + \\frac{1}{\\cos\\theta}",
+    "statement": "A fence 8 meters high is located 1 meter away from a tall building. Find the length of the shortest ladder that can reach from the ground outside the fence to the wall of the building.",
+    "explanation": "Let $\\theta$ be the angle of the ladder with the horizontal. The length is $L(\\theta) = \\frac{8}{\\sin\\theta} + \\frac{1}{\\cos\\theta} = 8\\csc\\theta + \\sec\\theta$. $L'(\\theta) = -8\\csc\\theta\\cot\\theta + \\sec\\theta\\tan\\theta = -\\frac{8\\cos\\theta}{\\sin^2\\theta} + \\frac{\\sin\\theta}{\\cos^2\\theta} = 0 \\implies \\frac{\\sin^3\\theta}{\\cos^3\\theta} = 8 \\implies \\tan^3\\theta = 8 \\implies \\tan\\theta = 2$. Then $\\sin\\theta = \\frac{2}{\\sqrt{5}}$ and $\\cos\\theta = \\frac{1}{\\sqrt{5}}$. Minimum length $L = \\frac{8}{2/\\sqrt{5}} + \\frac{1}{1/\\sqrt{5}} = 4\\sqrt{5} + \\sqrt{5} = 5\\sqrt{5}\\text{ meters} \\approx 11.18\\text{ m}$.",
+    "tags": [
+      "optimization",
+      "ladder-length",
+      "trigonometry",
+      "extremum"
+    ],
+    "hints": [
+      "Identify the objective function and constraint.",
+      "Express the objective in terms of a single variable.",
+      "Differentiate, set to zero, and verify using the second derivative test."
+    ]
+  },
+  {
+    "id": "fast-calc-opt-018",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "optimization",
+    "subcategoryId": "25-practice",
+    "title": "Trapezoidal Trough Maximum Cross-Section",
+    "difficulty": "medium",
+    "latexExpression": "A(\\theta) = 100\\sin\\theta(1 + \\cos\\theta)",
+    "statement": "A sheet of metal 30 cm wide is bent along two lines parallel to the edges to form a trough with a trapezoidal cross-section (base and sides of length 10 cm). Find the angle of inclination $\\theta$ that maximizes the cross-sectional area.",
+    "explanation": "Bottom base $b_1 = 10$. Height is $h = 10\\sin\\theta$. Top base $b_2 = 10 + 2(10\\cos\\theta) = 10 + 20\\cos\\theta$. Area $A(\\theta) = \\frac{b_1 + b_2}{2}h = \\frac{20 + 20\\cos\\theta}{2}(10\\sin\\theta) = 100\\sin\\theta(1 + \\cos\\theta)$. $A'(\\theta) = 100[\\cos\\theta(1 + \\cos\\theta) - \\sin^2\\theta] = 100[\\cos\\theta + \\cos^2\\theta - (1 - \\cos^2\\theta)] = 100(2\\cos^2\\theta + \\cos\\theta - 1) = 100(2\\cos\\theta - 1)(\\cos\\theta + 1) = 0$. For $0 < \\theta < \\pi/2$: $\\cos\\theta = 1/2 \\implies \\theta = \\pi/3 = 60^\\circ$. Optimal angle is $60^\\circ$.",
+    "tags": [
+      "optimization",
+      "trapezoid",
+      "trough",
+      "trigonometric-optimization"
+    ],
+    "hints": [
+      "Identify the objective function and constraint.",
+      "Express the objective in terms of a single variable.",
+      "Differentiate, set to zero, and verify using the second derivative test."
+    ]
+  },
+  {
+    "id": "fast-calc-opt-019",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "optimization",
+    "subcategoryId": "25-practice",
+    "title": "Product Maximization with Constraints (Square and Cube)",
+    "difficulty": "easy",
+    "latexExpression": "P(x) = x^2 (60 - x)^3",
+    "statement": "Find two positive numbers whose sum is 60 and whose product of the square of the first and the cube of the second is a maximum.",
+    "explanation": "Let numbers be $x$ and $y = 60 - x$. Product $P(x) = x^2 (60 - x)^3$. Differentiating using product rule: $P'(x) = 2x(60 - x)^3 - 3x^2(60 - x)^2 = x(60 - x)^2 [2(60 - x) - 3x] = x(60 - x)^2 (120 - 5x) = 0$. For non-trivial positive numbers, $120 - 5x = 0 \\implies x = 24$. Then $y = 60 - 24 = 36$. The two numbers are 24 and 36.",
+    "tags": [
+      "optimization",
+      "numbers",
+      "product-rule",
+      "polynomial"
+    ],
+    "hints": [
+      "Identify the objective function and constraint.",
+      "Express the objective in terms of a single variable.",
+      "Differentiate, set to zero, and verify using the second derivative test."
+    ]
+  },
+  {
+    "id": "fast-calc-opt-020",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "optimization",
+    "subcategoryId": "25-practice",
+    "title": "Minimizing Sum of Squares",
+    "difficulty": "easy",
+    "latexExpression": "S(x) = x^2 + (40 - x)^2 = 2x^2 - 80x + 1600",
+    "statement": "Find two numbers whose sum is 40 such that the sum of their squares is minimized.",
+    "explanation": "Let numbers be $x$ and $40 - x$. Sum of squares $S(x) = x^2 + (40 - x)^2 = 2x^2 - 80x + 1600$. $S'(x) = 4x - 80 = 0 \\implies x = 20$. Then $40 - x = 20$. Since $S''(x) = 4 > 0$, this is an absolute minimum. Both numbers are 20.",
+    "tags": [
+      "optimization",
+      "sum-of-squares",
+      "parabola",
+      "minimum"
+    ],
+    "hints": [
+      "Identify the objective function and constraint.",
+      "Express the objective in terms of a single variable.",
+      "Differentiate, set to zero, and verify using the second derivative test."
+    ]
+  },
+  {
+    "id": "fast-calc-opt-021",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "optimization",
+    "subcategoryId": "25-practice",
+    "title": "Ellipse Inscribed Rectangle Maximum Area",
+    "difficulty": "medium",
+    "latexExpression": "A(x) = 4xy = 4x\\left(3\\sqrt{1 - \\frac{x^2}{16}}\\right) = 3x\\sqrt{16 - x^2}",
+    "statement": "Find the area of the largest rectangle that can be inscribed in the ellipse $\\frac{x^2}{16} + \\frac{y^2}{9} = 1$.",
+    "explanation": "Corner in first quadrant is $(x, y)$ with $y = 3\\sqrt{1 - x^2/16} = \\frac{3}{4}\\sqrt{16 - x^2}$. Rectangle area $A = (2x)(2y) = 4xy = 3x\\sqrt{16 - x^2}$. Maximize $f(x) = A^2 = 9x^2(16 - x^2) = 144x^2 - 9x^4$. $f'(x) = 288x - 36x^3 = 0 \\implies 36x(8 - x^2) = 0 \\implies x = \\sqrt{8} = 2\\sqrt{2}$. Then $y = \\frac{3}{4}\\sqrt{16 - 8} = \\frac{3}{4}\\sqrt{8} = \\frac{3}{4}(2\\sqrt{2}) = \\frac{3\\sqrt{2}}{2}$. Maximum area $A = 4(2\\sqrt{2})\\left(\\frac{3\\sqrt{2}}{2}\\right) = 24$. (In general, for $\\frac{x^2}{a^2} + \\frac{y^2}{b^2} = 1$, maximum area is $2ab = 2(4)(3) = 24$).",
+    "tags": [
+      "optimization",
+      "ellipse",
+      "inscribed-rectangle",
+      "geometry"
+    ],
+    "hints": [
+      "Identify the objective function and constraint.",
+      "Express the objective in terms of a single variable.",
+      "Differentiate, set to zero, and verify using the second derivative test."
+    ]
+  },
+  {
+    "id": "fast-calc-opt-022",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "optimization",
+    "subcategoryId": "25-practice",
+    "title": "Postal Regulations Box Volume Maximization",
+    "difficulty": "medium",
+    "latexExpression": "L + 4x = 108 \\implies V(x) = x^2(108 - 4x)",
+    "statement": "A postal regulation states that the sum of the length and girth (perimeter of cross-section) of a package shaped like a rectangular box with square ends cannot exceed 108 inches. Find the dimensions of the box with square ends that maximizes its volume.",
+    "explanation": "Let the square end have side $x$. Girth $= 4x$. Length $= L$. Constraint: $L + 4x = 108 \\implies L = 108 - 4x$. Volume $V(x) = x^2 L = x^2(108 - 4x) = 108x^2 - 4x^3$. Differentiating: $V'(x) = 216x - 12x^2 = 12x(18 - x) = 0$. For $x > 0$: $x = 18\\text{ inches}$. Then length $L = 108 - 4(18) = 108 - 72 = 36\\text{ inches}$. Maximum volume $= 18 \\times 18 \\times 36 = 11,664\\text{ in}^3$.",
+    "tags": [
+      "optimization",
+      "postal-regulations",
+      "box-volume",
+      "derivatives"
+    ],
+    "hints": [
+      "Identify the objective function and constraint.",
+      "Express the objective in terms of a single variable.",
+      "Differentiate, set to zero, and verify using the second derivative test."
+    ]
+  },
+  {
+    "id": "fast-calc-opt-023",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "optimization",
+    "subcategoryId": "25-practice",
+    "title": "Revenue Demand Price Optimization",
+    "difficulty": "easy",
+    "latexExpression": "R(p) = p[300 - 10(p - 20)] = p(500 - 10p)",
+    "statement": "A bookstore finds that at a price of $20, they sell 300 books per week. For every $1 increase in price, sales drop by 10 books. What price should they charge to maximize weekly revenue?",
+    "explanation": "Let price increase be $x$ dollars, so price is $p = 20 + x$ and quantity sold is $q = 300 - 10x$. Revenue $R(x) = (20 + x)(300 - 10x) = 6000 + 100x - 10x^2$. $R'(x) = 100 - 20x = 0 \\implies x = 5$. Thus optimal price is $p = 20 + 5 = \\$25$. Quantity sold is $300 - 50 = 250$ books, yielding maximum weekly revenue of $25 \\times 250 = \\$6,250$.",
+    "tags": [
+      "optimization",
+      "revenue",
+      "demand",
+      "business-calculus"
+    ],
+    "hints": [
+      "Identify the objective function and constraint.",
+      "Express the objective in terms of a single variable.",
+      "Differentiate, set to zero, and verify using the second derivative test."
+    ]
+  },
+  {
+    "id": "fast-calc-opt-024",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "optimization",
+    "subcategoryId": "25-practice",
+    "title": "Minimizing Surface Area of Pill Capsule",
+    "difficulty": "hard",
+    "latexExpression": "V = \\frac{4}{3}\\pi r^3 + \\pi r^2 L = 36\\pi, \\quad S(r) = \\frac{4}{3}\\pi r^2 + \\frac{72\\pi}{r}",
+    "statement": "A cylindrical medical capsule with hemispherical ends has a fixed volume $V = 36\\pi\\text{ cm}^3$. Find the radius $r$ and cylinder length $L$ that minimize the total surface area.",
+    "explanation": "Volume $V = \\frac{4}{3}\\pi r^3 + \\pi r^2 L = 36\\pi \\implies \\frac{4}{3}r^3 + r^2 L = 36 \\implies L = \\frac{36 - \\frac{4}{3}r^3}{r^2} = \\frac{36}{r^2} - \\frac{4}{3}r$. Surface area $S = 4\\pi r^2 + 2\\pi r L = 4\\pi r^2 + 2\\pi r\\left(\\frac{36}{r^2} - \\frac{4}{3}r\\right) = 4\\pi r^2 + \\frac{72\\pi}{r} - \\frac{8}{3}\\pi r^2 = \\frac{4}{3}\\pi r^2 + \\frac{72\\pi}{r}$. $S'(r) = \\frac{8}{3}\\pi r - \\frac{72\\pi}{r^2} = 0 \\implies \\frac{8}{3}r^3 = 72 \\implies r^3 = 27 \\implies r = 3\\text{ cm}$. Substituting $r = 3$: $L = \\frac{36}{9} - \\frac{4}{3}(3) = 4 - 4 = 0\\text{ cm}$. As with capsule volume, the surface area is minimized when the cylinder length is 0, forming a pure sphere of radius $r = 3\\text{ cm}$.",
+    "tags": [
+      "optimization",
+      "capsule",
+      "surface-area-minimization",
+      "geometry"
+    ],
+    "hints": [
+      "Identify the objective function and constraint.",
+      "Express the objective in terms of a single variable.",
+      "Differentiate, set to zero, and verify using the second derivative test."
+    ]
+  },
+  {
+    "id": "fast-calc-opt-025",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "optimization",
+    "subcategoryId": "25-practice",
+    "title": "Illumination Intensity Above Circular Table",
+    "difficulty": "hard",
+    "latexExpression": "I(h) = \\frac{k h}{(h^2 + 9)^{3/2}}",
+    "statement": "A light source is placed above the center of a circular table of radius 3 meters. The illumination at any point on the edge of the table is proportional to the sine of the angle of incidence and inversely proportional to the square of the distance from the source. At what height should the light be suspended to maximize illumination at the edge?",
+    "explanation": "Let height be $h$. Distance to table edge is $D = \\sqrt{h^2 + 3^2} = \\sqrt{h^2 + 9}$. Angle of incidence $\\theta$ from horizontal has $\\sin\\theta = \\frac{h}{D} = \\frac{h}{\\sqrt{h^2 + 9}}$. Illumination $I = k \\frac{\\sin\\theta}{D^2} = k \\frac{h}{(h^2 + 9)^{3/2}}$. Differentiating with respect to $h$: $I'(h) = k \\frac{(h^2 + 9)^{3/2} - h \\cdot \\frac{3}{2}(h^2 + 9)^{1/2}(2h)}{(h^2 + 9)^3} = k \\frac{(h^2 + 9)^{1/2}[(h^2 + 9) - 3h^2]}{(h^2 + 9)^3} = k \\frac{9 - 2h^2}{(h^2 + 9)^{5/2}} = 0 \\implies 2h^2 = 9 \\implies h = \\frac{3}{\\sqrt{2}} \\approx 2.12\\text{ meters}$.",
+    "tags": [
+      "optimization",
+      "physics",
+      "illumination",
+      "intensity"
+    ],
+    "hints": [
+      "Identify the objective function and constraint.",
+      "Express the objective in terms of a single variable.",
+      "Differentiate, set to zero, and verify using the second derivative test."
+    ]
+  }
+]

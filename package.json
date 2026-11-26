@@ -1,0 +1,39 @@
+{
+  "name": "fastudy",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "oxlint",
+    "data:migrate": "node scripts/migrate-question-bank.mjs",
+    "data:check": "node scripts/validate-question-bank.mjs",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.118.0",
+    "canvas-confetti": "^1.9.4",
+    "date-fns": "^4.4.0",
+    "katex": "^0.19.0",
+    "lucide-react": "^1.59.0",
+    "marked": "^18.1.1",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-markdown": "^10.1.0",
+    "react-router-dom": "^7.18.4",
+    "react-syntax-highlighter": "^16.1.2",
+    "rehype-katex": "^7.0.1",
+    "remark-math": "^6.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.29.7",
+    "@rolldown/plugin-babel": "^0.2.3",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@vitejs/plugin-react": "^6.1.1",
+    "babel-plugin-react-compiler": "^1.0.0",
+    "oxlint": "^1.81.0",
+    "vite": "^8.3.0"
+  }
+}

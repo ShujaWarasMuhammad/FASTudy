@@ -1,0 +1,16 @@
+{
+  "id": "pf-loops-002",
+  "type": "dry_run",
+  "subjectId": "pf",
+  "categoryId": "dry-runs",
+  "subcategoryId": "loops",
+  "title": "A short, specific question title",
+  "difficulty": "easy",
+  "code": "#include <stdio.h>\n\nint main() {\n  // Your C/C++ code\n  return 0;\n}",
+  "expectedOutput": "exact output here",
+  "statement": "Optional student-facing problem statement.",
+  "latexExpression": "",
+  "explanation": "Explain the answer and the key idea.",
+  "tags": ["loops", "trace"],
+  "hints": ["First helpful hint", "Second helpful hint"]
+}

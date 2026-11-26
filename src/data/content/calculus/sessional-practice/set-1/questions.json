@@ -1,0 +1,272 @@
+[
+  {
+    "id": "fast-calc-sp1-001",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "sessional-practice",
+    "subcategoryId": "set-1",
+    "title": "Curve Sketching Rational Analysis",
+    "difficulty": "medium",
+    "latexExpression": "f(x) = \\frac{x^2 - 4}{x} = x - \\frac{4}{x}",
+    "statement": "Sketch or analyze the function $f(x) = \\frac{x^2 - 4}{x}$ by finding:\n(a) All critical points.\n(b) Intervals for increasing and decreasing.\n(c) Intervals for concave up and concave down.\n(d) Relative extrema (if any).\n(e) $x$-intercepts and $y$-intercept (if any).",
+    "explanation": "Domain: $x \\neq 0$. First derivative $f'(x) = 1 + \\frac{4}{x^2} = \\frac{x^2 + 4}{x^2} > 0$ for all $x \\neq 0$. Thus, $f'(x)$ is never 0 and has no critical points, meaning $f$ is strictly increasing on $(-\\infty, 0)$ and $(0, \\infty)$, with no relative extrema. Second derivative $f''(x) = -\\frac{8}{x^3}$. For $x < 0$, $f''(x) > 0$ (concave up). For $x > 0$, $f''(x) < 0$ (concave down). $x$-intercepts occur at $x^2 - 4 = 0 \\implies x = \\pm 2$ (points $(\\pm 2, 0)$). No $y$-intercept since $x=0$ is a vertical asymptote. Slant asymptote is $y = x$.",
+    "tags": ["curve-sketching", "critical-points", "concavity", "asymptotes", "extrema"],
+    "hints": [
+      "Rewrite $f(x) = x - 4x^{-1}$ to differentiate easily.",
+      "Notice that $f'(x) = 1 + 4/x^2 > 0$ everywhere in the domain.",
+      "Check the sign of $f''(x) = -8/x^3$ for $x < 0$ and $x > 0$."
+    ]
+  },
+  {
+    "id": "fast-calc-sp1-002",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "sessional-practice",
+    "subcategoryId": "set-1",
+    "title": "Asymptotes of Rational Function",
+    "difficulty": "easy",
+    "latexExpression": "f(x) = \\frac{5x}{x^2 - 9}",
+    "statement": "Find all vertical and horizontal asymptotes of the function $f(x) = \\frac{5x}{x^2 - 9}$, and describe the behavior of the graph near the vertical asymptotes.",
+    "explanation": "Vertical asymptotes occur where the denominator is zero and numerator is non-zero: $x^2 - 9 = 0 \\implies x = 3$ and $x = -3$. Horizontal asymptote: $\\lim_{x \\to \\pm\\infty} \\frac{5x}{x^2 - 9} = 0$, so $y = 0$. Near $x = 3$: $\\lim_{x \\to 3^+} f(x) = +\\infty$, $\\lim_{x \\to 3^-} f(x) = -\\infty$. Near $x = -3$: $\\lim_{x \\to -3^+} f(x) = +\\infty$, $\\lim_{x \\to -3^-} f(x) = -\\infty$.",
+    "tags": ["asymptotes", "rational-functions", "limits", "graph-behavior"],
+    "hints": [
+      "Factor the denominator $x^2 - 9 = (x - 3)(x + 3)$.",
+      "Check degrees of numerator (1) vs denominator (2) for horizontal asymptote.",
+      "Compute one-sided limits at $x = \\pm 3$."
+    ]
+  },
+  {
+    "id": "fast-calc-sp1-003",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "sessional-practice",
+    "subcategoryId": "set-1",
+    "title": "Minimizing Cylindrical Container Surface Area",
+    "difficulty": "medium",
+    "latexExpression": "A(r) = 2\\pi r^2 + \\frac{2000}{r}",
+    "statement": "A closed cylindrical container (with top and bottom) is to be constructed to hold $1000\\text{ cm}^3$ of liquid. Find the dimensions ($r$ and $h$) that minimize the total surface area of the container.",
+    "explanation": "Volume $V = \\pi r^2 h = 1000 \\implies h = \\frac{1000}{\\pi r^2}$. Total surface area $A = 2\\pi r^2 + 2\\pi r h = 2\\pi r^2 + \\frac{2000}{r}$. Differentiating: $A'(r) = 4\\pi r - \\frac{2000}{r^2} = 0 \\implies 4\\pi r^3 = 2000 \\implies r^3 = \\frac{500}{\\pi} \\implies r = \\sqrt[3]{\\frac{500}{\\pi}} \\approx 5.42\\text{ cm}$. Height $h = \\frac{1000}{\\pi (500/\\pi)^{2/3}} = 2\\sqrt[3]{\\frac{500}{\\pi}} = 2r \\approx 10.84\\text{ cm}$. $A''(r) = 4\\pi + \\frac{4000}{r^3} > 0$ confirms a minimum.",
+    "tags": ["optimization", "cylinder", "surface-area", "derivatives"],
+    "hints": [
+      "Express height $h$ in terms of radius $r$ using $V = \\pi r^2 h = 1000$.",
+      "Substitute $h$ into $A = 2\\pi r^2 + 2\\pi rh$.",
+      "Differentiate with respect to $r$ and equate to 0."
+    ]
+  },
+  {
+    "id": "fast-calc-sp1-004",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "sessional-practice",
+    "subcategoryId": "set-1",
+    "title": "Applied Optimization: Dragging Force & Friction Angle",
+    "difficulty": "hard",
+    "latexExpression": "F(\\theta) = \\frac{\\mu W}{\\cos\\theta + \\mu\\sin\\theta}",
+    "statement": "The force $F$ (in pounds) needed to drag a crate along a horizontal surface is given by $F = \\frac{\\mu W}{\\cos\\theta + \\mu\\sin\\theta}$, where $W$ is the weight and $\\mu$ is the coefficient of friction. Suppose $W = 200\\text{ lb}$ and $\\mu = 0.4$.\n(a) Find $\\frac{dF}{d\\theta}$ when $\\theta = 45^\\circ$ (express in pounds/degree).\n(b) Show that $F$ is minimized when $\\mu = \\tan\\theta$ for $0 \\le \\theta \\le \\frac{\\pi}{2}$.",
+    "explanation": "Differentiating $F(\\theta) = \\mu W (\\cos\\theta + \\mu\\sin\\theta)^{-1}$ with respect to $\\theta$ (in radians): $\\frac{dF}{d\\theta} = -\\mu W (\\cos\\theta + \\mu\\sin\\theta)^{-2} (-\\sin\\theta + \\mu\\cos\\theta) = \\frac{\\mu W (\\sin\\theta - \\mu\\cos\\theta)}{(\\cos\\theta + \\mu\\sin\\theta)^2}$. For $\\theta = 45^\\circ = \\pi/4$ rad: $\\sin 45^\\circ = \\cos 45^\\circ = \\frac{\\sqrt{2}}{2}$. $\\frac{dF}{d\\theta} = \\frac{0.4(200)(\\sqrt{2}/2 - 0.4\\sqrt{2}/2)}{(\\sqrt{2}/2 + 0.4\\sqrt{2}/2)^2} = \\frac{80(0.6\\sqrt{2}/2)}{(1.4\\sqrt{2}/2)^2} = \\frac{24\\sqrt{2}}{0.98} \\approx 34.63\\text{ lb/rad}$. In lb/degree: $34.63 \\times \\frac{\\pi}{180} \\approx 0.604\\text{ lb/deg}$. (b) For critical point, $\\frac{dF}{d\\theta} = 0 \\implies \\sin\\theta - \\mu\\cos\\theta = 0 \\implies \\mu = \\frac{\\sin\\theta}{\\cos\\theta} = \\tan\\theta$.",
+    "tags": ["optimization", "mechanics", "chain-rule", "trigonometry", "friction"],
+    "hints": [
+      "To maximize the denominator $\\cos\\theta + \\mu\\sin\\theta$, differentiate the denominator.",
+      "Recall conversion: $1\\text{ rad} = 180^\\circ / \\pi$, so $\\frac{dF}{d\\theta_{\\text{deg}}} = \\frac{\\pi}{180} \\frac{dF}{d\\theta_{\\text{rad}}}$.",
+      "Set $\\sin\\theta - \\mu\\cos\\theta = 0$ to get $\\tan\\theta = \\mu$."
+    ]
+  },
+  {
+    "id": "fast-calc-sp1-005",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "sessional-practice",
+    "subcategoryId": "set-1",
+    "title": "Related Rates: Leaking Conical Tank",
+    "difficulty": "medium",
+    "latexExpression": "\\frac{dh}{dt} = \\frac{dV/dt}{\\frac{\\pi}{9} h^2}",
+    "statement": "Water is leaking from a conical tank (vertex down) at a rate of $2\\text{ ft}^3/\\text{min}$. The tank has a height of $12\\text{ ft}$ and a base radius of $4\\text{ ft}$. How fast is the water level falling when the water height is $6\\text{ ft}$?",
+    "explanation": "Volume of cone: $V = \\frac{1}{3}\\pi r^2 h$. By similar triangles, $\\frac{r}{h} = \\frac{4}{12} = \\frac{1}{3} \\implies r = \\frac{h}{3}$. Thus $V = \\frac{1}{3}\\pi \\left(\\frac{h}{3}\\right)^2 h = \\frac{\\pi}{27} h^3$. Differentiating with respect to time $t$: $\\frac{dV}{dt} = \\frac{\\pi}{9} h^2 \\frac{dh}{dt}$. Given $\\frac{dV}{dt} = -2\\text{ ft}^3/\\text{min}$ and $h = 6\\text{ ft}$: $-2 = \\frac{\\pi}{9} (6)^2 \\frac{dh}{dt} = 4\\pi \\frac{dh}{dt} \\implies \\frac{dh}{dt} = -\\frac{2}{4\\pi} = -\\frac{1}{2\\pi}\\text{ ft/min} \\approx -0.159\\text{ ft/min}$. The water level is falling at $\\frac{1}{2\\pi}\\text{ ft/min}$.",
+    "tags": ["related-rates", "conical-tank", "geometry", "similar-triangles"],
+    "hints": [
+      "Use similar triangles: $r/h = 4/12 = 1/3$.",
+      "Express volume entirely in terms of $h$: $V = \\frac{\\pi}{27}h^3$.",
+      "Differentiate implicitly with respect to $t$."
+    ]
+  },
+  {
+    "id": "fast-calc-sp1-006",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "sessional-practice",
+    "subcategoryId": "set-1",
+    "title": "Related Rates: Sliding Ladder",
+    "difficulty": "easy",
+    "latexExpression": "x^2 + y^2 = 10^2 \\implies x\\frac{dx}{dt} + y\\frac{dy}{dt} = 0",
+    "statement": "A ladder $10\\text{ meters}$ long rests against a vertical wall. If the bottom of the ladder slides away from the wall at a rate of $1\\text{ m/s}$, how fast is the top of the ladder sliding down the wall when the bottom is $6\\text{ meters}$ from the wall?",
+    "explanation": "Pythagorean theorem: $x^2 + y^2 = 10^2 = 100$. When $x = 6$, $y = \\sqrt{100 - 36} = 8\\text{ m}$. Differentiating with respect to time $t$: $2x \\frac{dx}{dt} + 2y \\frac{dy}{dt} = 0 \\implies x \\frac{dx}{dt} + y \\frac{dy}{dt} = 0$. Substituting $x = 6$, $y = 8$, $\\frac{dx}{dt} = 1\\text{ m/s}$: $6(1) + 8\\frac{dy}{dt} = 0 \\implies \\frac{dy}{dt} = -\\frac{6}{8} = -0.75\\text{ m/s}$. The top of the ladder is sliding down at $0.75\\text{ m/s}$.",
+    "tags": ["related-rates", "pythagorean", "ladder", "kinematics"],
+    "hints": [
+      "Use $x^2 + y^2 = 100$.",
+      "Find $y$ when $x = 6$ ($y = 8$).",
+      "Differentiate implicitly and solve for $dy/dt$."
+    ]
+  },
+  {
+    "id": "fast-calc-sp1-007",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "sessional-practice",
+    "subcategoryId": "set-1",
+    "title": "Linear Approximation of Cube Root",
+    "difficulty": "medium",
+    "latexExpression": "L(x) = f(a) + f'(a)(x - a), \\quad f(x) = \\sqrt[3]{x}",
+    "statement": "Find the linear approximation of $f(x) = \\sqrt[3]{x}$ at $x = 8$. Use it to approximate the values of $\\sqrt[3]{8.5}$ and $\\sqrt[3]{7.8}$, and compare them with exact calculator values.",
+    "explanation": "$f(8) = \\sqrt[3]{8} = 2$. $f'(x) = \\frac{1}{3}x^{-2/3} = \\frac{1}{3\\sqrt[3]{x^2}}$, so $f'(8) = \\frac{1}{3(4)} = \\frac{1}{12}$. Linearization: $L(x) = 2 + \\frac{1}{12}(x - 8)$. For $x = 8.5$: $L(8.5) = 2 + \\frac{0.5}{12} = 2 + \\frac{1}{24} \\approx 2.04167$ (Exact $\\approx 2.04083$). For $x = 7.8$: $L(7.8) = 2 + \\frac{-0.2}{12} = 2 - \\frac{1}{60} \\approx 1.98333$ (Exact $\\approx 1.98319$). Both linear estimates are slight overestimates because $f''(x) < 0$ (concave down).",
+    "tags": ["linear-approximation", "differentials", "tangent-line", "estimation"],
+    "hints": [
+      "Compute $f(8)$ and $f'(8)$ for $f(x) = x^{1/3}$.",
+      "Form the tangent line equation $L(x) = 2 + \\frac{1}{12}(x - 8)$.",
+      "Plug in $8.5$ and $7.8$ respectively."
+    ]
+  },
+  {
+    "id": "fast-calc-sp1-008",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "sessional-practice",
+    "subcategoryId": "set-1",
+    "title": "Differentials & Percentage Error of Sphere Volume",
+    "difficulty": "easy",
+    "latexExpression": "\\frac{dV}{V} = 3\\frac{dr}{r}",
+    "statement": "Use linear approximation (differentials) to estimate the maximum percentage error in calculating the volume of a sphere if the radius is measured as $r = 5\\text{ cm}$ with a maximum possible error of $0.1\\text{ cm}$.",
+    "explanation": "Volume of sphere: $V = \\frac{4}{3}\\pi r^3$. Taking the differential: $dV = 4\\pi r^2 dr$. Relative error: $\\frac{dV}{V} = \\frac{4\\pi r^2 dr}{\\frac{4}{3}\\pi r^3} = 3\\frac{dr}{r}$. Given $r = 5\\text{ cm}$ and $dr = 0.1\\text{ cm}$: $\\frac{dr}{r} = \\frac{0.1}{5} = 0.02 = 2\\%$. Therefore, $\\frac{dV}{V} = 3(2\\%) = 6\\%$. The maximum estimated percentage error in volume is $6\\%$.",
+    "tags": ["differentials", "error-estimation", "sphere", "percentage-error"],
+    "hints": [
+      "Use $dV = V'(r) dr$.",
+      "Relative error in volume is $dV/V = 3(dr/r)$.",
+      "Multiply by $100\\%$ to get percentage error."
+    ]
+  },
+  {
+    "id": "fast-calc-sp1-009",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "sessional-practice",
+    "subcategoryId": "set-1",
+    "title": "L'Hôpital's Rule: Trig Exponential Indeterminate Form",
+    "difficulty": "hard",
+    "latexExpression": "\\lim_{x \\to 0} (\\cos x)^{1/x^2} = e^{-1/2}",
+    "statement": "Evaluate $\\lim_{x \\to 0} (\\cos x)^{1/x^2}$.",
+    "explanation": "This has indeterminate form $1^\\infty$. Let $y = (\\cos x)^{1/x^2}$, then $\\ln y = \\frac{\\ln(\\cos x)}{x^2}$. As $x \\to 0$, this is $\\frac{0}{0}$. Applying L'Hôpital's Rule: $\\lim_{x \\to 0} \\frac{-\\tan x}{2x} = -\\frac{1}{2} \\lim_{x \\to 0} \\frac{\\tan x}{x} = -\\frac{1}{2}(1) = -\\frac{1}{2}$. Since $\\lim_{x \\to 0} \\ln y = -1/2$, the original limit is $e^{-1/2} = \\frac{1}{\\sqrt{e}}$.",
+    "tags": ["lhopital", "limits", "indeterminate-forms", "exponential-limits"],
+    "hints": [
+      "Take the natural logarithm of the expression.",
+      "Apply L'Hôpital's rule to the $0/0$ form $\\frac{\\ln(\\cos x)}{x^2}$.",
+      "Exponentiate the result back ($e^L$)."
+    ]
+  },
+  {
+    "id": "fast-calc-sp1-010",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "sessional-practice",
+    "subcategoryId": "set-1",
+    "title": "L'Hôpital's Rule: Indeterminate Difference Form",
+    "difficulty": "medium",
+    "latexExpression": "\\lim_{x \\to 1} \\left( \\frac{x}{x-1} - \\frac{1}{\\ln x} \\right)",
+    "statement": "Evaluate $\\lim_{x \\to 1} \\left( \\frac{x}{x-1} - \\frac{1}{\\ln x} \\right)$.",
+    "explanation": "Form $\\infty - \\infty$. Combine fractions: $\\frac{x\\ln x - (x - 1)}{(x - 1)\\ln x}$. As $x \\to 1$, numerator $\\to 0$ and denominator $\\to 0$ ($0/0$ form). Apply L'Hôpital's: derivative of numerator is $\\ln x + 1 - 1 = \\ln x$; derivative of denominator is $\\ln x + \\frac{x - 1}{x}$. New limit: $\\lim_{x \\to 1} \\frac{\\ln x}{\\ln x + 1 - 1/x}$. Still $0/0$. Apply L'Hôpital again: numerator derivative is $1/x$; denominator derivative is $1/x + 1/x^2$. Evaluating at $x = 1$: $\\frac{1}{1 + 1} = \\frac{1}{2}$.",
+    "tags": ["lhopital", "limits", "algebraic-manipulation", "indeterminate-forms"],
+    "hints": [
+      "Find a common denominator: $(x-1)\\ln x$.",
+      "Apply L'Hôpital's rule twice to resolve the $0/0$ forms.",
+      "Simplify terms between successive differentiation steps."
+    ]
+  },
+  {
+    "id": "fast-calc-sp1-011",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "sessional-practice",
+    "subcategoryId": "set-1",
+    "title": "Exponential Indeterminate Limit",
+    "difficulty": "medium",
+    "latexExpression": "\\lim_{x \\to 0^+} (1 + 2\\sin x)^{3/x} = e^6",
+    "statement": "Evaluate $\\lim_{x \\to 0^+} (1 + 2\\sin x)^{3/x}$.",
+    "explanation": "Indeterminate form $1^\\infty$. Let $y = (1 + 2\\sin x)^{3/x}$. Then $\\ln y = \\frac{3\\ln(1 + 2\\sin x)}{x}$. As $x \\to 0^+$, this is $0/0$. By L'Hôpital: $\\lim_{x \\to 0^+} \\frac{3 \\cdot \\frac{2\\cos x}{1 + 2\\sin x}}{1} = 3 \\cdot \\frac{2(1)}{1 + 0} = 6$. Therefore, the limit is $e^6$.",
+    "tags": ["limits", "lhopital", "exponential-limits", "trigonometry"],
+    "hints": [
+      "Take the natural logarithm $\\ln y$.",
+      "Evaluate $\\lim_{x \\to 0^+} \\frac{3\\ln(1 + 2\\sin x)}{x}$ using L'Hôpital or standard limits.",
+      "The answer is $e^L$."
+    ]
+  },
+  {
+    "id": "fast-calc-sp1-012",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "sessional-practice",
+    "subcategoryId": "set-1",
+    "title": "Removable Discontinuity & Continuous Extension",
+    "difficulty": "easy",
+    "latexExpression": "f(x) = \\frac{x^2 - x - 2}{x - 2}",
+    "statement": "Determine the points of discontinuity for the function $f(x) = \\frac{x^2 - x - 2}{x - 2}$. Identify the type of discontinuity, and if it is removable, find the continuous extension function.",
+    "explanation": "$f(x)$ is undefined at $x = 2$. Factor numerator: $x^2 - x - 2 = (x - 2)(x + 1)$. For $x \\neq 2$, $f(x) = x + 1$. Thus $\\lim_{x \\to 2} f(x) = 2 + 1 = 3$. Because the limit exists but $f(2)$ is undefined, $x = 2$ is a removable discontinuity. The continuous extension is $F(x) = x + 1$ for all $x \\in \\mathbb{R}$, with $F(2) = 3$.",
+    "tags": ["continuity", "removable-discontinuity", "continuous-extension", "rational-functions"],
+    "hints": [
+      "Factor the numerator $(x - 2)(x + 1)$.",
+      "Check if the limit exists as $x \\to 2$.",
+      "Define $F(2) = \\lim_{x \\to 2} f(x)$ to remove the hole."
+    ]
+  },
+  {
+    "id": "fast-calc-sp1-013",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "sessional-practice",
+    "subcategoryId": "set-1",
+    "title": "Piecewise Function Continuity Constants",
+    "difficulty": "medium",
+    "latexExpression": "f(x) = \\begin{cases} ax^2 + b, & x < 1 \\\\ 2, & x = 1 \\\\ \\frac{x^2 - 1}{x - 1}, & x > 1 \\end{cases}",
+    "statement": "Find the values of constants $a$ and $b$ that make the following piecewise function continuous everywhere:\n$$f(x) = \\begin{cases} ax^2 + b, & x < 1 \\\\ 2, & x = 1 \\\\ \\frac{x^2 - 1}{x - 1}, & x > 1 \\end{cases}$$",
+    "explanation": "For continuity at $x = 1$, we must have $\\lim_{x \\to 1^-} f(x) = f(1) = \\lim_{x \\to 1^+} f(x)$. Right-hand limit: $\\lim_{x \\to 1^+} \\frac{x^2 - 1}{x - 1} = \\lim_{x \\to 1^+} (x + 1) = 2$. Function value: $f(1) = 2$. Left-hand limit: $\\lim_{x \\to 1^-} (ax^2 + b) = a(1)^2 + b = a + b$. Equating left limit to $f(1)$: $a + b = 2$. Any pair of constants satisfying $a + b = 2$ (e.g., $a = 1, b = 1$ or $b = 2 - a$) guarantees global continuity.",
+    "tags": ["continuity", "piecewise-functions", "limits", "constants"],
+    "hints": [
+      "Compute $\\lim_{x \\to 1^+} \\frac{x^2 - 1}{x - 1} = 2$.",
+      "Set left-hand limit $a(1)^2 + b$ equal to $f(1) = 2$.",
+      "Deduce the relation $a + b = 2$."
+    ]
+  },
+  {
+    "id": "fast-calc-sp1-014",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "sessional-practice",
+    "subcategoryId": "set-1",
+    "title": "Advanced Curve Sketching: Rational Symmetry & Extrema",
+    "difficulty": "hard",
+    "latexExpression": "f(x) = \\frac{8x}{x^2 - 4}",
+    "statement": "Find the vertical and horizontal asymptotes, critical points, and sketch the graph of $f(x) = \\frac{8x}{x^2 - 4}$.",
+    "explanation": "Symmetry: $f(-x) = \\frac{-8x}{x^2 - 4} = -f(x)$ (odd function, symmetric about origin). Vertical asymptotes: $x^2 - 4 = 0 \\implies x = 2$ and $x = -2$. Horizontal asymptote: $\\lim_{x \\to \\pm\\infty} f(x) = 0$, so $y = 0$. First derivative: $f'(x) = \\frac{8(x^2 - 4) - 8x(2x)}{(x^2 - 4)^2} = \\frac{-8x^2 - 32}{(x^2 - 4)^2} = \\frac{-8(x^2 + 4)}{(x^2 - 4)^2} < 0$ for all $x \\neq \\pm 2$. Since $f'(x)$ is strictly negative, there are no real critical points and no relative extrema; $f$ is strictly decreasing on $(-\\infty, -2)$, $(-2, 2)$, and $(2, \\infty)$. Inflection point at $(0, 0)$.",
+    "tags": ["curve-sketching", "rational-functions", "asymptotes", "symmetry", "derivatives"],
+    "hints": [
+      "Vertical asymptotes occur where $x^2 - 4 = 0$.",
+      "Differentiate using quotient rule and factor numerator: $-8(x^2 + 4)$.",
+      "Notice $f'(x) < 0$ everywhere in the domain."
+    ]
+  },
+  {
+    "id": "fast-calc-sp1-015",
+    "type": "math_study",
+    "subjectId": "calculus",
+    "categoryId": "sessional-practice",
+    "subcategoryId": "set-1",
+    "title": "Optimization: Inscribed Rectangle in Semicircle",
+    "difficulty": "medium",
+    "latexExpression": "A(x) = 2x\\sqrt{25 - x^2}",
+    "statement": "A rectangle is to be inscribed in a semicircle of radius $R = 5\\text{ cm}$ with one side lying along the diameter. Find the dimensions of the rectangle with maximum area.",
+    "explanation": "Place the semicircle in the upper half-plane: $x^2 + y^2 = 25$ with $y \\ge 0$. The top corners of the rectangle are $(\\pm x, y)$ with $y = \\sqrt{25 - x^2}$. Width of rectangle is $2x$, height is $y$. Area $A(x) = 2xy = 2x\\sqrt{25 - x^2}$. To maximize $A$, maximize $f(x) = A^2 = 4x^2(25 - x^2) = 100x^2 - 4x^4$. Differentiating: $f'(x) = 200x - 16x^3 = 0 \\implies 4x(50 - 4x^2) = 0$. For $x > 0$: $x^2 = \\frac{50}{4} = 12.5 \\implies x = \\frac{5}{\\sqrt{2}}\\text{ cm}$. Height $y = \\sqrt{25 - 12.5} = \\sqrt{12.5} = \\frac{5}{\\sqrt{2}}\\text{ cm}$. Dimensions: length $= 2x = 5\\sqrt{2}\\text{ cm} \\approx 7.07\\text{ cm}$, height $= y = \\frac{5}{\\sqrt{2}}\\text{ cm} \\approx 3.54\\text{ cm}$. Maximum area $A = 25\\text{ cm}^2$.",
+    "tags": ["optimization", "semicircle", "inscribed-rectangle", "geometry"],
+    "hints": [
+      "Let the upper vertex be $(x, y)$ where $x^2 + y^2 = 25$.",
+      "The area is $2xy = 2x\\sqrt{25 - x^2}$.",
+      "Maximize the squared area $100x^2 - 4x^4$ to simplify differentiation."
+    ]
+  }
+]

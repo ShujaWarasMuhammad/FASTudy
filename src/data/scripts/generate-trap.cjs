@@ -1,0 +1,254 @@
+const fs = require('fs');
+const path = require('path');
+
+// 25 Tricky & Trap Derivative Questions (Page 10-11)
+const trapQuestions = [
+  {
+    num: 1,
+    title: "Critical Point Trap 1: Absolute Value of Quadratic",
+    diff: "medium",
+    latex: "f(x) = |x^2 - 4| \\implies x \\in \\{0, -2, 2\\}",
+    stmt: "Find all critical numbers of the function $f(x) = |x^2 - 4|$. Hint: Do not just set the derivative to zero.",
+    exp: "A critical number is a number $c$ in the domain of $f$ where $f'(c) = 0$ OR $f'(c)$ does not exist (DNE). $f(x) = x^2 - 4$ when $|x| \\ge 2$, and $4 - x^2$ when $|x| < 2$. Differentiating: $f'(x) = 2x$ for $|x| > 2$ and $-2x$ for $|x| < 2$. Setting $f'(x) = 0$ yields $x = 0$ (since $0 \\in (-2, 2)$). However, at $x = 2$ and $x = -2$, sharp corners (cusps) exist because $\\lim_{x \\to 2^+} f'(x) = 4 \\neq \\lim_{x \\to 2^-} f'(x) = -4$. Thus $f'(\\pm 2)$ DNE. The trap is forgetting non-differentiable points. All critical numbers are $x = 0, 2, -2$.",
+    tags: ["critical-points", "absolute-value", "trap", "non-differentiable"]
+  },
+  {
+    num: 2,
+    title: "Critical Point Trap 2: Fractional Power Product",
+    diff: "medium",
+    latex: "f'(x) = \\frac{5x - 10}{3x^{1/3}} = \\frac{5(x - 2)}{3x^{1/3}}",
+    stmt: "Find all critical numbers of $f(x) = x^{2/3}(x - 5)$.",
+    exp: "Expand: $f(x) = x^{5/3} - 5x^{2/3}$. Differentiate: $f'(x) = \\frac{5}{3}x^{2/3} - \\frac{10}{3}x^{-1/3} = \\frac{5x^{2/3} \\cdot x^{1/3} - 10}{3x^{1/3}} = \\frac{5x - 10}{3x^{1/3}} = \\frac{5(x - 2)}{3x^{1/3}}$. Critical numbers occur where: 1. $f'(x) = 0 \\implies 5(x - 2) = 0 \\implies x = 2$. 2. $f'(x)$ does not exist where denominator is zero $\\implies x^{1/3} = 0 \\implies x = 0$. Since $x = 0$ is in the domain of $f$ (with $f(0) = 0$), $x = 0$ is a valid critical number (a vertical tangent/cusp). The trap is missing $x = 0$. The critical numbers are $x = 0$ and $x = 2$.",
+    tags: ["critical-points", "fractional-power", "trap", "cusp"]
+  },
+  {
+    num: 3,
+    title: "Rolle's Theorem Trap: Differentiability on Open Interval",
+    diff: "medium",
+    latex: "f(x) = 1 - x^{2/3} \\text{ on } [-1, 1], \\quad f'(0) \\text{ DNE}",
+    stmt: "Can Rolle's Theorem be applied to $f(x) = 1 - x^{2/3}$ on the interval [−1, 1]? Justify your answer.",
+    exp: "Check hypotheses of Rolle's Theorem: 1. Continuity: $f(x)$ is continuous on $[-1, 1]$. 2. Equal endpoints: $f(-1) = 1 - (-1)^{2/3} = 0$, and $f(1) = 1 - 1 = 0$, so $f(-1) = f(1)$. 3. Differentiability: $f'(x) = -\\frac{2}{3}x^{-1/3} = -\\frac{2}{3\\sqrt[3]{x}}$. At $x = 0 \\in (-1, 1)$, $f'(0)$ does not exist! Because $f(x)$ is NOT differentiable everywhere on the open interval $(-1, 1)$, the hypothesis fails. Therefore, Rolle's Theorem CANNOT be applied. (Indeed, $f'(c) \\neq 0$ for any $c \\in (-1, 1)$; there is a sharp cusp at $(0, 1)$).",
+    tags: ["rolles-theorem", "trap", "differentiability", "cusp"]
+  },
+  {
+    num: 4,
+    title: "Mean Value Theorem Trap: Continuity Failure at Origin",
+    diff: "easy",
+    latex: "f(x) = \\frac{1}{x} \\text{ on } [-1, 1]",
+    stmt: "Does the Mean Value Theorem apply to $f(x) = \\frac{1}{x}$ on the interval [−1, 1]? Why or why not?",
+    exp: "No. The Mean Value Theorem requires $f(x)$ to be continuous on the closed interval $[a, b]$. Here $f(x) = 1/x$ is undefined and has an infinite discontinuity at $x = 0$, which lies inside $[-1, 1]$. Because continuity fails on the closed interval, the MVT does not apply. (Note: $\\frac{f(1) - f(-1)}{1 - (-1)} = \\frac{1 - (-1)}{2} = 1$, but $f'(x) = -1/x^2 \\le 0$ can never equal $1$).",
+    tags: ["mean-value-theorem", "trap", "discontinuity", "prerequisites"]
+  },
+  {
+    num: 5,
+    title: "Inflection Point Trap: f''(c) = 0 vs Inflection Point",
+    diff: "medium",
+    latex: "f(x) = x^4 \\implies f''(0) = 0, \\text{ but no inflection point}",
+    stmt: "True or False: If $f''(c) = 0$, then $(c, f(c))$ must be an inflection point of the graph of $f$. Test your logic on $f(x) = x^4$.",
+    exp: "FALSE. $f''(c) = 0$ is a necessary condition for an inflection point (if $f''$ exists), but it is NOT sufficient. An inflection point requires that the concavity (the sign of $f''(x)$) actually CHANGES across $x = c$. For $f(x) = x^4$: $f'(x) = 4x^3$ and $f''(x) = 12x^2$. Here $f''(0) = 12(0)^2 = 0$. However, for all $x \\neq 0$, $12x^2 > 0$, so $f(x)$ is concave up on both sides of $0$. Concavity never changes, so $(0, 0)$ is a local minimum, NOT an inflection point.",
+    tags: ["inflection-point", "trap", "second-derivative", "concavity"]
+  },
+  {
+    num: 6,
+    title: "Second Derivative Test Failure on x^6",
+    diff: "easy",
+    latex: "f(x) = x^6 \\implies f''(0) = 0 \\text{ (Test Inconclusive)}",
+    stmt: "Consider $f(x) = x^6$. Find its critical point at $x = 0$ and attempt to classify it using the Second Derivative Test. What happens?",
+    exp: "$f'(x) = 6x^5 \\implies f'(0) = 0$, so $x = 0$ is a critical point. $f''(x) = 30x^4 \\implies f''(0) = 0$. The Second Derivative Test states: if $f''(c) > 0$ (min), if $f''(c) < 0$ (max), but if $f''(c) = 0$, the test is completely INCONCLUSIVE. To classify $x = 0$, we must fall back to the First Derivative Test: $f'(x) < 0$ for $x < 0$ and $f'(x) > 0$ for $x > 0$. The sign changes from negative to positive, proving $x = 0$ is a local minimum.",
+    tags: ["second-derivative-test", "trap", "inconclusive", "first-derivative-test"]
+  },
+  {
+    num: 7,
+    title: "Absolute Extrema Trap on Open Intervals",
+    diff: "easy",
+    latex: "f(x) = \\frac{1}{x} \\text{ on } (0, 1)",
+    stmt: "Find the absolute maximum and minimum values of $f(x) = \\frac{1}{x}$ on the open interval (0, 1).",
+    exp: "The Extreme Value Theorem (EVT) only guarantees absolute extrema on a CLOSED interval $[a, b]$. On the open interval $(0, 1)$: As $x \\to 0^+$, $f(x) \\to \\infty$, so there is NO absolute maximum (unbounded). As $x \\to 1^-$, $f(x) \\to 1$, but $f(x) > 1$ for all $x \\in (0, 1)$ and $x = 1$ is not in the interval, so the infimum $1$ is never attained. Thus there is NO absolute minimum either. The function has neither an absolute maximum nor an absolute minimum on $(0, 1)$.",
+    tags: ["absolute-extrema", "open-interval", "trap", "extreme-value-theorem"]
+  },
+  {
+    num: 8,
+    title: "L'Hôpital's Rule False Application Trap",
+    diff: "medium",
+    latex: "\\lim_{x \\to 0} \\frac{x^2 + 2x + 1}{x + 3} = \\frac{1}{3} \\neq 2",
+    stmt: "A student evaluates $\\lim_{x \\to 0} \\frac{x^2 + 2x + 1}{x + 3}$ by taking derivatives of numerator and denominator to get $\\lim_{x \\to 0} \\frac{2x + 2}{1} = 2$. Explain the mathematical trap here.",
+    exp: "The mathematical trap is applying L'Hôpital's Rule when the limit is NOT an indeterminate form ($0/0$ or $\\pm\\infty/\\pm\\infty$). At $x = 0$, direct substitution gives: numerator $= 0^2 + 2(0) + 1 = 1$, and denominator $= 0 + 3 = 3$. This is a determinate expression $\\frac{1}{3}$. The true limit is simply $\\frac{1}{3}$. Applying L'Hôpital's rule where hypotheses do not hold produces an invalid result ($2$).",
+    tags: ["lhopital", "trap", "determinate-form", "common-mistakes"]
+  },
+  {
+    num: 9,
+    title: "Derivative of Absolute Value at Zero: d/dx[x|x|]",
+    diff: "medium",
+    latex: "f(x) = x|x| \\implies f'(0) = 0",
+    stmt: "Evaluate $\\frac{d}{dx}(x|x|)$ at $x = 0$ using the limit definition of the derivative.",
+    exp: "By limit definition: $f'(0) = \\lim_{h \\to 0} \\frac{f(0 + h) - f(0)}{h} = \\lim_{h \\to 0} \\frac{h|h| - 0}{h} = \\lim_{h \\to 0} |h|$. As $h \\to 0$, $|h| \\to 0$. Therefore $f'(0) = 0$. The trap is assuming that because $|x|$ is not differentiable at $0$, any product containing $|x|$ must also be non-differentiable. In fact, $x|x|$ is differentiable everywhere, with derivative $f'(x) = 2|x|$.",
+    tags: ["limit-definition", "absolute-value", "differentiability", "trap"]
+  },
+  {
+    num: 10,
+    title: "Tangent Line Non-Existence for Absolute Value",
+    diff: "easy",
+    latex: "f(x) = |x| \\text{ at } x = 0 \\implies \\text{No tangent line}",
+    stmt: "Find the equation of the line tangent to $f(x) = |x|$ at $x = 0$.",
+    exp: "There is NO tangent line at $x = 0$. For a unique tangent line to exist, the derivative $f'(0)$ must exist. The left derivative is $\\lim_{h \\to 0^-} \\frac{|h|}{h} = -1$, and the right derivative is $\\lim_{h \\to 0^+} \\frac{|h|}{h} = +1$. Because the one-sided derivatives disagree, $f'(0)$ does not exist, and the graph has a sharp corner with no unique tangent line.",
+    tags: ["tangent-line", "absolute-value", "non-existence", "corner"]
+  },
+  {
+    num: 11,
+    title: "Concavity vs. Increasing Derivative: f(x) = x^3",
+    diff: "medium",
+    latex: "f(x) = x^3 \\implies f'(x) = 3x^2 \\text{ is NOT strictly increasing on } \\mathbb{R}",
+    stmt: "If a function $f(x)$ is strictly increasing on an interval, does its derivative $f'(x)$ have to be strictly increasing? Test with $f(x) = x^3$.",
+    exp: "NO. A function being strictly increasing means $f'(x) \\ge 0$, whereas the derivative $f'(x)$ being strictly increasing means $f''(x) \\ge 0$ (which corresponds to CONCAVE UP). For $f(x) = x^3$: $f(x)$ is strictly increasing on $(-\\infty, \\infty)$. However, its derivative is $f'(x) = 3x^2$. For $x < 0$, $f'(x) = 3x^2$ is DECREASING (its derivative $6x < 0$). The trap is confusing the increase of $f$ with the increase of $f'$ (concavity).",
+    tags: ["increasing-functions", "concavity", "trap", "definitions"]
+  },
+  {
+    num: 12,
+    title: "Vertical Tangent Trap: f(x) = x^(1/3) at x = 0",
+    diff: "easy",
+    latex: "f'(x) = \\frac{1}{3x^{2/3}} \\implies \\lim_{x \\to 0} f'(x) = \\infty",
+    stmt: "Find the slope of the tangent line to $f(x) = x^{1/3}$ at $x = 0$. What does this imply about the derivative?",
+    exp: "Derivative for $x \\neq 0$: $f'(x) = \\frac{1}{3\\sqrt[3]{x^2}}$. As $x \\to 0$, $3x^{2/3} \\to 0^+$ from both sides, so $\\lim_{x \\to 0} f'(x) = +\\infty$. The derivative $f'(0)$ does not exist as a finite real number, which means the slope is infinite. The tangent line is vertical ($x = 0$, the $y$-axis). Trap: a curve can have a well-defined geometric tangent line even when the calculus derivative does not exist!",
+    tags: ["vertical-tangent", "derivative-undefined", "trap", "geometry"]
+  },
+  {
+    num: 13,
+    title: "Optimization Domain Trap: Soda Can Thickness",
+    diff: "hard",
+    latex: "C(r) = 4\\pi r^2 + \\frac{710}{r}, \\quad r \\in (0, \\infty)",
+    stmt: "A cylindrical soda can is to hold 355 cm³ of liquid. If the top and bottom metal is twice as thick per unit area as the side wall, set up the objective function and state its valid physical domain.",
+    exp: "Let $r$ be radius and $h$ height. Volume $\\pi r^2 h = 355 \\implies h = \\frac{355}{\\pi r^2}$. Let metal cost/unit area of side be $k$, so top/bottom cost is $2k$. Total metal used $M = 2k(2\\pi r^2) + k(2\\pi rh) = k\\left(4\\pi r^2 + \\frac{710}{r}\\right)$. The objective function to minimize is $f(r) = 4\\pi r^2 + \\frac{710}{r}$. Valid physical domain: $r \\in (0, \\infty)$ (open interval). The trap is including $r = 0$, where height would be infinite, or restricting $r$ to an arbitrary finite upper bound.",
+    tags: ["optimization", "domain", "physical-modeling", "cylinder"]
+  },
+  {
+    num: 14,
+    title: "Linear Approximation Over/Underestimation via Concavity",
+    diff: "medium",
+    latex: "f''(x) = -\\frac{1}{4x^{3/2}} < 0 \\implies L(x) \\text{ overestimates}",
+    stmt: "For $f(x) = \\sqrt{x}$ at $a = 100$, does the linear approximation overestimate or underestimate the value of $\\sqrt{103}$? Use concavity to explain.",
+    exp: "Compute second derivative: $f'(x) = \\frac{1}{2}x^{-1/2}$, so $f''(x) = -\\frac{1}{4}x^{-3/2} = -\\frac{1}{4x\\sqrt{x}}$. For all $x > 0$, $f''(x) < 0$, which means the graph of $y = \\sqrt{x}$ is CONCAVE DOWN. Because a concave down curve always lies BELOW its tangent lines, the tangent line approximation $L(x)$ must lie strictly ABOVE the true curve. Therefore, $L(103) = 10.15$ is an OVERESTIMATE of the true value $\\sqrt{103} \\approx 10.14889$.",
+    tags: ["linear-approximation", "concavity", "overestimate", "second-derivative"]
+  },
+  {
+    num: 15,
+    title: "Related Rates Angle Trap: Sliding Ladder Angle Rate",
+    diff: "medium",
+    latex: "\\cos\\theta = \\frac{x}{10} \\implies \\frac{d\\theta}{dt} = -\\frac{1}{10\\sin\\theta} \\frac{dx}{dt} = -\\frac{1}{y} \\frac{dx}{dt}",
+    stmt: "A ladder 10 meters long slides down a wall. Let $\\theta$ be the angle between the ladder and the ground. If the bottom slides away at 1 m/s, is the rate of change of $\\theta$ constant?",
+    exp: "NO. From the right triangle, $\\cos\\theta = x/10 \\implies x = 10\\cos\\theta$. Differentiating with respect to time $t$: $\\frac{dx}{dt} = -10\\sin\\theta \\frac{d\\theta}{dt} \\implies \\frac{d\\theta}{dt} = -\\frac{1}{10\\sin\\theta}\\frac{dx}{dt} = -\\frac{1}{y}\\frac{dx}{dt}$. Since the ladder is sliding down, $y$ (the vertical height) decreases toward 0, which causes the magnitude $|d\\theta/dt| = 1/y$ to increase toward infinity! Even though the base speed $dx/dt = 1$ is constant, the angle speed $d\\theta/dt$ accelerates and is NOT constant.",
+    tags: ["related-rates", "ladder", "angle", "trap", "non-linear"]
+  },
+  {
+    num: 16,
+    title: "Implicit Differentiation Domain Trap at (5, 0)",
+    diff: "medium",
+    latex: "x^2 + y^2 = 25 \\implies \\frac{dy}{dx} = -\\frac{x}{y}",
+    stmt: "Find $\\frac{dy}{dx}$ for $x^2 + y^2 = 25$ at the point (5, 0). Explain why the resulting slope expression yields a division by zero.",
+    exp: "Differentiating implicitly: $2x + 2y y' = 0 \\implies y' = -x/y$. At the point $(5, 0)$, substituting $y = 0$ yields $-5/0$, which is undefined. This division by zero reflects a real geometric property: at $(5, 0)$, the circle has a VERTICAL tangent line ($x = 5$). The derivative $\\frac{dy}{dx}$ represents the slope of the tangent line, and the slope of a vertical line is undefined. The trap is thinking the calculus is 'broken' rather than representing an infinite slope.",
+    tags: ["implicit-differentiation", "vertical-tangent", "circle", "trap"]
+  },
+  {
+    num: 17,
+    title: "Saddle Point vs. Local Extrema: f(x) = x^3 at x = 0",
+    diff: "easy",
+    latex: "f'(0) = 0 \\text{ but } x = 0 \\text{ is neither a local max nor local min}",
+    stmt: "Find all critical points of $f(x) = x^3$. Is $x = 0$ a local extremum? Classify it.",
+    exp: "$f'(x) = 3x^2 = 0 \\implies x = 0$ is the only critical point. To classify it, test the sign of $f'$ on either side of $0$: for $x < 0$, $3x^2 > 0$ (increasing); for $x > 0$, $3x^2 > 0$ (increasing). Because $f'$ does not change sign across $0$, $x = 0$ is NEITHER a local maximum NOR a local minimum. It is a stationary point of inflection (a horizontal inflection / saddle point). Trap: $f'(c) = 0$ does not guarantee an extremum.",
+    tags: ["critical-points", "saddle-point", "extrema", "inflection-point"]
+  },
+  {
+    num: 18,
+    title: "Cusps and Extreme Values: f(x) = |x|",
+    diff: "easy",
+    latex: "f(x) = |x| \\text{ has an absolute minimum at } x = 0 \\text{ where } f'(0) \\text{ DNE}",
+    stmt: "Can a function possess a relative extremum at a point where its derivative is undefined? Give an example.",
+    exp: "YES. Fermat's Theorem and the definition of critical numbers explicitly state that extrema can occur where $f'(c) = 0$ OR where $f'(c)$ does not exist. Classic example: $f(x) = |x|$. At $x = 0$, $f'(0)$ does not exist (sharp corner), yet $f(0) = 0 \\le f(x)$ for all $x \\in \\mathbb{R}$, which is a strict global (and local) minimum. Another example is $f(x) = x^{2/3}$, which has a cusp at $(0, 0)$ and a local minimum there.",
+    tags: ["cusp", "extrema", "differentiability", "definitions"]
+  },
+  {
+    num: 19,
+    title: "Friction Force Physical Domain in Mechanics",
+    diff: "medium",
+    latex: "\\theta \\in \\left[0, \\frac{\\pi}{2}\\right)",
+    stmt: "In the dragging force equation $F = \\frac{\\mu W}{\\cos\\theta + \\mu\\sin\\theta}$, what is the strict physical domain of $\\theta$ in practical mechanics?",
+    exp: "In real-world dragging of a crate, the pulling rope angle $\\theta$ is measured upward from the horizontal ground. The angle cannot be negative (pulling into the ground) and cannot exceed $\\pi/2 = 90^\\circ$ (pulling backward or pure vertical lifting, where normal force vanishes). Moreover, at $\\theta = 90^\\circ$, $\\cos 90^\\circ = 0$ and $F = W$, which is pure lifting without sliding friction. Hence the strict physical domain for dragging is $0 \\le \\theta < \\pi/2$. The mathematical function might be defined elsewhere, but mechanics restricts it to $\\theta \\in [0, \\pi/2)$.",
+    tags: ["physics", "domain", "mechanics", "friction"]
+  },
+  {
+    num: 20,
+    title: "MVT Derivative Bound on Function Growth",
+    diff: "medium",
+    latex: "f(3) - f(0) = f'(c)(3 - 0) \\le 2(3) = 6 \\implies f(3) \\le 11",
+    stmt: "Suppose $f$ is continuous on [0, 3] and differentiable on (0, 3), with $f(0) = 5$ and $f'(x) \\le 2$ for all $x$. What is the maximum possible value of $f(3)$?",
+    exp: "By the Mean Value Theorem, there exists some $c \\in (0, 3)$ such that $\\frac{f(3) - f(0)}{3 - 0} = f'(c)$. Rewriting: $f(3) = f(0) + 3f'(c) = 5 + 3f'(c)$. Since $f'(x) \\le 2$ for all $x$, we have $f'(c) \\le 2$. Thus $f(3) \\le 5 + 3(2) = 5 + 6 = 11$. The maximum possible value of $f(3)$ is 11.",
+    tags: ["mean-value-theorem", "bounds", "derivatives", "inequalities"]
+  },
+  {
+    num: 21,
+    title: "Asymptote vs. Limit Intersection Trap: sin(x)/x",
+    diff: "medium",
+    latex: "f(x) = \\frac{\\sin x}{x} \\text{ intersects } y = 0 \\text{ infinitely many times}",
+    stmt: "Can a function intersect its own horizontal asymptote? Give an example using $f(x) = \\frac{\\sin x}{x}$.",
+    exp: "YES. A widespread student misconception is that graphs can never touch or cross their asymptotes. While a graph can never cross a VERTICAL asymptote (where it is undefined), it CAN cross a HORIZONTAL asymptote any number of times. For $f(x) = \\frac{\\sin x}{x}$, the horizontal asymptote as $x \\to \\pm\\infty$ is $y = 0$. However, $f(x) = 0$ whenever $\\sin x = 0$, which occurs at $x = \\pm\\pi, \\pm 2\\pi, \\pm 3\\pi, \\dots$. The curve intersects its horizontal asymptote infinitely many times as it oscillates with decaying amplitude toward zero.",
+    tags: ["asymptotes", "horizontal-asymptotes", "trap", "sinc"]
+  },
+  {
+    num: 22,
+    title: "Increasing Function with Zero Derivative at Origin",
+    diff: "medium",
+    latex: "f'(0) = 0, \\text{ yet } f(x) = x^3 \\text{ is strictly increasing on } (-\\infty, \\infty)",
+    stmt: "Is $f(x) = x^3$ strictly increasing on (−∞, ∞) even though $f'(0) = 0$? Explain why a single point with zero derivative does not break strict monotonicity.",
+    exp: "YES. By definition, a function is strictly increasing if $x_1 < x_2 \\implies f(x_1) < f(x_2)$. For any two real numbers $x_1 < x_2$, we have $x_1^3 < x_2^3$, which satisfies the definition strictly everywhere on $\\mathbb{R}$. A theorem in calculus states: if $f'(x) > 0$ except at isolated points where $f'(x) = 0$, then $f(x)$ is still strictly increasing. Because $f'(x) = 3x^2 > 0$ for all $x \\neq 0$, the single stationary point at $0$ does not contain an interval where $f$ is flat, so strict monotonicity is preserved.",
+    tags: ["strict-monotonicity", "increasing", "derivatives", "trap"]
+  },
+  {
+    num: 23,
+    title: "Extreme Value Theorem Prerequisite Failure: 1/(x-2)",
+    diff: "easy",
+    latex: "f(x) = \\frac{1}{x - 2} \\text{ on } [1, 3]",
+    stmt: "Can the Extreme Value Theorem guarantee an absolute maximum and minimum for $f(x) = \\frac{1}{x - 2}$ on [1, 3]? Why?",
+    exp: "NO. The Extreme Value Theorem strictly requires the function to be CONTINUOUS on the closed interval $[a, b]$. Here, $f(x) = \\frac{1}{x - 2}$ has a vertical asymptote (infinite discontinuity) at $x = 2$, which lies squarely inside $[1, 3]$. Because the continuity hypothesis fails, the theorem provides no guarantee. In fact, $\\lim_{x \\to 2^+} f(x) = +\\infty$ and $\\lim_{x \\to 2^-} f(x) = -\\infty$, so $f$ has neither an absolute maximum nor an absolute minimum on $[1, 3]$.",
+    tags: ["extreme-value-theorem", "continuity", "asymptotes", "trap"]
+  },
+  {
+    num: 24,
+    title: "Critical Number vs. Domain Boundary: sqrt(9 - x^2)",
+    diff: "medium",
+    latex: "f'(x) = -\\frac{x}{\\sqrt{9 - x^2}} \\implies x = 0 \\text{ (Endpoints } \\pm 3 \\text{ not critical numbers)}",
+    stmt: "If $f(x) = \\sqrt{9 - x^2}$, find its critical numbers. Are endpoints included as critical numbers in standard calculus definitions?",
+    exp: "Domain: $[-3, 3]$. Differentiating: $f'(x) = \\frac{-2x}{2\\sqrt{9 - x^2}} = -\\frac{x}{\\sqrt{9 - x^2}}$. $f'(x) = 0 \\implies x = 0$. In standard modern calculus textbooks (Stewart, Thomas, Anton), a critical number of $f$ is defined as a number $c$ in the INTERIOR of the domain of $f$ (or an open interval in the domain) such that $f'(c) = 0$ or $f'(c)$ DNE. Because $x = \\pm 3$ are boundary endpoints of the domain $[-3, 3]$ where two-sided derivatives cannot even be defined, they are domain endpoints rather than interior critical numbers. Thus $x = 0$ is the only true critical number.",
+    tags: ["critical-numbers", "domain-boundary", "definitions", "trap"]
+  },
+  {
+    num: 25,
+    title: "Second Derivative Sign Trap: f''(x) > 0 vs f(x) > 0",
+    diff: "easy",
+    latex: "f(x) = x^2 - 10 \\implies f''(x) = 2 > 0, \\text{ but } f(0) = -10 < 0",
+    stmt: "If $f''(x) > 0$ on an interval (a, b), does that guarantee the function is positive ($f(x) > 0$) on that interval? Provide a counterexample.",
+    exp: "NO. $f''(x) > 0$ means the function is CONCAVE UP (bending upward like a cup, or its slope is increasing); it says NOTHING about the sign of the function values $f(x)$ themselves. Counterexample: $f(x) = x^2 - 10$ on $(-1, 1)$. Here $f'(x) = 2x$ and $f''(x) = 2 > 0$ everywhere on $(-1, 1)$. Yet $f(0) = -10 < 0$, which is negative throughout the entire interval $[-3, 3]$. The trap is confusing the position/value of a function with its curvature/concavity.",
+    tags: ["second-derivative", "concavity", "trap", "counterexample"]
+  }
+];
+
+const formattedTrap = trapQuestions.map(q => ({
+  id: `fast-calc-trap-${String(q.num).padStart(3, '0')}`,
+  type: "math_study",
+  subjectId: "calculus",
+  categoryId: "tricky-derivatives",
+  subcategoryId: "25-practice",
+  title: q.title,
+  difficulty: q.diff,
+  latexExpression: q.latex,
+  statement: q.stmt,
+  explanation: q.exp,
+  tags: q.tags,
+  hints: [
+    "Beware of common student misconceptions and edge cases.",
+    "Verify whether all hypothesis conditions of the theorem are satisfied.",
+    "Check non-differentiable points (cusps, corners, vertical tangents)."
+  ]
+}));
+
+const trapFilePath = path.join(__dirname, '../content/calculus/tricky-derivatives/25-practice/questions.json');
+fs.writeFileSync(trapFilePath, JSON.stringify(formattedTrap, null, 2), 'utf8');
+console.log('Saved 25 Tricky & Trap questions successfully.');

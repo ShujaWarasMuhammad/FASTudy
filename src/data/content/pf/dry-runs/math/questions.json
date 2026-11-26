@@ -1,0 +1,85 @@
+[
+  {
+    "id": "pf-math-001",
+    "type": "dry_run",
+    "subjectId": "pf",
+    "categoryId": "dry-runs",
+    "subcategoryId": "math",
+    "title": "Integer Division & Modulus",
+    "difficulty": "easy",
+    "code": "#include <stdio.h>\n\nint main() {\n    int a = 17, b = 5;\n    int q = a / b;\n    int r = a % b;\n    printf(\"%d %d\", q, r);\n    return 0;\n}",
+    "expectedOutput": "3 2",
+    "explanation": "Integer division 17 / 5 = 3 (truncated towards zero in C). Modulus 17 % 5 = 2 (remainder).",
+    "tags": [
+      "division",
+      "modulus",
+      "arithmetic"
+    ],
+    "hints": [
+      "Integer division truncates decimal parts in C",
+      "Modulus operator % yields the remainder"
+    ]
+  },
+  {
+    "id": "pf-math-002",
+    "type": "dry_run",
+    "subjectId": "pf",
+    "categoryId": "dry-runs",
+    "subcategoryId": "math",
+    "title": "Pre and Post Increment Sequence",
+    "difficulty": "medium",
+    "code": "#include <stdio.h>\n\nint main() {\n    int x = 5;\n    int y = x++ + ++x;\n    printf(\"%d %d\", x, y);\n    return 0;\n}",
+    "expectedOutput": "7 12",
+    "explanation": "Post-increment uses 5 then updates x to 6. Pre-increment increments x to 7 and uses 7. y = 5 + 7 = 12. Final x = 7.",
+    "tags": [
+      "increment",
+      "operators",
+      "evaluation"
+    ],
+    "hints": [
+      "Post-increment evaluates before incrementing",
+      "Pre-increment increments before evaluation"
+    ]
+  },
+  {
+    "id": "pf-math-003",
+    "type": "dry_run",
+    "subjectId": "pf",
+    "categoryId": "dry-runs",
+    "subcategoryId": "math",
+    "title": "Explicit Type Casting",
+    "difficulty": "easy",
+    "code": "#include <stdio.h>\n\nint main() {\n    int a = 10, b = 3;\n    float c = (float)a / b;\n    float d = a / b;\n    printf(\"%.2f %.2f\", c, d);\n    return 0;\n}",
+    "expectedOutput": "3.33 3.00",
+    "explanation": "Casting a to float forces floating-point division (3.33). Without cast, integer division produces 3.00.",
+    "tags": [
+      "casting",
+      "floating-point",
+      "division"
+    ],
+    "hints": [
+      "Casting one operand promotes the entire division to float",
+      "Integer division truncates prior to assignment"
+    ]
+  },
+  {
+    "id": "pf-math-004",
+    "type": "dry_run",
+    "subjectId": "pf",
+    "categoryId": "dry-runs",
+    "subcategoryId": "math",
+    "title": "Compound Assignment Sequence",
+    "difficulty": "easy",
+    "code": "#include <stdio.h>\n\nint main() {\n    int x = 10;\n    x += 5;\n    x -= 3;\n    x *= 2;\n    x /= 4;\n    printf(\"%d\", x);\n    return 0;\n}",
+    "expectedOutput": "6",
+    "explanation": "Step 1: 10 + 5 = 15. Step 2: 15 - 3 = 12. Step 3: 12 * 2 = 24. Step 4: 24 / 4 = 6.",
+    "tags": [
+      "operators",
+      "assignment",
+      "arithmetic"
+    ],
+    "hints": [
+      "Trace the modifications to variable x line by line"
+    ]
+  }
+]

@@ -1,0 +1,20 @@
+[
+  {
+    "id": "c1",
+    "questionId": "pf-math-001",
+    "userId": "u_101",
+    "username": "student_fast",
+    "content": "Integer division in C always truncates toward zero.",
+    "createdAt": "2026-10-15T10:30:00Z",
+    "likes": 5
+  },
+  {
+    "id": "c2",
+    "questionId": "calc-limits-001",
+    "userId": "u_102",
+    "username": "calculus_pro",
+    "content": "Because this polynomial is continuous everywhere, direct substitution is sufficient.",
+    "createdAt": "2026-10-16T14:20:00Z",
+    "likes": 8
+  }
+]

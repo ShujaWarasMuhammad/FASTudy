@@ -1,0 +1,254 @@
+const fs = require('fs');
+const path = require('path');
+
+// 25 Limits, L'Hôpital's Rule & Continuity Practice Questions (Page 7-8)
+const limQuestions = [
+  {
+    num: 1,
+    title: "Algebraic Limit Difference of Squares",
+    diff: "easy",
+    latex: "\\lim_{x \\to 3} \\frac{x^2 - 9}{x - 3} = 6",
+    stmt: "Evaluate $\\lim_{x \\to 3} \\frac{x^2 - 9}{x - 3}$.",
+    exp: "Factor numerator: $x^2 - 9 = (x - 3)(x + 3)$. For $x \\neq 3$: $\\frac{(x - 3)(x + 3)}{x - 3} = x + 3$. Evaluating the limit as $x \\to 3$: $3 + 3 = 6$.",
+    tags: ["limits", "factoring", "algebraic-limits"]
+  },
+  {
+    num: 2,
+    title: "Rationalizing Radical Limit",
+    diff: "easy",
+    latex: "\\lim_{x \\to 0} \\frac{\\sqrt{x + 4} - 2}{x} = \\frac{1}{4}",
+    stmt: "Evaluate $\\lim_{x \\to 0} \\frac{\\sqrt{x + 4} - 2}{x}$.",
+    exp: "Multiply numerator and denominator by conjugate $(\\sqrt{x + 4} + 2)$: $\\frac{(\\sqrt{x + 4} - 2)(\\sqrt{x + 4} + 2)}{x(\\sqrt{x + 4} + 2)} = \\frac{(x + 4) - 4}{x(\\sqrt{x + 4} + 2)} = \\frac{x}{x(\\sqrt{x + 4} + 2)} = \\frac{1}{\\sqrt{x + 4} + 2}$. As $x \\to 0$: $\\frac{1}{\\sqrt{4} + 2} = \\frac{1}{2 + 2} = \\frac{1}{4}$.",
+    tags: ["limits", "conjugate", "rationalization", "radicals"]
+  },
+  {
+    num: 3,
+    title: "Trigonometric Sine Ratio Limit",
+    diff: "easy",
+    latex: "\\lim_{x \\to 0} \\frac{\\sin(5x)}{\\sin(3x)} = \\frac{5}{3}",
+    stmt: "Evaluate $\\lim_{x \\to 0} \\frac{\\sin(5x)}{\\sin(3x)}$.",
+    exp: "Rewrite using standard limits: $\\lim_{x \\to 0} \\frac{\\frac{\\sin(5x)}{5x} \\cdot 5x}{\\frac{\\sin(3x)}{3x} \\cdot 3x} = \\frac{5}{3} \\cdot \\frac{\\lim_{x \\to 0} \\frac{\\sin(5x)}{5x}}{\\lim_{x \\to 0} \\frac{\\sin(3x)}{3x}} = \\frac{5}{3} \\cdot \\frac{1}{1} = \\frac{5}{3}$. Alternatively, apply L'Hôpital: $\\lim_{x \\to 0} \\frac{5\\cos(5x)}{3\\cos(3x)} = \\frac{5(1)}{3(1)} = \\frac{5}{3}$.",
+    tags: ["limits", "trigonometry", "sinc", "lhopital"]
+  },
+  {
+    num: 4,
+    title: "Standard Cosine Quadratic Limit",
+    diff: "easy",
+    latex: "\\lim_{x \\to 0} \\frac{1 - \\cos x}{x^2} = \\frac{1}{2}",
+    stmt: "Evaluate $\\lim_{x \\to 0} \\frac{1 - \\cos x}{x^2}$.",
+    exp: "Indeterminate form $0/0$. Apply L'Hôpital's Rule: $\\lim_{x \\to 0} \\frac{\\sin x}{2x} = \\frac{1}{2} \\lim_{x \\to 0} \\frac{\\sin x}{x} = \\frac{1}{2}(1) = \\frac{1}{2}$. Alternatively, multiply by $(1 + \\cos x)/(1 + \\cos x)$ to get $\\frac{\\sin^2 x}{x^2(1 + \\cos x)} \\to \\frac{1}{1 + 1} = \\frac{1}{2}$.",
+    tags: ["limits", "lhopital", "trigonometry", "standard-limits"]
+  },
+  {
+    num: 5,
+    title: "Limit at Infinity of Rational Function",
+    diff: "easy",
+    latex: "\\lim_{x \\to \\infty} \\frac{3x^2 - 5x + 2}{4x^2 + x - 7} = \\frac{3}{4}",
+    stmt: "Evaluate $\\lim_{x \\to \\infty} \\frac{3x^2 - 5x + 2}{4x^2 + x - 7}$.",
+    exp: "Divide numerator and denominator by the highest power $x^2$: $\\lim_{x \\to \\infty} \\frac{3 - 5/x + 2/x^2}{4 + 1/x - 7/x^2} = \\frac{3 - 0 + 0}{4 + 0 - 0} = \\frac{3}{4}$.",
+    tags: ["limits", "infinity", "rational-functions", "asymptotes"]
+  },
+  {
+    num: 6,
+    title: "L'Hôpital's Rule: 0/0 Exponential Second-Order Limit",
+    diff: "medium",
+    latex: "\\lim_{x \\to 0} \\frac{e^x - 1 - x}{x^2} = \\frac{1}{2}",
+    stmt: "Evaluate $\\lim_{x \\to 0} \\frac{e^x - 1 - x}{x^2}$.",
+    exp: "At $x = 0$, numerator is $e^0 - 1 - 0 = 0$ and denominator is $0$ ($0/0$ form). Apply L'Hôpital once: $\\lim_{x \\to 0} \\frac{e^x - 1}{2x}$ (still $0/0$). Apply L'Hôpital a second time: $\\lim_{x \\to 0} \\frac{e^x}{2} = \\frac{e^0}{2} = \\frac{1}{2}$.",
+    tags: ["limits", "lhopital", "exponential", "indeterminate-forms"]
+  },
+  {
+    num: 7,
+    title: "L'Hôpital's Rule: Infinity over Infinity with Logarithm",
+    diff: "easy",
+    latex: "\\lim_{x \\to \\infty} \\frac{\\ln x}{x^3} = 0",
+    stmt: "Evaluate $\\lim_{x \\to \\infty} \\frac{\\ln x}{x^3}$.",
+    exp: "Indeterminate form $\\infty/\\infty$. Apply L'Hôpital's Rule: differentiate numerator ($1/x$) and denominator ($3x^2$): $\\lim_{x \\to \\infty} \\frac{1/x}{3x^2} = \\lim_{x \\to \\infty} \\frac{1}{3x^3} = 0$. Polynomial growth dominates logarithmic growth.",
+    tags: ["limits", "lhopital", "logarithms", "growth-rates"]
+  },
+  {
+    num: 8,
+    title: "L'Hôpital's Rule: 0 times Infinity Product Form",
+    diff: "medium",
+    latex: "\\lim_{x \\to 0^+} x\\ln x = 0",
+    stmt: "Evaluate $\\lim_{x \\to 0^+} x\\ln x$.",
+    exp: "Indeterminate form $0 \\cdot (-\\infty)$. Rewrite as a quotient: $\\lim_{x \\to 0^+} \\frac{\\ln x}{1/x}$ ($-\\infty/\\infty$ form). Apply L'Hôpital's Rule: $\\lim_{x \\to 0^+} \\frac{1/x}{-1/x^2} = \\lim_{x \\to 0^+} (-x) = 0$.",
+    tags: ["limits", "lhopital", "product-form", "logarithms"]
+  },
+  {
+    num: 9,
+    title: "L'Hôpital's Rule: Logarithmic Difference Form",
+    diff: "medium",
+    latex: "\\lim_{x \\to 1} \\left( \\frac{1}{\\ln x} - \\frac{1}{x - 1} \\right) = \\frac{1}{2}",
+    stmt: "Evaluate $\\lim_{x \\to 1} \\left( \\frac{1}{\\ln x} - \\frac{1}{x - 1} \\right)$.",
+    exp: "Form $\\infty - \\infty$. Combine fractions: $\\lim_{x \\to 1} \\frac{x - 1 - \\ln x}{(x - 1)\\ln x}$ ($0/0$ form). Apply L'Hôpital: numerator derivative is $1 - 1/x$; denominator derivative is $\\ln x + \\frac{x-1}{x} = \\ln x + 1 - 1/x$. Limit becomes $\\lim_{x \\to 1} \\frac{1 - 1/x}{\\ln x + 1 - 1/x}$ ($0/0$). Apply L'Hôpital again: numerator derivative is $1/x^2$; denominator is $1/x + 1/x^2$. At $x = 1$: $\\frac{1}{1 + 1} = \\frac{1}{2}$.",
+    tags: ["limits", "lhopital", "difference-form", "logarithms"]
+  },
+  {
+    num: 10,
+    title: "Exponential Form Limit (1 + 3x)^(2/x)",
+    diff: "medium",
+    latex: "\\lim_{x \\to 0} (1 + 3x)^{2/x} = e^6",
+    stmt: "Evaluate $\\lim_{x \\to 0} (1 + 3x)^{2/x}$.",
+    exp: "Form $1^\\infty$. Let $y = (1 + 3x)^{2/x} \\implies \\ln y = \\frac{2\\ln(1 + 3x)}{x}$ ($0/0$ form). Apply L'Hôpital: $\\lim_{x \\to 0} \\frac{2 \\cdot \\frac{3}{1 + 3x}}{1} = 2(3) = 6$. Therefore, $\\lim_{x \\to 0} y = e^6$.",
+    tags: ["limits", "exponential-form", "lhopital", "euler-number"]
+  },
+  {
+    num: 11,
+    title: "Exponential Form Limit (sin x)^x",
+    diff: "hard",
+    latex: "\\lim_{x \\to 0^+} (\\sin x)^x = 1",
+    stmt: "Evaluate $\\lim_{x \\to 0^+} (\\sin x)^x$.",
+    exp: "Form $0^0$. Let $y = (\\sin x)^x \\implies \\ln y = x\\ln(\\sin x) = \\frac{\\ln(\\sin x)}{1/x}$. Form $-\\infty/\\infty$. Apply L'Hôpital: $\\lim_{x \\to 0^+} \\frac{\\frac{\\cos x}{\\sin x}}{-1/x^2} = -\\lim_{x \\to 0^+} \\frac{x^2 \\cos x}{\\sin x} = -\\lim_{x \\to 0^+} \\left( \\frac{x}{\\sin x} \\right) (x\\cos x) = -(1)(0) = 0$. Thus the limit is $e^0 = 1$.",
+    tags: ["limits", "indeterminate-powers", "trigonometry", "lhopital"]
+  },
+  {
+    num: 12,
+    title: "Indeterminate Power Limit Definition of e^2",
+    diff: "easy",
+    latex: "\\lim_{x \\to \\infty} \\left( 1 + \\frac{2}{x} \\right)^x = e^2",
+    stmt: "Evaluate $\\lim_{x \\to \\infty} \\left( 1 + \\frac{2}{x} \\right)^x$.",
+    exp: "Using the standard limit definition $\\lim_{x \\to \\infty} (1 + a/x)^x = e^a$. With $a = 2$, this immediately yields $e^2$. Alternatively, $\\ln y = x\\ln(1 + 2/x) = \\frac{\\ln(1 + 2/x)}{1/x} \\to 2$, so $y \\to e^2$.",
+    tags: ["limits", "euler-number", "exponential-limits", "infinity"]
+  },
+  {
+    num: 13,
+    title: "Complex L'Hôpital Form: x minus arctan(x)",
+    diff: "hard",
+    latex: "\\lim_{x \\to 0} \\frac{x - \\arctan x}{x^3} = \\frac{1}{3}",
+    stmt: "Evaluate $\\lim_{x \\to 0} \\frac{x - \\arctan x}{x^3}$.",
+    exp: "Form $0/0$. Apply L'Hôpital's Rule: $\\lim_{x \\to 0} \\frac{1 - \\frac{1}{1 + x^2}}{3x^2} = \\lim_{x \\to 0} \\frac{\\frac{(1 + x^2) - 1}{1 + x^2}}{3x^2} = \\lim_{x \\to 0} \\frac{x^2}{3x^2(1 + x^2)} = \\lim_{x \\to 0} \\frac{1}{3(1 + x^2)} = \\frac{1}{3(1)} = \\frac{1}{3}$.",
+    tags: ["limits", "lhopital", "arctan", "series-approximation"]
+  },
+  {
+    num: 14,
+    title: "Trigonometric Exponential Form: (cos x)^(1/x^2)",
+    diff: "hard",
+    latex: "\\lim_{x \\to 0} (\\cos x)^{1/x^2} = e^{-1/2} = \\frac{1}{\\sqrt{e}}",
+    stmt: "Evaluate $\\lim_{x \\to 0} (\\cos x)^{1/x^2}$.",
+    exp: "Form $1^\\infty$. Take natural log: $\\ln y = \\frac{\\ln(\\cos x)}{x^2}$ ($0/0$). Apply L'Hôpital: $\\lim_{x \\to 0} \\frac{-\\tan x}{2x} = -\\frac{1}{2} \\lim_{x \\to 0} \\frac{\\tan x}{x} = -\\frac{1}{2}(1) = -\\frac{1}{2}$. Exponentiating: $e^{-1/2} = \\frac{1}{\\sqrt{e}}$.",
+    tags: ["limits", "lhopital", "trigonometry", "exponential-form"]
+  },
+  {
+    num: 15,
+    title: "Polynomial Rational Limit (Double Root Cancellation)",
+    diff: "medium",
+    latex: "\\lim_{x \\to 1} \\frac{x^3 - 3x + 2}{x^3 - x^2 - x + 1} = \\frac{3}{2}",
+    stmt: "Evaluate $\\lim_{x \\to 1} \\frac{x^3 - 3x + 2}{x^3 - x^2 - x + 1}$.",
+    exp: "Factoring both cubic polynomials: $x^3 - 3x + 2 = (x - 1)^2(x + 2)$, and $x^3 - x^2 - x + 1 = x^2(x - 1) - (x - 1) = (x - 1)(x^2 - 1) = (x - 1)^2(x + 1)$. Canceling $(x - 1)^2$: $\\lim_{x \\to 1} \\frac{x + 2}{x + 1} = \\frac{1 + 2}{1 + 1} = \\frac{3}{2}$.",
+    tags: ["limits", "factoring", "cubics", "rational-functions"]
+  },
+  {
+    num: 16,
+    title: "Continuity Classification for Rational Function",
+    diff: "easy",
+    latex: "f(x) = \\frac{x^2 - 4}{x - 2}",
+    stmt: "Determine the points of discontinuity for $f(x) = \\frac{x^2 - 4}{x - 2}$ and identify the type of discontinuity.",
+    exp: "$f(x)$ is undefined at $x = 2$ because denominator is zero. However, $\\lim_{x \\to 2} \\frac{(x - 2)(x + 2)}{x - 2} = \\lim_{x \\to 2} (x + 2) = 4$. Because the two-sided limit exists and is finite, the discontinuity at $x = 2$ is a removable discontinuity (a hole in the graph).",
+    tags: ["continuity", "removable-discontinuity", "classification"]
+  },
+  {
+    num: 17,
+    title: "Continuous Extension for Sinc Trigonometric Function",
+    diff: "easy",
+    latex: "F(x) = \\begin{cases} \\frac{\\sin(4x)}{x}, & x \\neq 0 \\\\ 4, & x = 0 \\end{cases}",
+    stmt: "Find the continuous extension function for $f(x) = \\frac{\\sin(4x)}{x}$ at $x = 0$.",
+    exp: "Compute the limit: $\\lim_{x \\to 0} \\frac{\\sin(4x)}{x} = 4\\lim_{x \\to 0} \\frac{\\sin(4x)}{4x} = 4(1) = 4$. Since the limit is 4, we define the continuous extension $F(x)$ by setting $F(0) = 4$ and $F(x) = \\frac{\\sin(4x)}{x}$ for $x \\neq 0$.",
+    tags: ["continuity", "continuous-extension", "trigonometry"]
+  },
+  {
+    num: 18,
+    title: "Piecewise Continuity Constants at x = 2",
+    diff: "medium",
+    latex: "f(x) = \\begin{cases} ax^2 + b, & x < 2 \\\\ 5, & x = 2 \\\\ 2x - a + b, & x > 2 \\end{cases}",
+    stmt: "Find values of $a$ and $b$ that make $f(x)$ continuous everywhere:\n$$f(x) = \\begin{cases} ax^2 + b, & x < 2 \\\\ 5, & x = 2 \\\\ 2x - a + b, & x > 2 \\end{cases}$$",
+    exp: "For continuity at $x = 2$, left and right limits must equal $f(2) = 5$. Left limit: $a(2)^2 + b = 4a + b = 5$. Right limit: $2(2) - a + b = 4 - a + b = 5 \\implies -a + b = 1$. Subtracting the two equations: $(4a + b) - (-a + b) = 5 - 1 \\implies 5a = 4 \\implies a = 4/5 = 0.8$. Then $b = 1 + a = 1 + 0.8 = 1.8 = 9/5$. Both values $a = 4/5, b = 9/5$ make $f(x)$ continuous everywhere.",
+    tags: ["continuity", "piecewise-functions", "constants", "linear-system"]
+  },
+  {
+    num: 19,
+    title: "Complex Piecewise Continuity Across Multiple Intervals",
+    diff: "hard",
+    latex: "f(x) = \\begin{cases} \\frac{x^2 - 1}{x - 1}, & x < 1 \\\\ ax^2 + bx + 3, & 1 \\le x \\le 3 \\\\ 2x - a - b, & x > 3 \\end{cases}",
+    stmt: "Find values of $a$ and $b$ making $f(x)$ continuous on its domain:\n$$f(x) = \\begin{cases} \\frac{x^2 - 1}{x - 1}, & x < 1 \\\\ ax^2 + bx + 3, & 1 \\le x \\le 3 \\\\ 2x - a - b, & x > 3 \\end{cases}$$",
+    exp: "At $x = 1$: Left limit is $\\lim_{x \\to 1^-} (x + 1) = 2$. Right limit and value is $a(1)^2 + b(1) + 3 = a + b + 3$. Thus $a + b + 3 = 2 \\implies a + b = -1$. At $x = 3$: Left limit and value is $a(9) + b(3) + 3 = 9a + 3b + 3$. Right limit is $2(3) - a - b = 6 - (a + b)$. Since $a + b = -1$, right limit is $6 - (-1) = 7$. Thus $9a + 3b + 3 = 7 \\implies 9a + 3b = 4$. Multiply $a + b = -1$ by 3: $3a + 3b = -3$. Subtracting gives $6a = 7 \\implies a = 7/6$. Then $b = -1 - 7/6 = -13/6$.",
+    tags: ["continuity", "piecewise-functions", "algebra", "limits"]
+  },
+  {
+    num: 20,
+    title: "Greatest Integer Function (Floor) One-Sided Limits",
+    diff: "easy",
+    latex: "\\lim_{x \\to 2^-} \\lfloor x \\rfloor = 1, \\quad \\lim_{x \\to 2^+} \\lfloor x \\rfloor = 2",
+    stmt: "Evaluate $\\lim_{x \\to 2^-} \\lfloor x \\rfloor$ and $\\lim_{x \\to 2^+} \\lfloor x \\rfloor$, and discuss continuity at $x = 2$.",
+    exp: "For $x$ approaching 2 from the left ($1 < x < 2$), $\\lfloor x \\rfloor = 1$, so $\\lim_{x \\to 2^-} \\lfloor x \\rfloor = 1$. For $x$ approaching 2 from the right ($2 < x < 3$), $\\lfloor x \\rfloor = 2$, so $\\lim_{x \\to 2^+} \\lfloor x \\rfloor = 2$. Because the left and right limits are not equal ($1 \\neq 2$), the two-sided limit does not exist, and $f(x) = \\lfloor x \\rfloor$ has a jump discontinuity of jump size $2 - 1 = 1$ at $x = 2$.",
+    tags: ["limits", "floor-function", "jump-discontinuity", "one-sided-limits"]
+  },
+  {
+    num: 21,
+    title: "Squeeze Theorem Application: x^2 sin(1/x)",
+    diff: "medium",
+    latex: "-x^2 \\le x^2\\sin(1/x) \\le x^2 \\implies \\lim_{x \\to 0} x^2\\sin(1/x) = 0",
+    stmt: "Evaluate $\\lim_{x \\to 0} x^2 \\sin\\left(\\frac{1}{x}\\right)$ using the Squeeze Theorem.",
+    exp: "For all $x \\neq 0$, the sine function is bounded: $-1 \\le \\sin(1/x) \\le 1$. Multiplying through by $x^2 \\ge 0$: $-x^2 \\le x^2 \\sin(1/x) \\le x^2$. Since $\\lim_{x \\to 0} (-x^2) = 0$ and $\\lim_{x \\to 0} x^2 = 0$, by the Squeeze (Sandwich) Theorem, $\\lim_{x \\to 0} x^2\\sin(1/x) = 0$.",
+    tags: ["squeeze-theorem", "limits", "trigonometry", "bounds"]
+  },
+  {
+    num: 22,
+    title: "One-Sided Limits with Absolute Value",
+    diff: "easy",
+    latex: "\\lim_{x \\to 3^-} \\frac{|x - 3|}{x - 3} = -1, \\quad \\lim_{x \\to 3^+} \\frac{|x - 3|}{x - 3} = 1",
+    stmt: "Evaluate $\\lim_{x \\to 3^-} \\frac{|x - 3|}{x - 3}$ and $\\lim_{x \\to 3^+} \\frac{|x - 3|}{x - 3}$.",
+    exp: "For $x < 3$, $x - 3 < 0$, so $|x - 3| = -(x - 3)$. Thus $\\lim_{x \\to 3^-} \\frac{-(x - 3)}{x - 3} = -1$. For $x > 3$, $x - 3 > 0$, so $|x - 3| = x - 3$. Thus $\\lim_{x \\to 3^+} \\frac{x - 3}{x - 3} = 1$. The function has a jump discontinuity at $x = 3$.",
+    tags: ["limits", "absolute-value", "one-sided-limits", "jump-discontinuity"]
+  },
+  {
+    num: 23,
+    title: "Intermediate Value Theorem Root Guarantee",
+    diff: "medium",
+    latex: "f(0) = 1 > 0, \\quad f(1) = -2 < 0 \\implies \\exists c \\in (0, 1): f(c) = 0",
+    stmt: "Show that the equation $x^3 - 4x + 1 = 0$ has at least one real root in the interval [0, 1].",
+    exp: "Let $f(x) = x^3 - 4x + 1$. As a polynomial, $f$ is continuous on the closed interval $[0, 1]$. Evaluate at endpoints: $f(0) = 0^3 - 4(0) + 1 = 1 > 0$, and $f(1) = 1^3 - 4(1) + 1 = -2 < 0$. Since $f(0)$ and $f(1)$ have opposite signs ($f(1) < 0 < f(0)$), by the Intermediate Value Theorem (IVT), there exists at least one real number $c \\in (0, 1)$ such that $f(c) = 0$.",
+    tags: ["intermediate-value-theorem", "continuity", "root-finding", "theorems"]
+  },
+  {
+    num: 24,
+    title: "Asymptotic Limit with Radical Difference at Infinity",
+    diff: "medium",
+    latex: "\\lim_{x \\to \\infty} \\left( \\sqrt{x^2 + 4x} - x \\right) = 2",
+    stmt: "Find $\\lim_{x \\to \\infty} \\left( \\sqrt{x^2 + 4x} - x \\right)$.",
+    exp: "Form $\\infty - \\infty$. Multiply and divide by the conjugate $(\\sqrt{x^2 + 4x} + x)$: $\\lim_{x \\to \\infty} \\frac{(\\sqrt{x^2 + 4x} - x)(\\sqrt{x^2 + 4x} + x)}{\\sqrt{x^2 + 4x} + x} = \\lim_{x \\to \\infty} \\frac{(x^2 + 4x) - x^2}{\\sqrt{x^2 + 4x} + x} = \\lim_{x \\to \\infty} \\frac{4x}{\\sqrt{x^2(1 + 4/x)} + x} = \\lim_{x \\to \\infty} \\frac{4x}{x\\sqrt{1 + 4/x} + x} = \\lim_{x \\to \\infty} \\frac{4}{\\sqrt{1 + 4/x} + 1} = \\frac{4}{\\sqrt{1 + 0} + 1} = \\frac{4}{2} = 2$.",
+    tags: ["limits", "conjugate", "radicals", "infinity"]
+  },
+  {
+    num: 25,
+    title: "Advanced Limit Form: (x cos x - sin x) / x^3",
+    diff: "hard",
+    latex: "\\lim_{x \\to 0} \\frac{x\\cos x - \\sin x}{x^3} = -\\frac{1}{3}",
+    stmt: "Evaluate $\\lim_{x \\to 0} \\frac{x\\cos x - \\sin x}{x^3}$.",
+    exp: "Indeterminate form $0/0$. Apply L'Hôpital's Rule: derivative of numerator is $(1\\cos x - x\\sin x) - \\cos x = -x\\sin x$. Derivative of denominator is $3x^2$. Limit simplifies to: $\\lim_{x \\to 0} \\frac{-x\\sin x}{3x^2} = -\\frac{1}{3} \\lim_{x \\to 0} \\frac{\\sin x}{x} = -\\frac{1}{3}(1) = -\\frac{1}{3}$. (Alternatively using Taylor series: $x\\cos x = x(1 - x^2/2) = x - x^3/2$, and $\\sin x = x - x^3/6$, so numerator is $-x^3/2 + x^3/6 = -x^3/3$, yielding $-1/3$).",
+    tags: ["limits", "lhopital", "trigonometry", "taylor-series"]
+  }
+];
+
+const formattedLim = limQuestions.map(q => ({
+  id: `fast-calc-lim-${String(q.num).padStart(3, '0')}`,
+  type: "math_study",
+  subjectId: "calculus",
+  categoryId: "limits-continuity",
+  subcategoryId: "25-practice",
+  title: q.title,
+  difficulty: q.diff,
+  latexExpression: q.latex,
+  statement: q.stmt,
+  explanation: q.exp,
+  tags: q.tags,
+  hints: [
+    "Check the direct substitution form (0/0, infinity/infinity, or 1^infinity).",
+    "Apply algebraic simplification, factoring, rationalization, or L'Hôpital's rule.",
+    "Evaluate the simplified limit expression."
+  ]
+}));
+
+const limFilePath = path.join(__dirname, '../content/calculus/limits-continuity/25-practice/questions.json');
+fs.writeFileSync(limFilePath, JSON.stringify(formattedLim, null, 2), 'utf8');
+console.log('Saved 25 Limits & Continuity questions successfully.');

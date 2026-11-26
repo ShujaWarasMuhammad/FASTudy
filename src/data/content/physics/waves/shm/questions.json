@@ -1,0 +1,23 @@
+[
+  {
+    "id": "phy-shm-001",
+    "type": "math_study",
+    "subjectId": "physics",
+    "categoryId": "waves",
+    "subcategoryId": "shm",
+    "title": "Simple Harmonic Motion Differential Equation",
+    "difficulty": "medium",
+    "latexExpression": "\\frac{d^2 x}{dt^2} + \\omega^2 x = 0 \\quad \\implies \\quad x(t) = A\\cos(\\omega t + \\phi)",
+    "statement": "Study the standard equation of motion for a simple harmonic oscillator:",
+    "explanation": "The acceleration is directly proportional to the displacement and directed towards the equilibrium position.",
+    "tags": [
+      "oscillations",
+      "shm",
+      "study-card"
+    ],
+    "hints": [
+      "Recall Hooke's law F = -kx",
+      "Omega is the angular frequency sqrt(k/m)"
+    ]
+  }
+]

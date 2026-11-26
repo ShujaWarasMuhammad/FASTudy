@@ -1,0 +1,78 @@
+{
+  "id": "pf",
+  "name": "Programming Fundamentals",
+  "shortName": "PF",
+  "description": "C/C++ fundamentals, dry runs, control flow, memory tracing, and online compiled logic building",
+  "categories": [
+    {
+      "id": "dry-runs",
+      "name": "Dry Runs",
+      "subcategories": [
+        {
+          "id": "math",
+          "name": "Math Operations"
+        },
+        {
+          "id": "bitwise",
+          "name": "Bitwise Operations"
+        },
+        {
+          "id": "loops",
+          "name": "Loops & Iteration"
+        },
+        {
+          "id": "arrays",
+          "name": "Arrays & Strings"
+        },
+        {
+          "id": "pointers",
+          "name": "Pointers & Memory"
+        },
+        {
+          "id": "recursion",
+          "name": "Recursion"
+        },
+        {
+          "id": "functions",
+          "name": "Functions & Scope"
+        }
+      ]
+    },
+    {
+      "id": "logic-building",
+      "name": "Logic Building",
+      "subcategories": [
+        {
+          "id": "patterns",
+          "name": "Pattern Printing"
+        },
+        {
+          "id": "sorting",
+          "name": "Sorting Algorithms"
+        },
+        {
+          "id": "searching",
+          "name": "Searching Algorithms"
+        }
+      ]
+    },
+    {
+      "id": "bug-hunting",
+      "name": "Bug Hunting",
+      "subcategories": [
+        {
+          "id": "syntax",
+          "name": "Syntax Errors"
+        },
+        {
+          "id": "logical",
+          "name": "Logical Errors"
+        },
+        {
+          "id": "runtime",
+          "name": "Runtime Errors"
+        }
+      ]
+    }
+  ]
+}

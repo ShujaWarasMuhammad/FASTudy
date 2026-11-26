@@ -1,0 +1,28 @@
+[
+  {
+    "id": "pf-recursion-001",
+    "type": "dry_run",
+    "subjectId": "pf",
+    "categoryId": "dry-runs",
+    "subcategoryId": "recursion",
+    "title": "Recursive Factorial Evaluation",
+    "difficulty": "medium",
+    "code": "#include <stdio.h>\n\nint fact(int n) {\n    if (n <= 1) return 1;\n    return n * fact(n - 1);\n}\n\nint main() {\n    printf(\"%d\", fact(5));\n    return 0;\n}",
+    "expectedOutput": "120",
+    "explanation": "fact(5) = 5 * 4 * 3 * 2 * 1 = 120.",
+    "tags": [
+      "recursion",
+      "call-stack",
+      "factorial"
+    ],
+    "hints": [
+      "Trace call tree: 5 * 24 = 120"
+    ],
+    "visualization": {
+      "type": "mermaid",
+      "title": "Recursive Call Stack Tree & Return Unwinding",
+      "content": "graph TD\n    A[\"fact(5) = 5 * fact(4)\"] --> B[\"fact(4) = 4 * fact(3)\"]\n    B --> C[\"fact(3) = 3 * fact(2)\"]\n    C --> D[\"fact(2) = 2 * fact(1)\"]\n    D --> E[\"fact(1) returns 1 (Base Case)\"]\n    E -. \"returns 1\" .-> D\n    D -. \"returns 2\" .-> C\n    C -. \"returns 6\" .-> B\n    B -. \"returns 24\" .-> A\n    A -. \"returns 120\" .-> RES[\"Output: 120\"]\n    style E fill:#161b22,stroke:#d29922,stroke-width:2px,color:#f0f6fc\n    style RES fill:#161b22,stroke:#3fb950,stroke-width:2px,color:#f0f6fc",
+      "caption": "Visualization of the recursive activation tree, descending down to base case n=1 and unwinding back up."
+    }
+  }
+]

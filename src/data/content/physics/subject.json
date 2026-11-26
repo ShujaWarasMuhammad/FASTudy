@@ -1,0 +1,36 @@
+{
+  "id": "physics",
+  "name": "Applied Physics",
+  "shortName": "PHY",
+  "description": "Mechanics, oscillations, and wave equations with numerical inputs and conceptual study checkpoints",
+  "categories": [
+    {
+      "id": "mechanics",
+      "name": "Mechanics",
+      "subcategories": [
+        {
+          "id": "kinematics",
+          "name": "Kinematics"
+        },
+        {
+          "id": "dynamics",
+          "name": "Dynamics"
+        }
+      ]
+    },
+    {
+      "id": "waves",
+      "name": "Waves & Oscillations",
+      "subcategories": [
+        {
+          "id": "shm",
+          "name": "Simple Harmonic Motion"
+        },
+        {
+          "id": "wave-eq",
+          "name": "Wave Equations"
+        }
+      ]
+    }
+  ]
+}
