@@ -9,6 +9,7 @@ import Home from './pages/Home';
 import Practice from './pages/Practice';
 import QuestionView from './pages/QuestionView';
 import Profile from './pages/Profile';
+import Planner from './pages/Planner';
 import Cms from './pages/Cms';
 import './index.css';
 
@@ -31,6 +32,7 @@ function App() {
                 />
                 <Route path="/question/:questionId" element={<QuestionView />} />
                 <Route path="/profile" element={<Profile />} />
+                <Route path="/planner" element={<Planner />} />
                 <Route path="/cms" element={<Cms />} />
               </Routes>
             </main>

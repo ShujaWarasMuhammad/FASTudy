@@ -391,3 +391,32 @@ EXCEPTION
     WHEN duplicate_object THEN NULL;
     WHEN undefined_object THEN NULL;
 END $$;
+
+-- ==============================================================================
+-- 10. Chronos AI Academic Planner Tables
+-- ==============================================================================
+
+CREATE TABLE IF NOT EXISTS public.chronos_schedules (
+    user_id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+    residence_status TEXT DEFAULT 'day_scholar',
+    commute_duration_minutes INT DEFAULT 45,
+    timetable JSONB NOT NULL DEFAULT '[]'::jsonb,
+    gcr_posts JSONB NOT NULL DEFAULT '[]'::jsonb,
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE public.chronos_schedules ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Users can manage own chronos schedule" ON public.chronos_schedules;
+CREATE POLICY "Users can manage own chronos schedule"
+    ON public.chronos_schedules FOR ALL
+    USING (auth.uid() = user_id)
+    WITH CHECK (auth.uid() = user_id);
+
+DO $$
+BEGIN
+    ALTER PUBLICATION supabase_realtime ADD TABLE public.chronos_schedules;
+EXCEPTION
+    WHEN duplicate_object THEN NULL;
+    WHEN undefined_object THEN NULL;
+END $$;

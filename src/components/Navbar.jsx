@@ -64,6 +64,14 @@ export default function Navbar() {
               Progress
             </Link>
             <Link
+              to="/planner"
+              className={`nav-tab-link ${
+                location.pathname === '/planner' ? 'active' : ''
+              }`}
+            >
+              Planner
+            </Link>
+            <Link
               to="/cms"
               className={`nav-tab-link ${
                 location.pathname === '/cms' ? 'active' : ''

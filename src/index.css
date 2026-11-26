@@ -3116,3 +3116,660 @@ img { max-width: 100%; display: block; }
   display: block;
   margin-bottom: 2px;
 }
+
+/* ==============================================================================
+   CHRONOS AI ACADEMIC PLANNER & GOOGLE CLASSROOM STYLES
+   ============================================================================== */
+
+.planner-page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px 24px 60px;
+  width: 100%;
+}
+
+.planner-hero-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  background: var(--surface-2);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+.planner-hero-left {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  max-width: 640px;
+}
+
+.chronos-avatar-badge {
+  font-size: 36px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(47, 129, 247, 0.15);
+  border: 1px solid rgba(47, 129, 247, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.chronos-title-flex {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.chronos-title-flex h1 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.chronos-role-pill {
+  font-size: 11px;
+  font-weight: 700;
+  background: rgba(47, 129, 247, 0.2);
+  color: #2f81f7;
+  padding: 2px 8px;
+  border-radius: 10px;
+  text-transform: uppercase;
+}
+
+.chronos-lead {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+.residence-toggle-card {
+  background: var(--surface-1);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 14px 16px;
+  min-width: 320px;
+}
+
+.toggle-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.toggle-button-group {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.residence-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: var(--surface-2);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.residence-btn.active {
+  background: rgba(47, 129, 247, 0.15);
+  border-color: #2f81f7;
+  color: #2f81f7;
+}
+
+.toggle-caption {
+  display: block;
+  font-size: 11px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+/* Bugsy & Chronos Sync Banner */
+.chronos-bugsy-sync-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: linear-gradient(135deg, rgba(163, 113, 247, 0.12) 0%, rgba(47, 129, 247, 0.12) 100%);
+  border: 1px solid rgba(163, 113, 247, 0.3);
+  border-radius: 10px;
+  padding: 12px 18px;
+  margin-bottom: 22px;
+}
+
+.sync-banner-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sync-icons {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 18px;
+}
+
+.sync-text {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-primary);
+}
+
+.sync-text strong {
+  margin-right: 6px;
+  color: #a371f7;
+}
+
+/* Tabs */
+.planner-tabs-bar {
+  display: flex;
+  gap: 10px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 12px;
+  margin-bottom: 24px;
+  overflow-x: auto;
+}
+
+.planner-tab-btn {
+  background: var(--surface-2);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.planner-tab-btn:hover {
+  color: var(--text-primary);
+  border-color: var(--accent);
+}
+
+.planner-tab-btn.active {
+  background: rgba(47, 129, 247, 0.15);
+  border-color: #2f81f7;
+  color: #2f81f7;
+}
+
+/* Weekday Nav Strip */
+.weekdays-nav-strip {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.weekday-btn {
+  background: var(--surface-2);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 8px 20px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.weekday-btn.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+/* Schedule Timeline */
+.schedule-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.timeline-slot {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.timeline-time-col {
+  width: 140px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+  padding-top: 10px;
+  flex-shrink: 0;
+}
+
+.timeline-content-card {
+  flex: 1;
+  background: var(--surface-2);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 14px 18px;
+}
+
+.slot-commute .timeline-content-card {
+  border-left: 4px solid #d29922;
+}
+
+.slot-class .timeline-content-card {
+  border-left: 4px solid #2f81f7;
+}
+
+.slot-lab .timeline-content-card {
+  border-left: 4px solid #1f6feb;
+}
+
+.slot-study_bugsy .timeline-content-card {
+  border-left: 4px solid #a371f7;
+  background: rgba(163, 113, 247, 0.06);
+}
+
+.slot-study_gcr .timeline-content-card {
+  border-left: 4px solid #3fb950;
+  background: rgba(46, 160, 67, 0.06);
+}
+
+.slot-rest .timeline-content-card {
+  border-left: 4px solid var(--border-color);
+  opacity: 0.85;
+}
+
+.slot-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.slot-title-row h4 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.slot-tag {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 10px;
+  text-transform: uppercase;
+}
+
+.tag-commute { background: rgba(210, 153, 34, 0.2); color: #d29922; }
+.tag-class { background: rgba(47, 129, 247, 0.2); color: #2f81f7; }
+.tag-lab { background: rgba(31, 111, 235, 0.2); color: #58a6ff; }
+.tag-study_bugsy { background: rgba(163, 113, 247, 0.2); color: #a371f7; }
+.tag-study_gcr { background: rgba(46, 160, 67, 0.2); color: #3fb950; }
+.tag-rest { background: var(--surface-3); color: var(--text-secondary); }
+
+.slot-desc {
+  margin: 0;
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.slot-action-row {
+  margin-top: 10px;
+}
+
+/* Google Classroom View */
+.gcr-header-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.gcr-header-strip h3 {
+  margin: 0 0 4px;
+  font-size: 16px;
+  color: var(--text-primary);
+}
+
+.gcr-header-strip p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.add-gcr-form {
+  background: var(--surface-2);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.form-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.add-gcr-form label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.add-gcr-form input,
+.add-gcr-form textarea {
+  width: 100%;
+  background: var(--surface-1);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 8px 10px;
+  color: var(--text-primary);
+  font-size: 13px;
+}
+
+.gcr-posts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 16px;
+}
+
+.gcr-card {
+  background: var(--surface-2);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.gcr-card.card-quiz { border-top: 3px solid #f85149; }
+.gcr-card.card-makeup { border-top: 3px solid #d29922; }
+.gcr-card.card-project { border-top: 3px solid #a371f7; }
+.gcr-card.card-presentation { border-top: 3px solid #2f81f7; }
+
+.gcr-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.gcr-course {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.gcr-teacher {
+  display: block;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.gcr-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.gcr-category-pill {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 10px;
+}
+
+.pill-quiz { background: rgba(248, 81, 73, 0.18); color: #f85149; }
+.pill-makeup { background: rgba(210, 153, 34, 0.18); color: #d29922; }
+.pill-project { background: rgba(163, 113, 247, 0.18); color: #a371f7; }
+.pill-presentation { background: rgba(47, 129, 247, 0.18); color: #2f81f7; }
+
+.gcr-text {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+.gcr-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  font-size: 11px;
+}
+
+.gcr-keywords-list {
+  display: flex;
+  gap: 5px;
+}
+
+.gcr-keyword-tag {
+  color: var(--accent);
+  background: var(--surface-3);
+  padding: 1px 6px;
+  border-radius: 8px;
+}
+
+.gcr-due-date {
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+/* Timetable View */
+.timetable-header {
+  margin-bottom: 18px;
+}
+
+.timetable-header h3 {
+  margin: 0 0 4px;
+  font-size: 16px;
+  color: var(--text-primary);
+}
+
+.timetable-header p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.timetable-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+}
+
+.timetable-day-col {
+  background: var(--surface-2);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.day-col-header {
+  background: var(--surface-3);
+  padding: 10px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.day-classes-list {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 240px;
+}
+
+.no-class-box {
+  color: var(--text-secondary);
+  font-size: 11px;
+  text-align: center;
+  margin-top: 40px;
+}
+
+.class-slot-card {
+  background: var(--surface-1);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 10px;
+  font-size: 12px;
+}
+
+.class-slot-card.type-lab {
+  border-left: 3px solid #1f6feb;
+}
+
+.class-slot-card.type-lecture {
+  border-left: 3px solid #2f81f7;
+}
+
+.class-time {
+  font-size: 11px;
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.class-course {
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.class-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--text-secondary);
+}
+
+/* Chat with Chronos */
+.planner-chat-view {
+  background: var(--surface-2);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  height: 540px;
+}
+
+.chat-messages-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.chronos-chat-msg {
+  display: flex;
+  gap: 10px;
+  max-width: 80%;
+}
+
+.chronos-chat-msg.msg-user {
+  margin-left: auto;
+  flex-direction: row-reverse;
+}
+
+.chronos-chat-msg.msg-agent {
+  margin-right: auto;
+}
+
+.chat-avatar {
+  font-size: 20px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(47, 129, 247, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.chat-bubble {
+  background: var(--surface-1);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-primary);
+}
+
+.msg-user .chat-bubble {
+  background: rgba(47, 129, 247, 0.15);
+  border-color: rgba(47, 129, 247, 0.35);
+}
+
+.chat-bubble p {
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.chat-input-row {
+  display: flex;
+  gap: 10px;
+  padding: 14px 20px;
+  border-top: 1px solid var(--border-color);
+  background: var(--surface-3);
+}
+
+.chat-input-row input {
+  flex: 1;
+  background: var(--surface-1);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 10px 14px;
+  color: var(--text-primary);
+  font-size: 13px;
+}
+
+@media (max-width: 860px) {
+  .planner-hero-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .residence-toggle-card {
+    min-width: 100%;
+  }
+  .timetable-grid {
+    grid-template-columns: 1fr;
+  }
+}
