@@ -1,0 +1,44 @@
+[
+  {
+    "id": "pf-final-q3b",
+    "type": "code_submit",
+    "subjectId": "pf",
+    "categoryId": "final-exam",
+    "subcategoryId": "strings-chars",
+    "title": "C-String Subsequence Verification (No Built-ins)",
+    "difficulty": "medium",
+    "statement": "Write a C++ program to check whether a given string (word2) is a subsequence of another given string (word1). A subsequence is a sequence derived from another sequence by removing some elements without changing the order of the remaining elements. Do not use any built-in functions. Both word1 and word2 must be char arrays of maximum size 100.",
+    "starterCode": "#include <iostream>\nusing namespace std;\n\n// Check whether word2 is a subsequence of word1.\n// Do not use any built-in functions (<cstring> / <string> methods banned).\n// Both word1 and word2 are char arrays of max size 100.\n\nbool isSubsequence(const char word1[], const char word2[]) {\n    int i = 0; // index for word1\n    int j = 0; // index for word2\n\n    while (word1[i] != '\\0' && word2[j] != '\\0') {\n        if (word1[i] == word2[j]) {\n            j++;\n        }\n        i++;\n    }\n\n    return (word2[j] == '\\0');\n}\n\nint main() {\n    char word1[100];\n    char word2[100];\n\n    cout << \"Enter word1: \";\n    cin >> word1;\n    cout << \"Enter word2: \";\n    cin >> word2;\n\n    if (isSubsequence(word1, word2)) {\n        cout << \"Yes, word2 is a subsequence of word1.\" << endl;\n    } else {\n        cout << \"No, word2 is not a subsequence of word1.\" << endl;\n    }\n\n    return 0;\n}",
+    "expectedOutput": "Input: word1 = 'apple'; word2 = 'apl'; -> Output: Yes, word2 is a subsequence of word1.",
+    "hints": [
+      "Review concepts required for FAST_CFD_PF_F23_FINAL_Q3B.",
+      "Observe strict PF-lab constraints: avoid banned STL algorithms and classes."
+    ],
+    "tags": [
+      "C-Strings",
+      "Subsequence Verification",
+      "Two-Pointer Technique"
+    ]
+  },
+  {
+    "id": "pf-final-q4-2",
+    "type": "code_submit",
+    "subjectId": "pf",
+    "categoryId": "final-exam",
+    "subcategoryId": "strings-chars",
+    "title": "Random 4-Letter Word Generator without Char Variables",
+    "difficulty": "medium",
+    "statement": "Write a C++ program that outputs a random word of length 4 using upper- and lower-case English alphabets (A-Z, a-z). Use a switch structure for selection wherever required. You cannot create a char variable or char array for any purpose.",
+    "starterCode": "#include <iostream>\n#include <cstdlib>\n#include <ctime>\nusing namespace std;\n\n// Output a random 4-letter word using upper- and lower-case English alphabets.\n// Use a switch structure for selection.\n// Rule: You cannot create a char variable or char array for any purpose!\n\nint main() {\n    srand(time(0));\n\n    for (int i = 0; i < 4; i++) {\n        int caseType = rand() % 2; // 0 for uppercase, 1 for lowercase\n        int asciiVal;\n\n        switch (caseType) {\n            case 0:\n                asciiVal = 65 + (rand() % 26); // 'A' to 'Z'\n                break;\n            case 1:\n                asciiVal = 97 + (rand() % 26); // 'a' to 'z'\n                break;\n        }\n\n        // Print via typecast without creating any char variable\n        cout << (char)asciiVal;\n    }\n    cout << endl;\n\n    return 0;\n}",
+    "expectedOutput": "SWRT",
+    "hints": [
+      "Review concepts required for FAST_CFD_PF_F23_FINAL_Q4_2.",
+      "Observe strict PF-lab constraints: avoid banned STL algorithms and classes."
+    ],
+    "tags": [
+      "Switch Statement",
+      "Random Number Generation",
+      "ASCII Type Casting"
+    ]
+  }
+]

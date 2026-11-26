@@ -1,0 +1,67 @@
+[
+  {
+    "id": "pf-lab10-p6",
+    "type": "code_submit",
+    "subjectId": "pf",
+    "categoryId": "lab10-tasks",
+    "subcategoryId": "arrays",
+    "title": "1D Array Declaration & Traversal",
+    "difficulty": "easy",
+    "statement": "Declare an integer array 'int numbers[5]', initialize it with five integer values at declaration time, and display all elements in a single line using a loop.",
+    "starterCode": "#include <iostream>\nusing namespace std;\n\n// Declare an integer array int numbers[5], initialize it at declaration time,\n// and display all elements in a single line using a loop.\n\nint main() {\n    int numbers[5] = {10, 20, 30, 40, 50};\n\n    for (int i = 0; i < 5; i++) {\n        cout << numbers[i] << (i < 4 ? \" \" : \"\");\n    }\n    cout << endl;\n    return 0;\n}",
+    "expectedOutput": "10 20 30 40 50",
+    "hints": [
+      "Carefully review the requirements in FAST_CL1002_F26_LAB10_P6.",
+      "Use standard C++ PF-lab constructs (nested loops, basic arrays, no banned STL)."
+    ],
+    "tags": [
+      "Array Initialization",
+      "Array Traversal",
+      "Loops"
+    ]
+  },
+  {
+    "id": "pf-lab10-p7",
+    "type": "code_submit",
+    "subjectId": "pf",
+    "categoryId": "lab10-tasks",
+    "subcategoryId": "arrays",
+    "title": "Duplicate Roll Numbers Detection",
+    "difficulty": "hard",
+    "statement": "Identify duplicate roll numbers among N students using a 1D integer array and nested loops. Requirements: 1. Input N (1 <= N <= 100). 2. Store N roll numbers in a 1D array. 3. Use nested loops to find duplicates. 4. Print each duplicated roll number only once even if it appears more than twice. 5. Display a message if no duplicates exist.",
+    "starterCode": "#include <iostream>\nusing namespace std;\n\n// Identify duplicate roll numbers among N students using a 1D integer array and nested loops.\n// Print each duplicate roll number only once even if it appears more than twice.\n\nint main() {\n    int n;\n    cout << \"Enter number of students: \";\n    cin >> n;\n\n    if (n < 1 || n > 100) {\n        cout << \"Invalid student count!\" << endl;\n        return 0;\n    }\n\n    int roll[100];\n    cout << \"Enter roll numbers: \";\n    for (int i = 0; i < n; i++) {\n        cin >> roll[i];\n    }\n\n    cout << \"Duplicate roll numbers:\" << endl;\n    bool foundAny = false;\n\n    for (int i = 0; i < n; i++) {\n        // Check if already printed earlier\n        bool alreadySeen = false;\n        for (int k = 0; k < i; k++) {\n            if (roll[k] == roll[i]) {\n                alreadySeen = true;\n                break;\n            }\n        }\n        if (alreadySeen) continue;\n\n        // Check if appears later\n        bool hasDuplicate = false;\n        for (int j = i + 1; j < n; j++) {\n            if (roll[j] == roll[i]) {\n                hasDuplicate = true;\n                break;\n            }\n        }\n\n        if (hasDuplicate) {\n            cout << roll[i] << endl;\n            foundAny = true;\n        }\n    }\n\n    if (!foundAny) {\n        cout << \"No duplicates found.\" << endl;\n    }\n\n    return 0;\n}",
+    "expectedOutput": "Duplicate roll numbers:\n101\n102",
+    "hints": [
+      "Carefully review the requirements in FAST_CL1002_F26_LAB10_P7.",
+      "Use standard C++ PF-lab constructs (nested loops, basic arrays, no banned STL)."
+    ],
+    "tags": [
+      "Duplicate Detection",
+      "Nested Loops",
+      "Input Validation",
+      "1D Arrays"
+    ]
+  },
+  {
+    "id": "pf-lab10-p8",
+    "type": "code_submit",
+    "subjectId": "pf",
+    "categoryId": "lab10-tasks",
+    "subcategoryId": "arrays",
+    "title": "Quiz Mark Frequency & Mode Finder",
+    "difficulty": "hard",
+    "statement": "Count how many times each distinct quiz mark appears for N students using a 1D array and nested loops. Requirements: 1. Input N (1 <= N <= 100). 2. Store student marks (0 to 100) in a 1D integer array. 3. Use nested loops to compute frequencies of distinct marks. 4. Display each distinct mark and its frequency once. 5. Display the highest frequency and all marks tied for it.",
+    "starterCode": "#include <iostream>\nusing namespace std;\n\n// Count how many times each distinct quiz mark appears for N students using a 1D array and nested loops.\n// Display distinct mark & frequency, highest frequency, and all marks tied for it.\n\nint main() {\n    int n;\n    cout << \"Enter number of students: \";\n    cin >> n;\n\n    int marks[100];\n    cout << \"Enter marks: \";\n    for (int i = 0; i < n; i++) {\n        cin >> marks[i];\n    }\n\n    int distinctMarks[100];\n    int frequencies[100];\n    int distinctCount = 0;\n\n    for (int i = 0; i < n; i++) {\n        bool seen = false;\n        for (int d = 0; d < distinctCount; d++) {\n            if (distinctMarks[d] == marks[i]) {\n                seen = true;\n                break;\n            }\n        }\n        if (seen) continue;\n\n        int freq = 0;\n        for (int j = 0; j < n; j++) {\n            if (marks[j] == marks[i]) freq++;\n        }\n\n        distinctMarks[distinctCount] = marks[i];\n        frequencies[distinctCount] = freq;\n        distinctCount++;\n    }\n\n    cout << \"Mark Frequency\" << endl;\n    int maxFreq = 0;\n    for (int i = 0; i < distinctCount; i++) {\n        cout << distinctMarks[i] << endl << frequencies[i] << endl;\n        if (frequencies[i] > maxFreq) maxFreq = frequencies[i];\n    }\n\n    cout << \"Highest frequency: \" << maxFreq << endl;\n    cout << \"Marks with highest frequency: \";\n    bool first = true;\n    for (int i = 0; i < distinctCount; i++) {\n        if (frequencies[i] == maxFreq) {\n            if (!first) cout << \", \";\n            cout << distinctMarks[i];\n            first = false;\n        }\n    }\n    cout << endl;\n\n    return 0;\n}",
+    "expectedOutput": "Mark Frequency\n70\n3\n85\n3\n90\n1\n60\n1\nHighest frequency: 3\nMarks with highest frequency: 70, 85",
+    "hints": [
+      "Carefully review the requirements in FAST_CL1002_F26_LAB10_P8.",
+      "Use standard C++ PF-lab constructs (nested loops, basic arrays, no banned STL)."
+    ],
+    "tags": [
+      "Frequency Counting",
+      "Nested Loops",
+      "Mode / Highest Frequency",
+      "1D Arrays"
+    ]
+  }
+]

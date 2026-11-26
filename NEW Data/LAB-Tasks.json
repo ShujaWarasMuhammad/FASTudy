@@ -1,0 +1,178 @@
+{
+  "exam_metadata": {
+    "institution": "National University of Computer and Emerging Sciences, Chiniot-Faisalabad Campus",
+    "course": "Programming Fundamentals",
+    "course_code": "CS1002",
+    "semester": "Fall 2023",
+    "exam_term": "Final Term",
+    "exam_date": "2023-12-18",
+    "degree_programs": ["BS(CS)", "BS(SE)", "BS(AI)"]
+  },
+  "questions": [
+    {
+      "question_unique_id": "FAST_CFD_PF_F23_FINAL_Q1A",
+      "course": "Programming Fundamentals",
+      "topic": "Functions",
+      "subtopics": ["Function Overloading", "Data Types", "Arithmetic Operations"],
+      "labels": ["Objective", "Output Prediction", "C++"],
+      "problem_statement": "Assuming there are no errors in the codes and all the headers are appropriately included, write the output of the given code:\n\nint operate (int a, int b) {\n  return (a * b);\n}\nfloat operate (float a, float b) {\n  return (a / b);\n}\nint main () {\n  int x = 6, y = 7;\n  float s = 4.0, u = 2.0;\n  cout << operate (x, y);\n  cout << operate (s, u);\n  return 0;\n}",
+      "sample_outputs": [
+        "422"
+      ]
+    },
+    {
+      "question_unique_id": "FAST_CFD_PF_F23_FINAL_Q1B",
+      "course": "Programming Fundamentals",
+      "topic": "Functions",
+      "subtopics": ["Function Calls", "Return Values", "Pass by Value"],
+      "labels": ["Objective", "Output Prediction", "C++"],
+      "problem_statement": "Assuming there are no errors in the codes and all the headers are appropriately included, write the output of the given code:\n\nint addition(int x, int y, int z) {\n  int d;\n  d = x + y + z;\n  cout << d;\n  return d;\n}\nint main() {\n  int a, b, c, sum;\n  a = 10; b = 5; c = 7;\n  sum = addition(a, b, c);\n  cout << endl << \"Sum is = \" << sum;\n}",
+      "sample_outputs": [
+        "22\nSum is = 22"
+      ]
+    },
+    {
+      "question_unique_id": "FAST_CFD_PF_F23_FINAL_Q1C",
+      "course": "Programming Fundamentals",
+      "topic": "Control Structures",
+      "subtopics": ["Infinite For Loop", "Break Statement", "Void Functions"],
+      "labels": ["Objective", "Output Prediction", "C++"],
+      "problem_statement": "Assuming there are no errors in the codes and all the headers are appropriately included, write the output of the given code:\n\nvoid function() {\n  int count = 0;\n  for(;; count++) {\n    if(count < 4)\n      cout << count;\n    else\n      break;\n  }\n}\nint main() {\n  cout << \"Hi\" << endl;\n  function();\n  cout << \"FAST\";\n}",
+      "sample_outputs": [
+        "Hi\n0123FAST"
+      ]
+    },
+    {
+      "question_unique_id": "FAST_CFD_PF_F23_FINAL_Q1D",
+      "course": "Programming Fundamentals",
+      "topic": "Control Structures",
+      "subtopics": ["Nested Loops", "Pattern Printing"],
+      "labels": ["Objective", "Output Prediction", "C++"],
+      "problem_statement": "Assuming there are no errors in the codes and all the headers are appropriately included, write the output of the given code:\n\nint main() {\n  for (int i = 0; i < 3; i++) {\n    for (int j = 0; j <= i; j++) {\n      cout << \"* \";\n    }\n    cout << endl;\n  }\n  for (int i = 0; i < 3; i++) {\n    for (int j = i; j < 3; j++) {\n      cout << \"* \";\n    }\n    cout << endl;\n  }\n}",
+      "sample_outputs": [
+        "* \n* * \n* * * \n* * * \n* * \n* "
+      ]
+    },
+    {
+      "question_unique_id": "FAST_CFD_PF_F23_FINAL_Q1E",
+      "course": "Programming Fundamentals",
+      "topic": "Operators & Expressions",
+      "subtopics": ["Nested Ternary Operator", "Conditional Expressions"],
+      "labels": ["Objective", "Output Prediction", "C++"],
+      "problem_statement": "Assuming there are no errors in the codes and all the headers are appropriately included, write the output of the given code:\n\nint main() {\n  int r, a = 10, b = 13, c = 70;\n  r = (a > b ? (a > c ? 5 : 7) : (b > c ? 9 : 10));\n  cout << r;\n  return 0;\n}",
+      "sample_outputs": [
+        "10"
+      ]
+    },
+    {
+      "question_unique_id": "FAST_CFD_PF_F23_FINAL_Q1F",
+      "course": "Programming Fundamentals",
+      "topic": "Control Structures",
+      "subtopics": ["While Loop", "Decrement Operators", "Boundary Conditions"],
+      "labels": ["Objective", "Output Prediction", "C++"],
+      "problem_statement": "Assuming there are no errors in the codes and all the headers are appropriately included, write the output of the given code:\n\nint main() {\n  int x = 10;\n  while (x != 0) {\n    x--;\n    cout << x << endl;\n    x--;\n    if (x < 0) {\n      x = 0;\n    }\n  }\n}",
+      "sample_outputs": [
+        "9\n7\n5\n3\n1"
+      ]
+    },
+    {
+      "question_unique_id": "FAST_CFD_PF_F23_FINAL_Q1G",
+      "course": "Programming Fundamentals",
+      "topic": "Control Structures",
+      "subtopics": ["Nested If-Else", "Dangling Else Problem"],
+      "labels": ["Objective", "Output Prediction", "C++"],
+      "problem_statement": "Assuming there are no errors in the codes and all the headers are appropriately included, write the output of the given code:\n\nint main() {\n  int num = 100;\n  if(num > 1)\n    if(num > 10)\n      if(num > 100)\n        cout << \"3digit\";\n      else\n        cout << \"2digit\";\n    else\n      cout << \"1digit\";\n}",
+      "sample_outputs": [
+        "2digit"
+      ]
+    },
+    {
+      "question_unique_id": "FAST_CFD_PF_F23_FINAL_Q1H",
+      "course": "Programming Fundamentals",
+      "topic": "Arrays",
+      "subtopics": ["1D Arrays", "Bubble Sort", "Descending Order Sorting"],
+      "labels": ["Objective", "Output Prediction", "Sorting", "C++"],
+      "problem_statement": "Assuming there are no errors in the codes and all the headers are appropriately included, write the output of the given code:\n\nint number[6] = {5, 10, 8, 2, 7, 9};\nfor (int i = 0; i < 6 - 1; i++) {\n  for (int j = 0; j < 6 - 1; j++) {\n    if (number[j] < number[j + 1]) {\n      int temp = number[j];\n      number[j] = number[j + 1];\n      number[j + 1] = temp;\n    }\n  }\n}\nfor (int i = 0; i < 6; i++) {\n  cout << number[i] << \" \";\n}",
+      "sample_outputs": [
+        "10 9 8 7 5 2 "
+      ]
+    },
+    {
+      "question_unique_id": "FAST_CFD_PF_F23_FINAL_Q2",
+      "course": "Programming Fundamentals",
+      "topic": "Arrays & Functions",
+      "subtopics": ["1D Arrays", "Menu-Driven Programs", "Loops", "Input Validation", "Functions"],
+      "labels": ["Subjective", "Code Writing", "System Design", "C++"],
+      "problem_statement": "Library Book Checkout System: Create a library book checkout system in C++ utilizing loops to manage the library's collection of books. Requirements: 1. Operate with a collection of 10 books, each identified by a unique ID (1 to 10). 2. Utilize arrays and loops to manage book information (IDs, titles, availability). 3. Write functions to display available books and check out books by entering their IDs. 4. Display a menu using a loop to continuously prompt users for choices until they decide to exit. 5. Ensure appropriate error handling within loops for invalid inputs (non-existent book IDs or already checked-out books).",
+      "sample_outputs": [
+        "Welcome to the Library Book Checkout System!\nMenu:\n1. Display available books\n2. Check out a book\n3. Exit\nEnter your choice: 1\nAvailable Books:\nID: 1, Title: \"Book A\", Available: Yes\nID: 2, Title: \"Book B\", Available: Yes\nEnter your choice: 2\nEnter the ID of the book you want to check out: 1\nBook with ID 1 has been checked out successfully.\nEnter your choice: 1\nAvailable Books:\nID: 2, Title: \"Book B\", Available: Yes\nEnter your choice: 3\nExiting the program. Thank you!"
+      ]
+    },
+    {
+      "question_unique_id": "FAST_CFD_PF_F23_FINAL_Q3A",
+      "course": "Programming Fundamentals",
+      "topic": "Multidimensional Arrays",
+      "subtopics": ["2D Arrays", "Named Constants", "Matrix Manipulation", "Reverse Indexing"],
+      "labels": ["Subjective", "Code Writing", "Matrices", "C++"],
+      "problem_statement": "Write a program that declares three 2D arrays of size N x M (named constants initialized to 3 and 4 respectively). Initialize the first array with (row + col)^2 for each location. Take user input for the second array. Initialize the third array with all 0s at declaration time (handling any size of N and M). Update the third array with the difference of the first and second array index by index, with rows filled in reverse column order (e.g., Array1[0][0] - Array2[0][0] is stored in Array3[0][3]). Print all three arrays without hardcoding.",
+      "sample_outputs": [
+        "Array1:\n0 1 4 9\n1 4 9 16\n4 9 16 25\n\nArray2:\n2 1 9 3\n0 5 6 20\n6 7 11 22\n\nArray3:\n6 -5 0 -2\n-4 3 -1 0\n3 5 2 -2"
+      ]
+    },
+    {
+      "question_unique_id": "FAST_CFD_PF_F23_FINAL_Q3B",
+      "course": "Programming Fundamentals",
+      "topic": "Character Arrays & Strings",
+      "subtopics": ["C-Strings", "Subsequence Verification", "Two-Pointer Technique"],
+      "labels": ["Subjective", "Code Writing", "String Manipulation", "C++"],
+      "problem_statement": "Write a C++ program to check whether a given string (word2) is a subsequence of another given string (word1). A subsequence is a sequence derived from another sequence by removing some elements without changing the order of the remaining elements. Do not use any built-in functions. Both word1 and word2 must be char arrays of maximum size 100.",
+      "sample_outputs": [
+        "Input: word1 = 'apple'; word2 = 'apl'; -> Output: Yes, word2 is a subsequence of word1.",
+        "Input: word1 = 'apple'; word2 = 'pla'; -> Output: No, word2 is not a subsequence of word1."
+      ]
+    },
+    {
+      "question_unique_id": "FAST_CFD_PF_F23_FINAL_Q4_1",
+      "course": "Programming Fundamentals",
+      "topic": "Control Structures",
+      "subtopics": ["Conditional Statements", "Operator Precedence", "Logical Operators Refactoring"],
+      "labels": ["Subjective", "Code Completion", "Logic", "C++"],
+      "problem_statement": "Rewrite/fill the empty if-else-if code skeletons for two given conditional expressions without using logical operators (&& and ||):\nSnippet 1: if (a > b || !b >= c || a != c && c <= b)\nSnippet 2: if (a > b || !b == c && a != c || c <= b)",
+      "sample_outputs": []
+    },
+    {
+      "question_unique_id": "FAST_CFD_PF_F23_FINAL_Q4_2",
+      "course": "Programming Fundamentals",
+      "topic": "Control Structures & Randomization",
+      "subtopics": ["Switch Statement", "Random Number Generation", "ASCII Type Casting"],
+      "labels": ["Subjective", "Code Writing", "ASCII", "C++"],
+      "problem_statement": "Write a C++ program that outputs a random word of length 4 using upper- and lower-case English alphabets (A-Z, a-z). Use a switch structure for selection wherever required. You cannot create a char variable or char array for any purpose.",
+      "sample_outputs": [
+        "SWRT",
+        "PiCk",
+        "telQ"
+      ]
+    },
+    {
+      "question_unique_id": "FAST_CFD_PF_F23_FINAL_Q5A",
+      "course": "Programming Fundamentals",
+      "topic": "Functions & 2D Arrays",
+      "subtopics": ["2D Array Parameters", "Const Correctness", "Default Arguments", "Function Overloading", "Pass-by-Reference"],
+      "labels": ["Subjective", "Code Writing", "Function Prototypes", "C++"],
+      "problem_statement": "1. Write a C++ function named validateMatrix taking two 2D integer arrays (matrix A and matrix B) and their dimensions (rows and columns). Check consecutive elements in matrix A: if a middle element is greater than both its left and right neighbors (within bounds), mark the corresponding element in matrix B with -1. Write the function definition and call statement.\n2. Modify the prototype so matrix A cannot be modified inside the function.\n3. Make both 2D arrays parameters with default values in the prototype.\n4. Mention prototypes to overload validateMatrix for bool, float, and char datatypes.\n5. Write updated prototypes if asked to pass both 2D arrays as pass-by-reference parameters.",
+      "sample_outputs": []
+    },
+    {
+      "question_unique_id": "FAST_CFD_PF_F23_FINAL_Q5B",
+      "course": "Programming Fundamentals",
+      "topic": "File Handling",
+      "subtopics": ["ifstream", "ofstream", "String/Char Array Parsing", "File I/O Processing"],
+      "labels": ["Subjective", "Code Writing", "File Handling", "C++"],
+      "problem_statement": "A teacher needs help marking a 20-question True/False quiz for 50 students. Student Roll Nos and answers (T, F, or space for unattempted) are stored in 'submission.txt', and the answer key is in 'solution.txt'. Each correct answer gives 1 mark with no negative marking. Write C++ code to read data from both files, calculate each student's score, and write the student's Roll_No alongside their marks into 'marks.txt'.",
+      "sample_outputs": [
+        "marks.txt content:\nF230503 5\nF230712 10\nF238083 12"
+      ]
+    }
+  ]
+}
+```[cite: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]

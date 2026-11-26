@@ -1,0 +1,24 @@
+[
+  {
+    "id": "pf-lab10-p5",
+    "type": "code_submit",
+    "subjectId": "pf",
+    "categoryId": "lab10-tasks",
+    "subcategoryId": "control-flow",
+    "title": "Electricity Consumption Monitor",
+    "difficulty": "medium",
+    "statement": "Monitor daily household electricity consumption in units for up to 30 days using a while loop. Requirements: If a reading is negative, print 'Invalid Reading' and skip it using continue; if > 500 units, print 'Unusually High Consumption'; if 0 is entered, stop reading using break; process at most 30 readings; display the count of valid readings and total consumption at the end.",
+    "starterCode": "#include <iostream>\nusing namespace std;\n\n// Monitor daily household electricity consumption for up to 30 days using a while loop.\n// Negative reading: print 'Invalid Reading' and skip with continue.\n// Reading > 500: print 'Unusually High Consumption'.\n// Reading == 0: terminate with break.\n// Display count of valid readings and total consumption.\n\nint main() {\n    int validCount = 0;\n    double totalUnits = 0.0;\n    int day = 1;\n\n    while (day <= 30) {\n        double reading;\n        cout << \"Day \" << day << \" consumption (0 to stop): \";\n        cin >> reading;\n\n        if (reading == 0) {\n            break;\n        }\n        if (reading < 0) {\n            cout << \"Invalid Reading\" << endl;\n            continue;\n        }\n        if (reading > 500) {\n            cout << \"Unusually High Consumption\" << endl;\n        }\n\n        totalUnits += reading;\n        validCount++;\n        day++;\n    }\n\n    cout << \"Valid readings recorded: \" << validCount << endl;\n    cout << \"Total units consumed: \" << totalUnits << endl;\n    return 0;\n}",
+    "expectedOutput": "",
+    "hints": [
+      "Carefully review the requirements in FAST_CL1002_F26_LAB10_P5.",
+      "Use standard C++ PF-lab constructs (nested loops, basic arrays, no banned STL)."
+    ],
+    "tags": [
+      "While Loop",
+      "Continue Statement",
+      "Break Statement",
+      "Input Filtering & Aggregation"
+    ]
+  }
+]

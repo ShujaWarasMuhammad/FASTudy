@@ -332,3 +332,62 @@ DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
 CREATE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
   FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
+
+-- ==============================================================================
+-- 9. Bugsy AI Agent Tables: Edgecases & Code Evaluations
+-- ==============================================================================
+
+CREATE TABLE IF NOT EXISTS public.bugsy_edgecases (
+    question_id TEXT PRIMARY KEY,
+    edgecases JSONB NOT NULL DEFAULT '[]'::jsonb,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE public.bugsy_edgecases ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Public can read bugsy edgecases" ON public.bugsy_edgecases;
+CREATE POLICY "Public can read bugsy edgecases"
+    ON public.bugsy_edgecases FOR SELECT
+    USING (true);
+
+DROP POLICY IF EXISTS "Authenticated users can insert bugsy edgecases" ON public.bugsy_edgecases;
+CREATE POLICY "Authenticated users can insert bugsy edgecases"
+    ON public.bugsy_edgecases FOR ALL
+    USING (true)
+    WITH CHECK (true);
+
+CREATE TABLE IF NOT EXISTS public.bugsy_evaluations (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+    question_id TEXT NOT NULL,
+    topic TEXT,
+    time_taken_seconds INT DEFAULT 0,
+    tests_passed INT DEFAULT 0,
+    tests_total INT DEFAULT 0,
+    style_score INT DEFAULT 100,
+    critique TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE public.bugsy_evaluations ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Users can read own bugsy evaluations" ON public.bugsy_evaluations;
+CREATE POLICY "Users can read own bugsy evaluations"
+    ON public.bugsy_evaluations FOR SELECT
+    USING (auth.uid() = user_id);
+
+DROP POLICY IF EXISTS "Users can insert own bugsy evaluations" ON public.bugsy_evaluations;
+CREATE POLICY "Users can insert own bugsy evaluations"
+    ON public.bugsy_evaluations FOR INSERT
+    WITH CHECK (auth.uid() = user_id);
+
+-- Add to Realtime
+DO $$
+BEGIN
+    ALTER PUBLICATION supabase_realtime ADD TABLE public.bugsy_edgecases;
+    ALTER PUBLICATION supabase_realtime ADD TABLE public.bugsy_evaluations;
+EXCEPTION
+    WHEN duplicate_object THEN NULL;
+    WHEN undefined_object THEN NULL;
+END $$;

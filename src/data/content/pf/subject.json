@@ -2,75 +2,49 @@
   "id": "pf",
   "name": "Programming Fundamentals",
   "shortName": "PF",
-  "description": "C/C++ fundamentals, dry runs, control flow, memory tracing, and online compiled logic building",
+  "description": "C/C++ fundamentals, logic building, nested loops, arrays, strings, and live compilation with Judge0 & Bugsy AI",
   "categories": [
     {
-      "id": "dry-runs",
-      "name": "Dry Runs",
+      "id": "lab10-tasks",
+      "name": "Lab 10 Tasks",
       "subcategories": [
         {
-          "id": "math",
-          "name": "Math Operations"
+          "id": "nested-loops",
+          "name": "Nested Loops & Calculations"
         },
-        {
-          "id": "bitwise",
-          "name": "Bitwise Operations"
-        },
-        {
-          "id": "loops",
-          "name": "Loops & Iteration"
-        },
-        {
-          "id": "arrays",
-          "name": "Arrays & Strings"
-        },
-        {
-          "id": "pointers",
-          "name": "Pointers & Memory"
-        },
-        {
-          "id": "recursion",
-          "name": "Recursion"
-        },
-        {
-          "id": "functions",
-          "name": "Functions & Scope"
-        }
-      ]
-    },
-    {
-      "id": "logic-building",
-      "name": "Logic Building",
-      "subcategories": [
         {
           "id": "patterns",
           "name": "Pattern Printing"
         },
         {
-          "id": "sorting",
-          "name": "Sorting Algorithms"
+          "id": "control-flow",
+          "name": "Loops & Flow Control"
         },
         {
-          "id": "searching",
-          "name": "Searching Algorithms"
+          "id": "arrays",
+          "name": "1D Arrays & Algorithms"
         }
       ]
     },
     {
-      "id": "bug-hunting",
-      "name": "Bug Hunting",
+      "id": "final-exam",
+      "name": "Final Exam Tasks",
       "subcategories": [
         {
-          "id": "syntax",
-          "name": "Syntax Errors"
+          "id": "code-tracing",
+          "name": "Output & Code Tracing"
         },
         {
-          "id": "logical",
-          "name": "Logical Errors"
+          "id": "arrays-matrices",
+          "name": "2D Arrays & Matrices"
         },
         {
-          "id": "runtime",
-          "name": "Runtime Errors"
+          "id": "strings-chars",
+          "name": "Character Arrays & Strings"
+        },
+        {
+          "id": "system-design",
+          "name": "Systems & Logic Refactoring"
         }
       ]
     }

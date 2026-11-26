@@ -1,0 +1,167 @@
+[
+  {
+    "id": "pf-final-q1a",
+    "type": "code_submit",
+    "subjectId": "pf",
+    "categoryId": "final-exam",
+    "subcategoryId": "code-tracing",
+    "title": "Function Overloading Output Tracing",
+    "difficulty": "easy",
+    "statement": "Assuming there are no errors in the codes and all the headers are appropriately included, write the output of the given code:\n\nint operate (int a, int b) {\n  return (a * b);\n}\nfloat operate (float a, float b) {\n  return (a / b);\n}\nint main () {\n  int x = 6, y = 7;\n  float s = 4.0, u = 2.0;\n  cout << operate (x, y);\n  cout << operate (s, u);\n  return 0;\n}",
+    "starterCode": "#include <iostream>\nusing namespace std;\n\nint operate (int a, int b) {\n  return (a * b);\n}\nfloat operate (float a, float b) {\n  return (a / b);\n}\nint main () {\n  int x = 6, y = 7;\n  float s = 4.0, u = 2.0;\n  cout << operate (x, y);\n  cout << operate (s, u);\n  return 0;\n}",
+    "expectedOutput": "422",
+    "hints": [
+      "Review concepts required for FAST_CFD_PF_F23_FINAL_Q1A.",
+      "Observe strict PF-lab constraints: avoid banned STL algorithms and classes."
+    ],
+    "tags": [
+      "Function Overloading",
+      "Data Types",
+      "Arithmetic Operations"
+    ]
+  },
+  {
+    "id": "pf-final-q1b",
+    "type": "code_submit",
+    "subjectId": "pf",
+    "categoryId": "final-exam",
+    "subcategoryId": "code-tracing",
+    "title": "Pass by Value & Scope Tracing",
+    "difficulty": "easy",
+    "statement": "Assuming there are no errors in the codes and all the headers are appropriately included, write the output of the given code:\n\nint addition(int x, int y, int z) {\n  int d;\n  d = x + y + z;\n  cout << d;\n  return d;\n}\nint main() {\n  int a, b, c, sum;\n  a = 10; b = 5; c = 7;\n  sum = addition(a, b, c);\n  cout << endl << \"Sum is = \" << sum;\n}",
+    "starterCode": "#include <iostream>\nusing namespace std;\n\nint addition(int x, int y, int z) {\n  int d;\n  d = x + y + z;\n  cout << d;\n  return d;\n}\nint main() {\n  int a, b, c, sum;\n  a = 10; b = 5; c = 7;\n  sum = addition(a, b, c);\n  cout << endl << \"Sum is = \" << sum;\n    return 0;\n}",
+    "expectedOutput": "22\nSum is = 22",
+    "hints": [
+      "Review concepts required for FAST_CFD_PF_F23_FINAL_Q1B.",
+      "Observe strict PF-lab constraints: avoid banned STL algorithms and classes."
+    ],
+    "tags": [
+      "Function Calls",
+      "Return Values",
+      "Pass by Value"
+    ]
+  },
+  {
+    "id": "pf-final-q1c",
+    "type": "code_submit",
+    "subjectId": "pf",
+    "categoryId": "final-exam",
+    "subcategoryId": "code-tracing",
+    "title": "Infinite For Loop & Break Tracing",
+    "difficulty": "easy",
+    "statement": "Assuming there are no errors in the codes and all the headers are appropriately included, write the output of the given code:\n\nvoid function() {\n  int count = 0;\n  for(;; count++) {\n    if(count < 4)\n      cout << count;\n    else\n      break;\n  }\n}\nint main() {\n  cout << \"Hi\" << endl;\n  function();\n  cout << \"FAST\";\n}",
+    "starterCode": "#include <iostream>\nusing namespace std;\n\nvoid function() {\n  int count = 0;\n  for(;; count++) {\n    if(count < 4)\n      cout << count;\n    else\n      break;\n  }\n}\nint main() {\n  cout << \"Hi\" << endl;\n  function();\n  cout << \"FAST\";\n    return 0;\n}",
+    "expectedOutput": "Hi\n0123FAST",
+    "hints": [
+      "Review concepts required for FAST_CFD_PF_F23_FINAL_Q1C.",
+      "Observe strict PF-lab constraints: avoid banned STL algorithms and classes."
+    ],
+    "tags": [
+      "Infinite For Loop",
+      "Break Statement",
+      "Void Functions"
+    ]
+  },
+  {
+    "id": "pf-final-q1d",
+    "type": "code_submit",
+    "subjectId": "pf",
+    "categoryId": "final-exam",
+    "subcategoryId": "code-tracing",
+    "title": "Nested Star Pattern Output Tracing",
+    "difficulty": "easy",
+    "statement": "Assuming there are no errors in the codes and all the headers are appropriately included, write the output of the given code:\n\nint main() {\n  for (int i = 0; i < 3; i++) {\n    for (int j = 0; j <= i; j++) {\n      cout << \"* \";\n    }\n    cout << endl;\n  }\n  for (int i = 0; i < 3; i++) {\n    for (int j = i; j < 3; j++) {\n      cout << \"* \";\n    }\n    cout << endl;\n  }\n}",
+    "starterCode": "#include <iostream>\nusing namespace std;\n\nint main() {\n  for (int i = 0; i < 3; i++) {\n    for (int j = 0; j <= i; j++) {\n      cout << \"* \";\n    }\n    cout << endl;\n  }\n  for (int i = 0; i < 3; i++) {\n    for (int j = i; j < 3; j++) {\n      cout << \"* \";\n    }\n    cout << endl;\n  }\n    return 0;\n}",
+    "expectedOutput": "* \n* * \n* * * \n* * * \n* * \n* ",
+    "hints": [
+      "Review concepts required for FAST_CFD_PF_F23_FINAL_Q1D.",
+      "Observe strict PF-lab constraints: avoid banned STL algorithms and classes."
+    ],
+    "tags": [
+      "Nested Loops",
+      "Pattern Printing"
+    ]
+  },
+  {
+    "id": "pf-final-q1e",
+    "type": "code_submit",
+    "subjectId": "pf",
+    "categoryId": "final-exam",
+    "subcategoryId": "code-tracing",
+    "title": "Nested Ternary Operator Evaluation",
+    "difficulty": "easy",
+    "statement": "Assuming there are no errors in the codes and all the headers are appropriately included, write the output of the given code:\n\nint main() {\n  int r, a = 10, b = 13, c = 70;\n  r = (a > b ? (a > c ? 5 : 7) : (b > c ? 9 : 10));\n  cout << r;\n  return 0;\n}",
+    "starterCode": "#include <iostream>\nusing namespace std;\n\nint main() {\n  int r, a = 10, b = 13, c = 70;\n  r = (a > b ? (a > c ? 5 : 7) : (b > c ? 9 : 10));\n  cout << r;\n  return 0;\n}",
+    "expectedOutput": "10",
+    "hints": [
+      "Review concepts required for FAST_CFD_PF_F23_FINAL_Q1E.",
+      "Observe strict PF-lab constraints: avoid banned STL algorithms and classes."
+    ],
+    "tags": [
+      "Nested Ternary Operator",
+      "Conditional Expressions"
+    ]
+  },
+  {
+    "id": "pf-final-q1f",
+    "type": "code_submit",
+    "subjectId": "pf",
+    "categoryId": "final-exam",
+    "subcategoryId": "code-tracing",
+    "title": "While Loop Decrement Floor Tracing",
+    "difficulty": "easy",
+    "statement": "Assuming there are no errors in the codes and all the headers are appropriately included, write the output of the given code:\n\nint main() {\n  int x = 10;\n  while (x != 0) {\n    x--;\n    cout << x << endl;\n    x--;\n    if (x < 0) {\n      x = 0;\n    }\n  }\n}",
+    "starterCode": "#include <iostream>\nusing namespace std;\n\nint main() {\n  int x = 10;\n  while (x != 0) {\n    x--;\n    cout << x << endl;\n    x--;\n    if (x < 0) {\n      x = 0;\n    }\n  }\n    return 0;\n}",
+    "expectedOutput": "9\n7\n5\n3\n1",
+    "hints": [
+      "Review concepts required for FAST_CFD_PF_F23_FINAL_Q1F.",
+      "Observe strict PF-lab constraints: avoid banned STL algorithms and classes."
+    ],
+    "tags": [
+      "While Loop",
+      "Decrement Operators",
+      "Boundary Conditions"
+    ]
+  },
+  {
+    "id": "pf-final-q1g",
+    "type": "code_submit",
+    "subjectId": "pf",
+    "categoryId": "final-exam",
+    "subcategoryId": "code-tracing",
+    "title": "Nested If-Else & Dangling Else Tracing",
+    "difficulty": "easy",
+    "statement": "Assuming there are no errors in the codes and all the headers are appropriately included, write the output of the given code:\n\nint main() {\n  int num = 100;\n  if(num > 1)\n    if(num > 10)\n      if(num > 100)\n        cout << \"3digit\";\n      else\n        cout << \"2digit\";\n    else\n      cout << \"1digit\";\n}",
+    "starterCode": "#include <iostream>\nusing namespace std;\n\nint main() {\n  int num = 100;\n  if(num > 1)\n    if(num > 10)\n      if(num > 100)\n        cout << \"3digit\";\n      else\n        cout << \"2digit\";\n    else\n      cout << \"1digit\";\n    return 0;\n}",
+    "expectedOutput": "2digit",
+    "hints": [
+      "Review concepts required for FAST_CFD_PF_F23_FINAL_Q1G.",
+      "Observe strict PF-lab constraints: avoid banned STL algorithms and classes."
+    ],
+    "tags": [
+      "Nested If-Else",
+      "Dangling Else Problem"
+    ]
+  },
+  {
+    "id": "pf-final-q1h",
+    "type": "code_submit",
+    "subjectId": "pf",
+    "categoryId": "final-exam",
+    "subcategoryId": "code-tracing",
+    "title": "Descending Bubble Sort Tracing",
+    "difficulty": "easy",
+    "statement": "Assuming there are no errors in the codes and all the headers are appropriately included, write the output of the given code:\n\nint number[6] = {5, 10, 8, 2, 7, 9};\nfor (int i = 0; i < 6 - 1; i++) {\n  for (int j = 0; j < 6 - 1; j++) {\n    if (number[j] < number[j + 1]) {\n      int temp = number[j];\n      number[j] = number[j + 1];\n      number[j + 1] = temp;\n    }\n  }\n}\nfor (int i = 0; i < 6; i++) {\n  cout << number[i] << \" \";\n}",
+    "starterCode": "#include <iostream>\nusing namespace std;\n\nint number[6] = {5, 10, 8, 2, 7, 9};\nfor (int i = 0; i < 6 - 1; i++) {\n  for (int j = 0; j < 6 - 1; j++) {\n    if (number[j] < number[j + 1]) {\n      int temp = number[j];\n      number[j] = number[j + 1];\n      number[j + 1] = temp;\n    }\n  }\n}\nfor (int i = 0; i < 6; i++) {\n  cout << number[i] << \" \";\n}",
+    "expectedOutput": "10 9 8 7 5 2 ",
+    "hints": [
+      "Review concepts required for FAST_CFD_PF_F23_FINAL_Q1H.",
+      "Observe strict PF-lab constraints: avoid banned STL algorithms and classes."
+    ],
+    "tags": [
+      "1D Arrays",
+      "Bubble Sort",
+      "Descending Order Sorting"
+    ]
+  }
+]

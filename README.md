@@ -1,31 +1,106 @@
 # FASTudy
 
-## Supabase progress tracking
+FASTudy is a dedicated learning and practice platform for FAST NUCES students, covering **Programming Fundamentals (PF)**, **Calculus & Analytical Geometry**, and **Physics**.
 
-Authenticated learners' profiles, completed questions, attempts, activity heatmaps, and bookmarks are stored in Supabase. Guest-mode records intentionally remain on the device.
+---
 
-1. Copy `.env.example` to `.env.local` and set your Supabase credentials and Gemini API key (`VITE_GEMINI_API_KEY`).
-2. Run `supabase_schema.sql` in the project's Supabase SQL Editor.
-3. In Supabase Authentication, add local and deployed app URLs to the redirect allow-list and enable your desired sign-in providers.
+## 🐛 Bugsy: Automated PF Lab TA & Code Verifier
 
-The schema applies row-level security, so each learner can access only their own progress records.
+**Bugsy** is the built-in AI agent designed for FAST NUCES Programming Fundamentals:
+- **Automatic Edgecase Generation**: When you open any problem, Bugsy synthesizes realistic boundary cases, negative input filters, and extreme-size tests. Edge cases are **persistently stored** against each problem (in `localStorage` and Supabase).
+- **Beginner PF-Lab Style Check**: Checks student code against authentic FAST lab grading standards:
+  - Banned advanced STL containers (`<vector>`, `<map>`, `<set>`).
+  - Banned STL algorithms (`std::sort`, `<algorithm>`).
+  - Prohibited modern C++ features (`auto`, lambdas, dynamic OOP classes).
+  - Enforces manual loops, primitive arrays, and bounds-checking re-prompt loops.
+  - Generates a **PF-Lab Style Score (0–100%)** with actionable TA feedback.
+- **Performance & Weak-Topic Memory**: Tracks your time per problem, test pass rates, and identifies topics where you struggle. Surfaces diagnostic tips and weak-topic alerts directly in problem views and the Profile page.
 
-# React + Vite
+---
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+## ⚡ How to Set Up Judge0 for C/C++ Code Execution
 
-Currently, two official plugins are available:
+FASTudy compiles and runs C/C++ code against test suites and Bugsy edge cases. Three configuration options are supported:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+### Option 1: Free Public Judge0 CE (Default — Zero Config Needed)
+- FASTudy is pre-configured to use the free public Judge0 CE endpoint: `https://ce.judge0.com`.
+- If the public endpoint is busy or rate-limited, FASTudy automatically and seamlessly falls back to the **Piston Code Execution Engine** (`https://emkc.org`).
+- **Setup**: None! It works out of the box.
 
-## React Compiler
+### Option 2: RapidAPI Judge0 (Personal API Key & High Quota)
+1. Go to [RapidAPI Judge0 CE](https://rapidapi.com/hermanzdosilovic/api/judge0-ce).
+2. Sign up for a free plan and copy your `X-RapidAPI-Key`.
+3. Add it to your `.env.local` file:
+   ```env
+   VITE_JUDGE0_API_URL=https://judge0-ce.p.rapidapi.com
+   VITE_JUDGE0_API_KEY=your_rapidapi_key_here
+   VITE_JUDGE0_API_HOST=judge0-ce.p.rapidapi.com
+   ```
+4. Or enter it directly in the app via the **Judge0 Config** button in the code editor top bar!
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+### Option 3: Self-Hosted Judge0 via Docker (Unlimited Local Execution)
+If you prefer running a 100% offline or local compiler:
+1. Clone the Judge0 repository:
+   ```bash
+   git clone https://github.com/judge0/judge0.git
+   cd judge0
+   docker-compose up -d db redis
+   docker-compose up -d
+   ```
+2. In FASTudy `.env.local`:
+   ```env
+   VITE_JUDGE0_API_URL=http://localhost:2358
+   ```
 
-Note: This will impact Vite dev & build performances.
-You can also try [the experimental native React Compiler support in plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md#rust-react-compiler) by using `compiler: true` in the plugin options instead of using the Babel plugin.
+---
 
-## Expanding the Oxlint configuration
+## 📂 Programming Fundamentals Question Suite
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+The old dummy questions have been completely cleaned out. FASTudy now features authentic FAST NUCES coursework from `NEW Data`:
+1. **Lab 10 Tasks**:
+   - Nested Loops & Conditional Grading (5 students, 3 subjects, marks validation)
+   - Cafeteria Billing System (4 customers, item pricing, discount tiers)
+   - Centered Star Pyramid Pattern ($2N-1$ stars)
+   - Square Border & Diagonal Patterns ($N \times N$)
+   - Household Electricity Consumption Monitor (while loop, continue, break)
+   - 1D Array Declaration & Traversal
+   - Duplicate Roll Numbers Detection (nested loops on 1D array)
+   - Quiz Marks Frequency & Mode Finder (tied highest frequencies)
+2. **Fall 2023 Final Exam Tasks**:
+   - Function Overloading & Scope Tracing
+   - Pass-by-Value Execution Tracing
+   - Infinite Loops & Break Tracing
+   - Ascending & Descending Nested Loops
+   - Nested Ternary Operator Logic
+   - Decrement Operator & Zero-Floor Tracing
+   - Dangling Else & Nested Conditionals
+   - Descending Bubble Sort Tracing
+   - Menu-Driven Library Book Checkout System (10 books, availability tracking)
+   - 2D Array Matrix Difference & Reverse Column Indexing
+   - Subsequence Verification in C-Strings without built-ins
+   - Boolean Logic Refactoring without `&&` or `||`
+   - Random 4-Letter Word Generator without char variables
+   - `validateMatrix` 2D Array Peak Element & Const Prototypes
+   - Automated Quiz Grader with File I/O Simulation
+
+---
+
+## 🛠️ Environment Setup
+
+1. Copy `.env.example` to `.env.local`:
+   ```env
+   VITE_SUPABASE_URL=https://your-project-ref.supabase.co
+   VITE_SUPABASE_ANON_KEY=your-anon-key
+   VITE_GEMINI_API_KEY=your-gemini-api-key
+   ```
+2. Run database migrations:
+   - Run `supabase_schema.sql` in your Supabase SQL Editor.
+3. Install dependencies and start the dev server:
+   ```bash
+   npm install
+   npm run dev
+   ```
+4. Verify question bank integrity:
+   ```bash
+   npm run data:check
+   ```

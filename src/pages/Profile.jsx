@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useProfile } from '../context/ProfileContext';
 import { useAuth, getOAuthUserDetails } from '../context/AuthContext';
 import { useQuestions } from '../context/QuestionsContext';
+import { getBugsyAnalytics } from '../utils/bugsy';
 import ActivityHeatmap from '../components/ActivityHeatmap';
 import AuthModal from '../components/AuthModal';
 import {
@@ -17,6 +18,7 @@ import {
   Bookmark,
   ExternalLink,
   ShieldCheck,
+  ShieldAlert,
   Building,
   History,
   TrendingUp,
@@ -26,6 +28,9 @@ import {
   Sparkles,
   LogIn,
   Camera,
+  Bug,
+  AlertTriangle,
+  Clock,
 } from 'lucide-react';
 
 const AVATAR_PRESETS = [
@@ -70,6 +75,7 @@ export default function Profile() {
   const [isSyncingManual, setIsSyncingManual] = useState(false);
 
   const oAuthDetails = useMemo(() => getOAuthUserDetails(user), [user]);
+  const bugsyAnalytics = useMemo(() => getBugsyAnalytics(), [submissionHistory]);
 
   const [formData, setFormData] = useState({
     username: profile.username || 'Fastian',
@@ -523,6 +529,13 @@ export default function Profile() {
           <History size={14} />
           <span>Activity ({submissionHistory.length})</span>
         </button>
+        <button
+          className={`profile-tab-btn ${activeTab === 'bugsy' ? 'active' : ''}`}
+          onClick={() => setActiveTab('bugsy')}
+        >
+          <Bug size={14} />
+          <span>Bugsy AI Diagnostics {bugsyAnalytics.weakTopics?.length > 0 ? `(${bugsyAnalytics.weakTopics.length} weak)` : ''}</span>
+        </button>
       </div>
 
       {/* Tab 1: Overview & Heatmap */}
@@ -773,6 +786,176 @@ export default function Profile() {
               </table>
             </div>
           )}
+        </div>
+      )}
+
+      {/* Tab 4: Bugsy AI Diagnostics & Weak Topics */}
+      {activeTab === 'bugsy' && (
+        <div className="profile-bugsy-diagnostics">
+          {/* Hero Banner */}
+          <div className="bugsy-profile-hero">
+            <div className="hero-avatar">🐛</div>
+            <div className="hero-text">
+              <h2>Bugsy AI Performance & Weak-Topic Memory</h2>
+              <p>
+                Bugsy analyzes your C/C++ submissions against FAST PF Lab constraints, checks input limits and edge cases, and remembers which programming topics need reinforcement.
+              </p>
+            </div>
+          </div>
+
+          {/* Metrics Grid */}
+          <div className="profile-metrics-grid">
+            <div className="profile-metric">
+              <Bug size={16} />
+              <div>
+                <strong>{bugsyAnalytics.totalEvaluations}</strong>
+                <span>Bugsy evaluations</span>
+              </div>
+            </div>
+            <div className="profile-metric">
+              <AlertTriangle size={16} color={bugsyAnalytics.weakTopics.length > 0 ? '#f85149' : '#3fb950'} />
+              <div>
+                <strong>{bugsyAnalytics.weakTopics.length} topics</strong>
+                <span>requiring practice</span>
+              </div>
+            </div>
+            <div className="profile-metric">
+              <ShieldCheck size={16} color="#3fb950" />
+              <div>
+                <strong>{bugsyAnalytics.strongTopics.length} topics</strong>
+                <span>solid mastery</span>
+              </div>
+            </div>
+            <div className="profile-metric">
+              <Clock size={16} />
+              <div>
+                <strong>
+                  {bugsyAnalytics.totalEvaluations > 0
+                    ? `${Math.round(bugsyAnalytics.topicSummary.reduce((acc, t) => acc + t.avgTime, 0) / Math.max(bugsyAnalytics.topicSummary.length, 1))}s`
+                    : '—'}
+                </strong>
+                <span>avg solve pace</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Weak Topics Section */}
+          <div className="profile-section-card" style={{ marginTop: '20px' }}>
+            <div className="profile-section-heading">
+              <div>
+                <p className="eyebrow">DIAGNOSTIC TARGETS</p>
+                <h2>Topics flagged for improvement</h2>
+              </div>
+            </div>
+
+            {bugsyAnalytics.weakTopics.length === 0 ? (
+              <div className="empty-sub-state">
+                <ShieldCheck size={28} color="#3fb950" />
+                <p>No weak topics detected! Your code adheres cleanly to PF-lab standards and passes edge cases.</p>
+                <span>Continue practicing across different lab tasks to maintain proficiency.</span>
+              </div>
+            ) : (
+              <div className="weak-topics-grid">
+                {bugsyAnalytics.weakTopics.map((wt) => (
+                  <div key={wt.topic} className="weak-topic-card">
+                    <div className="weak-card-header">
+                      <span className="weak-topic-name">{wt.topic}</span>
+                      <span className="weak-rate-pill">{wt.successRate}% Success</span>
+                    </div>
+
+                    <div className="weak-card-stats">
+                      <div className="stat-item">
+                        <span>Attempts:</span>
+                        <strong>{wt.attempts}</strong>
+                      </div>
+                      <div className="stat-item">
+                        <span>Avg Time:</span>
+                        <strong>{Math.round(wt.avgTime / 60)}m {wt.avgTime % 60}s</strong>
+                      </div>
+                      <div className="stat-item">
+                        <span>PF-Lab Style:</span>
+                        <strong>{wt.avgStyle}/100</strong>
+                      </div>
+                    </div>
+
+                    <div className="weak-card-tip">
+                      <strong>Bugsy's TA Tip:</strong>
+                      <p>
+                        Review input validation loops and check boundary values. Avoid using banned STL libraries; implement standard manual arrays and nested loops.
+                      </p>
+                    </div>
+
+                    <Link to="/practice?subject=pf" className="btn-secondary btn-sm" style={{ width: '100%', justifyContent: 'center' }}>
+                      Practice Questions in this Topic
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Recent Evaluations Log */}
+          <div className="profile-section-card" style={{ marginTop: '20px' }}>
+            <div className="profile-section-heading">
+              <div>
+                <p className="eyebrow">EVALUATION LOG</p>
+                <h2>Recent Bugsy code verifications</h2>
+              </div>
+            </div>
+
+            {bugsyAnalytics.recentEvals.length === 0 ? (
+              <div className="empty-sub-state">
+                <History size={24} color="#8b949e" />
+                <p>No evaluations recorded yet.</p>
+                <span>Open any PF question, write code, and click "Run Full Evaluation with Bugsy" to see results here.</span>
+              </div>
+            ) : (
+              <div className="history-table-wrapper">
+                <table className="history-table">
+                  <thead>
+                    <tr>
+                      <th>Question</th>
+                      <th>Topic</th>
+                      <th>Tests Passed</th>
+                      <th>PF-Lab Score</th>
+                      <th>Time Spent</th>
+                      <th>Date</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {bugsyAnalytics.recentEvals.map((ev) => (
+                      <tr key={ev.id}>
+                        <td className="sub-qid-cell">
+                          <strong>{ev.questionTitle || ev.questionId}</strong>
+                        </td>
+                        <td>{ev.topic}</td>
+                        <td>
+                          <span className={`sub-status-pill ${ev.testsPassed === ev.testsTotal ? 'correct' : 'wrong'}`}>
+                            {ev.testsPassed} / {ev.testsTotal} passed
+                          </span>
+                        </td>
+                        <td>
+                          <span style={{ fontWeight: '600', color: ev.styleScore >= 80 ? '#3fb950' : '#d29922' }}>
+                            {ev.styleScore}/100
+                          </span>
+                        </td>
+                        <td>{Math.floor((ev.timeTakenSeconds || 0) / 60)}m {(ev.timeTakenSeconds || 0) % 60}s</td>
+                        <td className="sub-date-cell">
+                          {new Date(ev.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </td>
+                        <td>
+                          <Link to={`/question/${ev.questionId}`} className="btn-table-jump">
+                            Re-attempt
+                          </Link>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
         </div>
       )}
 

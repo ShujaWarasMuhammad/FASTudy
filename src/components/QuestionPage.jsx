@@ -14,6 +14,9 @@ import CodeBlock from './CodeBlock';
 import MathView from './MathView';
 import VisualizationView from './VisualizationView';
 import AiTutorDrawer from './AiTutorDrawer';
+import BugsyDrawer from './BugsyDrawer';
+import Judge0Modal from './Judge0Modal';
+import { getBugsyAnalytics, evaluatePfLabStyle, recordBugsyEvaluation } from '../utils/bugsy';
 import { QuestionPageSkeleton } from './SkeletonLoaders';
 import ReactMarkdown from 'react-markdown';
 import remarkMath from 'remark-math';
@@ -38,6 +41,10 @@ import {
   SquareCheck,
   Square,
   Trash2,
+  Settings,
+  Bug,
+  Clock,
+  AlertTriangle,
 } from 'lucide-react';
 
 export default function QuestionPage() {
@@ -59,6 +66,13 @@ export default function QuestionPage() {
   const [isCompiling, setIsCompiling] = useState(false);
   const [compilerOutput, setCompilerOutput] = useState(null);
 
+  // Bugsy Agent & Judge0 Modal states
+  const [isBugsyOpen, setIsBugsyOpen] = useState(false);
+  const [isJudge0ModalOpen, setIsJudge0ModalOpen] = useState(false);
+  const [elapsedSeconds, setElapsedSeconds] = useState(0);
+  const [weakTopicNotice, setWeakTopicNotice] = useState(null);
+  const [styleReport, setStyleReport] = useState(null);
+
   // UI accordion & auxiliary states
   const [showHints, setShowHints] = useState(false);
   const [showExplanation, setShowExplanation] = useState(false);
@@ -67,6 +81,15 @@ export default function QuestionPage() {
   const [newComment, setNewComment] = useState('');
   const [activeTab, setActiveTab] = useState('question');
   const [isAiDrawerOpen, setIsAiDrawerOpen] = useState(false);
+
+  // Live problem timer
+  useEffect(() => {
+    setElapsedSeconds(0);
+    const interval = setInterval(() => {
+      setElapsedSeconds((prev) => prev + 1);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [questionId]);
 
   // Load question details
   useEffect(() => {
@@ -77,20 +100,35 @@ export default function QuestionPage() {
       setUserAnswer('');
       setResult(null);
       setCompilerOutput(null);
+      setStyleReport(null);
       setShowHints(false);
       setShowExplanation(false);
       setCopied(false);
       setActiveTab('question');
       setIsAiDrawerOpen(false);
+      setIsBugsyOpen(false);
 
       if (q) {
         setUserCode(q.starterCode || '');
+        // Check for weak topic match in Bugsy analytics
+        const analytics = getBugsyAnalytics();
+        const currentTopic = q.tags?.[0] || q.subcategoryId || '';
+        const match = analytics.weakTopics?.find(
+          (w) => w.topic?.toLowerCase() === currentTopic.toLowerCase()
+        );
+        setWeakTopicNotice(match || null);
       }
       setIsLoading(false);
     }, 120);
 
     return () => clearTimeout(timer);
   }, [questionId]);
+
+  const formatTimer = (secs) => {
+    const m = Math.floor(secs / 60).toString().padStart(2, '0');
+    const s = (secs % 60).toString().padStart(2, '0');
+    return `${m}:${s}`;
+  };
 
   // Load & Stream Realtime Comments from Supabase
   useEffect(() => {
@@ -231,7 +269,7 @@ export default function QuestionPage() {
     }
   };
 
-  // Compile with Judge0 (for Logic Building)
+  // Compile with Judge0 (for Logic Building & Lab Tasks)
   const handleCompileRun = async () => {
     setIsCompiling(true);
     setCompilerOutput(null);
@@ -240,8 +278,18 @@ export default function QuestionPage() {
     setIsCompiling(false);
     setCompilerOutput(res);
 
+    // Evaluate PF-Lab style via Bugsy
+    const style = evaluatePfLabStyle(userCode, question);
+    setStyleReport(style);
+
     // Check if output matches expected
-    if (res.success && res.stdout.trim() === question.expectedOutput?.trim()) {
+    const expectedTrimmed = question.expectedOutput?.trim();
+    const isCorrect = res.success && Boolean(expectedTrimmed) && (
+      res.stdout.trim() === expectedTrimmed ||
+      res.stdout.includes(expectedTrimmed)
+    );
+
+    if (isCorrect) {
       setResult('correct');
       triggerCelebration();
       markQuestionSolved();
@@ -251,6 +299,19 @@ export default function QuestionPage() {
     } else {
       setResult('compile_error');
     }
+
+    // Log evaluation with Bugsy (updates topic mastery and logs to database)
+    recordBugsyEvaluation({
+      question,
+      userCode,
+      timeTakenSeconds: elapsedSeconds,
+      testSummary: {
+        totalTests: 1,
+        passedTests: isCorrect ? 1 : 0,
+      },
+      styleReport: style,
+      user,
+    });
   };
 
   const handleCopyStatement = () => {
@@ -493,30 +554,76 @@ export default function QuestionPage() {
           )}
 
           {/* ========================================================
-              TYPE 2: LOGIC BUILDING (Compiled code with Judge0)
+              TYPE 2: LOGIC BUILDING & PF LAB TASKS (Judge0 + Bugsy)
              ======================================================== */}
           {question.type === 'code_submit' && (
             <div className="logic-building-container">
-              <div className="problem-statement-box">
-                <p className="statement-text">{question.description}</p>
-                <div className="expected-target-row">
-                  <span className="target-label">Target Output Required:</span>
-                  <pre className="target-code-block">{question.expectedOutput}</pre>
+              {/* Weak Topic Alert Notice */}
+              {weakTopicNotice && (
+                <div className="bugsy-inline-alert">
+                  <AlertTriangle size={16} color="#d29922" />
+                  <div className="alert-content">
+                    <strong>Bugsy Diagnostic:</strong> You have a <strong>{weakTopicNotice.successRate}%</strong> success rate on <strong>{weakTopicNotice.topic}</strong>. Remember to check input boundaries, negative values, and loop terminal conditions!
+                  </div>
+                  <button className="btn-link-action" onClick={() => setIsBugsyOpen(true)}>
+                    View Bugsy Edgecases
+                  </button>
                 </div>
+              )}
+
+              <div className="problem-statement-box">
+                <div className="statement-markdown">
+                  <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
+                    {question.statement || question.description || ''}
+                  </ReactMarkdown>
+                </div>
+                {question.expectedOutput && (
+                  <div className="expected-target-row">
+                    <span className="target-label">Target Sample Output:</span>
+                    <pre className="target-code-block">{question.expectedOutput}</pre>
+                  </div>
+                )}
               </div>
 
               {/* Code Editor */}
               <div className="compiler-editor-box">
                 <div className="editor-top-bar">
-                  <span className="editor-lang-tag">C++ (GCC 9.2.0 via Judge0 Compiler)</span>
-                  <button
-                    className="btn-primary btn-compile"
-                    onClick={handleCompileRun}
-                    disabled={isCompiling}
-                  >
-                    <Play size={14} fill="currentColor" />
-                    <span>{isCompiling ? 'Compiling Code...' : 'Compile & Run'}</span>
-                  </button>
+                  <div className="editor-meta-left">
+                    <span className="editor-lang-tag">C++ (GCC 9.2.0 via Judge0)</span>
+                    <div className="live-timer-badge" title="Active Problem Timer">
+                      <Clock size={13} />
+                      <span>{formatTimer(elapsedSeconds)}</span>
+                    </div>
+                  </div>
+
+                  <div className="editor-actions-right">
+                    <button
+                      className="btn-secondary btn-sm"
+                      onClick={() => setIsJudge0ModalOpen(true)}
+                      title="Compiler Settings & API Config"
+                    >
+                      <Settings size={13} />
+                      <span>Judge0 Config</span>
+                    </button>
+
+                    <button
+                      className="btn-bugsy-trigger"
+                      onClick={() => setIsBugsyOpen(true)}
+                      title="Bugsy Automated Edgecase & PF-Lab Style Verifier"
+                    >
+                      <Bug size={14} />
+                      <span>Ask Bugsy TA</span>
+                    </button>
+
+                    <button
+                      className="btn-primary btn-compile"
+                      onClick={handleCompileRun}
+                      disabled={isCompiling}
+                    >
+                      <Play size={14} fill="currentColor" />
+                      <span>{isCompiling ? 'Compiling Code...' : 'Compile & Run'}</span>
+                    </button>
+                  </div>
                 </div>
 
                 <textarea
@@ -526,8 +633,9 @@ export default function QuestionPage() {
                     setUserCode(e.target.value);
                     setResult(null);
                   }}
-                  rows={14}
+                  rows={16}
                   spellCheck="false"
+                  placeholder="// Write your C/C++ solution code here..."
                 />
               </div>
 
@@ -542,6 +650,27 @@ export default function QuestionPage() {
                       Time: {compilerOutput.time}s | Memory: {compilerOutput.memory} KB
                     </span>
                   </div>
+
+                  {/* Bugsy PF-Lab Style Strip */}
+                  {styleReport && (
+                    <div className="bugsy-style-strip">
+                      <div className="style-strip-header">
+                        <span className="style-strip-title">
+                          🐛 Bugsy PF-Lab Score: <strong>{styleReport.score}/100</strong>
+                        </span>
+                        <span className={`style-status-pill ${styleReport.isBeginnerCompliant ? 'pill-compliant' : 'pill-warning'}`}>
+                          {styleReport.isBeginnerCompliant ? 'Beginner PF-Lab Compliant' : 'Lab Violations Detected'}
+                        </span>
+                      </div>
+                      <p className="style-critique-text">{styleReport.critique}</p>
+                      <button
+                        className="btn-secondary btn-xs"
+                        onClick={() => setIsBugsyOpen(true)}
+                      >
+                        Inspect Edge Cases & Full Rubric
+                      </button>
+                    </div>
+                  )}
 
                   {compilerOutput.stdout && (
                     <div className="compiler-section">
@@ -796,6 +925,29 @@ export default function QuestionPage() {
         question={question}
         isOpen={isAiDrawerOpen}
         onClose={() => setIsAiDrawerOpen(false)}
+      />
+
+      {/* Bugsy QA & Edgecases Drawer */}
+      <BugsyDrawer
+        isOpen={isBugsyOpen}
+        onClose={() => setIsBugsyOpen(false)}
+        question={question}
+        userCode={userCode}
+        timeSpentSeconds={elapsedSeconds}
+        onEvaluationCompleted={({ testSummary, styleReport: rep }) => {
+          setStyleReport(rep);
+          if (testSummary?.passedTests === testSummary?.totalTests && testSummary?.totalTests > 0) {
+            setResult('correct');
+            triggerCelebration();
+            markQuestionSolved();
+          }
+        }}
+      />
+
+      {/* Judge0 Setup Modal */}
+      <Judge0Modal
+        isOpen={isJudge0ModalOpen}
+        onClose={() => setIsJudge0ModalOpen(false)}
       />
     </div>
   );
