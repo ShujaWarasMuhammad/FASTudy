@@ -9,7 +9,7 @@ import { useProfile } from '../context/ProfileContext';
 import { useAuth } from '../context/AuthContext';
 import { useQuestions } from '../context/QuestionsContext';
 import { supabase } from '../config/supabase';
-import { compileAndRunCode } from '../utils/judge0';
+import { evaluateCodeWithAI } from '../utils/aiEval';
 import CodeBlock from './CodeBlock';
 import MathView from './MathView';
 import VisualizationView from './VisualizationView';
@@ -326,7 +326,7 @@ export default function QuestionPage() {
     setIsConsoleOpen(true);
     setCompilerOutput(null);
 
-    const res = await compileAndRunCode(userCode, 54, customStdin);
+    const res = await evaluateCodeWithAI(userCode, question, customStdin);
     setIsCompiling(false);
     setCompilerOutput(res);
 
@@ -355,7 +355,7 @@ export default function QuestionPage() {
     setIsConsoleOpen(true);
     setCompilerOutput(null);
 
-    const res = await compileAndRunCode(userCode, 54, customStdin);
+    const res = await evaluateCodeWithAI(userCode, question, customStdin);
     setIsCompiling(false);
     setCompilerOutput(res);
 

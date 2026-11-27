@@ -3,7 +3,7 @@
 // executes tests via Judge0, and tracks performance and weak topics.
 
 import { supabase } from '../config/supabase';
-import { compileAndRunCode } from './judge0';
+import { evaluateCodeWithAI } from './aiEval';
 
 const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
@@ -431,11 +431,11 @@ export function evaluatePfLabStyle(userCode = '', question = {}) {
 }
 
 /**
- * Runs code through Judge0 for all test cases (sample + Bugsy edgecases)
+ * Runs code through AI evaluator for all test cases (sample + Bugsy edgecases)
  */
-export async function runJudge0TestMatrix(userCode, testCases = []) {
+export async function runJudge0TestMatrix(userCode, testCases = [], question = {}) {
   if (!testCases || testCases.length === 0) {
-    const singleRun = await compileAndRunCode(userCode, 54, '');
+    const singleRun = await evaluateCodeWithAI(userCode, question, '');
     return {
       totalTests: 1,
       passedTests: singleRun.success ? 1 : 0,
@@ -460,14 +460,13 @@ export async function runJudge0TestMatrix(userCode, testCases = []) {
 
   for (const test of testCases) {
     const input = test.stdin || '';
-    const res = await compileAndRunCode(userCode, 54, input);
+    const res = await evaluateCodeWithAI(userCode, question, input);
 
     let isPassed = false;
     if (res.success) {
       if (test.expected) {
         isPassed = res.stdout.trim() === test.expected.trim() || res.stdout.includes(test.expected.trim());
       } else {
-        // If no strict expected string (e.g. descriptive edgecase), passing without runtime/compile error is considered successful run
         isPassed = true;
       }
     }
