@@ -61,8 +61,9 @@
   --radius-pill: 999px;
 
   /* Layout */
-  --navbar-height: 45px;
+  --navbar-height: 48px;
   --sidebar-width: 260px;
+  --container-max: 1280px;
 
   /* Motion */
   --transition-fast: 120ms ease;
@@ -135,12 +136,18 @@ img { max-width: 100%; display: block; }
   }
 }
 
+/* ----- Custom Scrollbars ----- */
+::-webkit-scrollbar { width: 7px; height: 7px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: var(--radius-pill); }
+::-webkit-scrollbar-thumb:hover { background: var(--text-tertiary); }
+
 /* ----- Layout containers ----- */
 .page-container {
   width: 100%;
-  max-width: 1080px;
+  max-width: 1120px;
   margin: 0 auto;
-  padding: 72px 96px 100px;
+  padding: 40px 32px 72px;
 }
 
 /* =====================================================================
@@ -157,11 +164,13 @@ img { max-width: 100%; display: block; }
 
 .header-inner {
   height: 100%;
-  padding: 0 14px;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 16px;
 }
 
 .header-brand-group { display: flex; align-items: center; gap: 10px; }
@@ -1060,21 +1069,34 @@ img { max-width: 100%; display: block; }
   background: var(--bg-color);
 }
 
-/* â”€â”€ Top bar â”€â”€ */
+/* ── Top bar ── */
 .lc-topbar {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  padding: 6px 12px;
+  gap: 12px;
+  padding: 7px 16px;
   border-bottom: 1px solid var(--border-color);
   background: var(--surface-1);
   flex-shrink: 0;
 }
-.lc-topbar-left,
-.lc-topbar-right { display: flex; align-items: center; gap: 8px; }
-.lc-topbar-center { flex: 1; text-align: center; min-width: 0; }
+.lc-topbar-left { display: flex; align-items: center; gap: 8px; justify-self: start; }
+.lc-topbar-center { min-width: 0; max-width: 460px; text-align: center; justify-self: center; }
+.lc-topbar-right { display: flex; align-items: center; gap: 6px; justify-self: end; }
+.lc-topbar-right > *,
+.lc-topbar-left .btn-icon {
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+}
+.lc-topbar-right .btn-secondary,
+.lc-topbar-right .btn-bugsy-trigger {
+  padding: 0 10px;
+  border-radius: var(--radius-xs);
+  font-size: 12px;
+}
 .lc-problem-title-sm {
+  display: block;
   font-size: 13px;
   font-weight: 600;
   color: var(--text-primary);
@@ -1506,12 +1528,16 @@ img { max-width: 100%; display: block; }
 
 /* Responsive: stack on small screens */
 @media (max-width: 860px) {
+  .lc-topbar {
+    grid-template-columns: auto 1fr;
+  }
+  .lc-topbar-center { display: none; }
+  .lc-topbar-right { justify-self: end; }
   .lc-split {
     grid-template-columns: 1fr;
     grid-template-rows: 1fr 1fr;
   }
   .lc-left { border-right: none; border-bottom: 1px solid var(--border-color); }
-  .lc-topbar-center { display: none; }
 }
 
 /* =====================================================================
@@ -2121,14 +2147,18 @@ img { max-width: 100%; display: block; }
    SITE FOOTER
    ===================================================================== */
 .site-footer {
-  padding: 20px 24px;
+  padding: 16px 20px;
   background: var(--surface-1);
   border-top: 1px solid var(--border-subtle);
   color: var(--text-secondary);
   margin-top: auto;
 }
 
-.footer-container { max-width: 1280px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+body:has(.lc-page) .site-footer {
+  display: none;
+}
+
+.footer-container { max-width: var(--container-max); margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
 .footer-left-col { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--text-secondary); }
 .footer-brand-title { font-family: var(--font-mono); font-weight: 700; color: var(--text-primary); }
 .footer-sep-dash { color: var(--border-color); }
@@ -3601,15 +3631,15 @@ img { max-width: 100%; display: block; }
   display: flex;
   align-items: center;
   gap: 20px;
-  padding: 10px 20px;
+  padding: 10px max(20px, calc((100% - var(--container-max)) / 2 + 20px));
   background: var(--surface-1);
   border-bottom: 1px solid var(--border-color);
   flex-shrink: 0;
   flex-wrap: wrap;
 }
 .planner-topbar-brand { display: flex; align-items: center; gap: 10px; }
-.planner-logo { font-size: 22px; }
-.planner-title { font-size: 15px; font-weight: 700; color: var(--text-primary); line-height: 1.1; }
+.planner-logo { font-size: 20px; line-height: 1; }
+.planner-title { font-size: 14.5px; font-weight: 700; color: var(--text-primary); line-height: 1.15; }
 .planner-subtitle { font-size: 11px; color: var(--text-tertiary); }
 
 .planner-residence-group { display: flex; align-items: center; gap: 8px; }
@@ -3617,7 +3647,8 @@ img { max-width: 100%; display: block; }
 .planner-res-btns { display: flex; gap: 4px; }
 .planner-res-btn {
   display: inline-flex; align-items: center; gap: 5px;
-  padding: 5px 10px; border-radius: var(--radius-xs);
+  height: 30px;
+  padding: 0 11px; border-radius: var(--radius-xs);
   font-size: 11.5px; font-weight: 600;
   background: var(--surface-2); border: 1px solid var(--border-color);
   color: var(--text-secondary); cursor: pointer;
@@ -3629,6 +3660,11 @@ img { max-width: 100%; display: block; }
 .planner-bugsy-strip {
   margin-left: auto;
   display: flex; align-items: center; gap: 7px;
+  height: 30px;
+  padding: 0 10px;
+  background: var(--surface-2);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xs);
   font-size: 12px; color: var(--text-secondary);
 }
 .planner-bugsy-strip strong { color: var(--text-primary); font-weight: 600; }
@@ -3637,11 +3673,12 @@ img { max-width: 100%; display: block; }
 
 /* â”€â”€ Tab bar â”€â”€ */
 .planner-tabbar {
-  display: flex; gap: 2px;
-  padding: 0 16px;
+  display: flex; gap: 4px;
+  padding: 0 max(20px, calc((100% - var(--container-max)) / 2 + 20px));
   border-bottom: 1px solid var(--border-subtle);
   background: var(--surface-1);
   flex-shrink: 0;
+  overflow-x: auto;
 }
 .planner-tabbar-btn {
   display: inline-flex; align-items: center; gap: 6px;
@@ -3663,16 +3700,18 @@ img { max-width: 100%; display: block; }
 }
 
 /* â•â•â•â•â•â•â•â•â•â• TIMETABLE GRID (faithful replica) â•â•â•â•â•â•â•â•â•â• */
-:root { --tt-dw: 52px; }
+:root { --tt-dw: 56px; }
 
 .tt-wrap {
   display: flex;
   flex-direction: column;
   min-width: 1000px;
+  max-width: var(--container-max);
+  margin: 0 auto;
   height: 100%;
   font-family: var(--font-sans);
   background: var(--bg-color);
-  padding: 18px 20px 10px;
+  padding: 20px 20px 16px;
 }
 
 /* Header */
@@ -3815,7 +3854,14 @@ img { max-width: 100%; display: block; }
 .tt-legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
 
 /* â•â•â•â•â•â•â•â•â•â• STUDY PLAN â•â•â•â•â•â•â•â•â•â• */
-.planner-schedule-panel { flex: 1; padding: 20px 24px; overflow-y: auto; }
+.planner-schedule-panel {
+  flex: 1;
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px 20px 40px;
+  overflow-y: auto;
+}
 
 .plan-day-nav { display: flex; gap: 6px; margin-bottom: 20px; }
 .plan-day-pill {
@@ -3868,7 +3914,14 @@ img { max-width: 100%; display: block; }
 }
 
 /* â•â•â•â•â•â•â•â•â•â• GCR RADAR â•â•â•â•â•â•â•â•â•â• */
-.planner-gcr-panel { flex: 1; padding: 20px 24px; overflow-y: auto; }
+.planner-gcr-panel {
+  flex: 1;
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px 20px 40px;
+  overflow-y: auto;
+}
 
 .gcr-panel-head {
   display: flex; align-items: flex-start; justify-content: space-between; gap: 16px;
@@ -3925,8 +3978,19 @@ img { max-width: 100%; display: block; }
 
 /* â•â•â•â•â•â•â•â•â•â• CHAT â•â•â•â•â•â•â•â•â•â• */
 .planner-chat-panel {
-  flex: 1; display: flex; flex-direction: column;
-  min-height: 0; overflow: hidden;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: calc(100% - 40px);
+  max-width: 920px;
+  margin: 20px auto;
+  height: calc(100vh - 200px);
+  min-height: 400px;
+  max-height: 680px;
+  background: var(--surface-1);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
 }
 .chat-msgs {
   flex: 1; overflow-y: auto;

@@ -495,12 +495,11 @@ export default function QuestionPage() {
           </div>
 
           <div className="lc-topbar-right">
-            <div className="live-timer-badge" title="Timer"><Clock size={13} /><span>{formatTimer(elapsedSeconds)}</span></div>
-            <button className="btn-secondary btn-sm" onClick={() => setIsJudge0ModalOpen(true)} title="Judge0 Config"><Settings size={13} /></button>
-            <button className="btn-bugsy-trigger" onClick={() => setIsBugsyOpen(true)} title="Ask Bugsy"><Bug size={14} /><span>Bugsy</span></button>
-            <button className={`btn-secondary ${isSaved ? 'active' : ''}`} onClick={handleToggleBookmark} title={isSaved ? 'Unsave' : 'Save'}><Bookmark size={14} fill={isSaved ? 'currentColor' : 'none'} /></button>
-            <button className="btn-secondary" onClick={handleCopyStatement} title="Copy">{copied ? <Check size={14} /> : <Copy size={14} />}</button>
-            <button className="btn-secondary btn-ai" onClick={handleAskAI}><Bot size={14} /></button>
+            <div className="live-timer-badge" title="Active Problem Timer"><Clock size={13} /><span>{formatTimer(elapsedSeconds)}</span></div>
+            <button className="btn-bugsy-trigger" onClick={() => setIsBugsyOpen(true)} title="Ask Bugsy TA"><Bug size={14} /><span>Bugsy</span></button>
+            <button className={`btn-secondary ${isSaved ? 'active' : ''}`} onClick={handleToggleBookmark} title={isSaved ? 'Remove Bookmark' : 'Save Question'}><Bookmark size={14} fill={isSaved ? 'currentColor' : 'none'} /></button>
+            <button className="btn-secondary" onClick={handleCopyStatement} title="Copy Statement">{copied ? <Check size={14} /> : <Copy size={14} />}</button>
+            <button className="btn-secondary btn-ai" onClick={handleAskAI} title="Ask AI Tutor"><Bot size={14} /></button>
           </div>
         </div>
 
@@ -637,7 +636,7 @@ export default function QuestionPage() {
           <div className="lc-right">
             {/* Editor header */}
             <div className="lc-editor-header">
-              <span className="editor-lang-tag">C++ (GCC 9.2.0)</span>
+              <span className="editor-lang-tag">C++ (Bugsy AI Evaluator)</span>
               <div className="lc-editor-actions">
                 <button className="btn-secondary btn-sm" onClick={handleResetCode} title="Reset to starter code"><RotateCcw size={13} /><span>Reset</span></button>
               </div>
