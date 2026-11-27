@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
-import { supabase } from '../config/supabase';
+import { supabase, isSupabaseConfigured } from '../config/supabase';
 import {
   questions as defaultQuestions,
   subjects as defaultSubjects,
@@ -74,6 +74,7 @@ export function QuestionsProvider({ children }) {
     const channelName = `questions_stream_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
 
     async function loadAndStreamQuestions() {
+      if (!isSupabaseConfigured) { setIsLoading(false); return; }
       try {
         // 1. Fetch initial questions from Supabase
         const { data: dbQuestions, error: qError } = await supabase

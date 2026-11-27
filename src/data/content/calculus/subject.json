@@ -5,6 +5,20 @@
   "description": "FAST NUCES MT-1003 Calculus & Analytical Geometry curriculum covering limits, continuity, differentiation, optimization, related rates, and applications.",
   "categories": [
     {
+      "id": "limits",
+      "name": "Limits",
+      "subcategories": [
+        {
+          "id": "basic-limits",
+          "name": "Basic Limits"
+        },
+        {
+          "id": "lhopital",
+          "name": "L'Hôpital's Rule"
+        }
+      ]
+    },
+    {
       "id": "sessional-practice",
       "name": "Sessional Practice Sets",
       "subcategories": [

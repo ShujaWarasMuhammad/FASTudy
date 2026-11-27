@@ -5,7 +5,7 @@
 import { supabase } from '../config/supabase';
 import { evaluateCodeWithAI } from './aiEval';
 
-const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
+import { GEMINI_API_KEY, generateGeminiText } from './geminiClient';
 
 const LOCAL_STORAGE_EDGECASES_KEY = 'fastudy_bugsy_edgecases_v1';
 const LOCAL_STORAGE_EVALS_KEY = 'fastudy_bugsy_evaluations_v1';
@@ -223,7 +223,7 @@ export async function getBugsyEdgecases(question) {
   let generated = null;
   if (GEMINI_API_KEY) {
     try {
-      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+
       const prompt = `You are Bugsy, the senior Programming Fundamentals (PF) Lab TA at FAST NUCES.
 Analyze this C++ problem and generate 3 rigorous edge cases that will test beginner student code:
 Title: ${question.title}
@@ -241,23 +241,14 @@ Return ONLY a valid JSON array of 3 objects with these exact keys:
   }
 ]`;
 
-      const res = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ role: 'user', parts: [{ text: prompt }] }],
-          generationConfig: { responseMimeType: 'application/json' }
-        })
-      });
-
-      if (res.ok) {
-        const body = await res.json();
-        const jsonText = body.candidates?.[0]?.content?.parts?.[0]?.text;
-        if (jsonText) {
-          const parsed = JSON.parse(jsonText);
-          if (Array.isArray(parsed) && parsed.length > 0) {
-            generated = parsed;
-          }
+      const jsonText = await generateGeminiText(
+        [{ role: 'user', parts: [{ text: prompt }] }],
+        { responseMimeType: 'application/json' }
+      );
+      if (jsonText) {
+        const parsed = JSON.parse(jsonText);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          generated = parsed;
         }
       }
     } catch (apiErr) {
@@ -460,15 +451,14 @@ export async function runJudge0TestMatrix(userCode, testCases = [], question = {
 
   for (const test of testCases) {
     const input = test.stdin || '';
-    const res = await evaluateCodeWithAI(userCode, question, input);
+    // Exact-output tests compare stdout; behaviour-only edge cases rely on the AI verdict.
+    const res = await evaluateCodeWithAI(userCode, question, input, test.expected ? '' : test.expectedBehavior || '');
 
     let isPassed = false;
     if (res.success) {
-      if (test.expected) {
-        isPassed = res.stdout.trim() === test.expected.trim() || res.stdout.includes(test.expected.trim());
-      } else {
-        isPassed = true;
-      }
+      isPassed = test.expected
+        ? res.stdout.trim() === test.expected.trim() || res.stdout.includes(test.expected.trim())
+        : true;
     }
 
     if (isPassed) passedCount++;
@@ -519,7 +509,7 @@ export async function recordBugsyEvaluation({
     timeTakenSeconds,
     testsPassed: testSummary?.passedTests || 0,
     testsTotal: testSummary?.totalTests || 1,
-    styleScore: styleReport?.score || 100,
+    styleScore: styleReport?.score ?? 100,
     isBeginnerCompliant: styleReport?.isBeginnerCompliant ?? true,
     violationsCount: styleReport?.violations?.length || 0,
     timestamp: new Date().toISOString()

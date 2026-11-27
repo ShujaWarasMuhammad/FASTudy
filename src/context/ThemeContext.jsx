@@ -1,11 +1,15 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { themes, applyTheme } from '../config/themes';
+import { applyTheme } from '../config/themes';
 
 const ThemeContext = createContext();
 
 export function ThemeProvider({ children }) {
   const [themeMode, setThemeMode] = useState(() => {
-    return localStorage.getItem('fastudy_theme_mode') || 'light';
+    try {
+      const saved = localStorage.getItem('fastudy_theme_mode');
+      if (saved === 'dark' || saved === 'light') return saved;
+    } catch { /* storage unavailable */ }
+    return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   });
 
   useEffect(() => {

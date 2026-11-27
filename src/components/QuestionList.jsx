@@ -42,13 +42,18 @@ export default function QuestionList() {
                 <span className="breadcrumb-current">{category.name}</span>
               </>
             )}
+            {subcategory && (
+              <>
+                <ChevronRight size={13} className="breadcrumb-divider" />
+                <span className="breadcrumb-current">{subcategory.name}</span>
+              </>
+            )}
           </nav>
-          <p className="ledger-kicker">PRACTICE SET</p>
           <h1 className="ledger-title">{activeTitle}</h1>
           <p className="ledger-description">
             {subcategory
               ? `Work through ${questions.length} questions in this topic at your own pace.`
-              : 'Choose a question to start practicing. Your completed work is saved to your progress record.'}
+              : 'Choose a question to start practicing.'}
           </p>
         </div>
 
@@ -72,7 +77,6 @@ export default function QuestionList() {
           <thead>
             <tr>
               <th className="col-status-cell">Status</th>
-              <th className="col-id-cell">ID</th>
               <th className="col-title-cell">Question</th>
               <th className="col-difficulty-cell">Difficulty</th>
               <th className="col-tags-cell">Concepts</th>
@@ -90,9 +94,6 @@ export default function QuestionList() {
                       <Circle size={14} className="status-icon-unsolved" title="Unsolved" />
                     )}
                   </td>
-                  <td className="col-id-cell">
-                    <span className="problem-mono-id">{q.id}</span>
-                  </td>
                   <td className="col-title-cell">
                     <Link to={`/question/${q.id}`} className="problem-link-anchor">
                       <span>{q.title}</span>
@@ -106,11 +107,12 @@ export default function QuestionList() {
                   </td>
                   <td className="col-tags-cell">
                     <div className="concept-tags-group">
-                      {q.tags.map((tag) => (
+                      {(q.tags || []).slice(0, 2).map((tag) => (
                         <span key={tag} className="concept-tag">
                           {tag}
                         </span>
                       ))}
+                      {(q.tags || []).length > 2 && <span className="concept-tag">+{q.tags.length - 2}</span>}
                     </div>
                   </td>
                 </tr>
@@ -118,10 +120,10 @@ export default function QuestionList() {
             })}
             {questions.length === 0 && (
               <tr>
-                <td colSpan={5} className="ledger-empty-cell">
+                <td colSpan={4} className="ledger-empty-cell">
                   <div className="empty-message-wrap">
                     <Terminal size={18} />
-                    <span>No problems found under this subcategory. Select another branch from the curriculum sidebar.</span>
+                    <span>{subject ? 'No problems in this topic yet. Pick another topic from the sidebar.' : 'This course doesn’t exist. Go back to the course directory.'}</span>
                   </div>
                 </td>
               </tr>

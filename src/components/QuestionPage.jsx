@@ -1,21 +1,18 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import confetti from 'canvas-confetti';
-import {
-  getCommentsByQuestionId,
-  questions,
-} from '../data/questionBank';
+
 import { useProfile } from '../context/ProfileContext';
 import { useAuth } from '../context/AuthContext';
 import { useQuestions } from '../context/QuestionsContext';
-import { supabase } from '../config/supabase';
+import { supabase, isSupabaseConfigured } from '../config/supabase';
 import { evaluateCodeWithAI } from '../utils/aiEval';
 import CodeBlock from './CodeBlock';
 import MathView from './MathView';
 import VisualizationView from './VisualizationView';
 import AiTutorDrawer from './AiTutorDrawer';
 import BugsyDrawer from './BugsyDrawer';
-import Judge0Modal from './Judge0Modal';
+
 import { getBugsyAnalytics, getBugsyEdgecases, evaluatePfLabStyle, recordBugsyEvaluation } from '../utils/bugsy';
 import { QuestionPageSkeleton } from './SkeletonLoaders';
 import ReactMarkdown from 'react-markdown';
@@ -49,7 +46,6 @@ import {
   Terminal,
   ChevronUp,
   ChevronDown,
-  FileText,
 } from 'lucide-react';
 
 export default function QuestionPage() {
@@ -57,23 +53,22 @@ export default function QuestionPage() {
   const navigate = useNavigate();
   const { profile, solvedQuestions, isBookmarked, toggleBookmark, recordAttempt, recordSolve } = useProfile();
   const { user } = useAuth();
-  const { getQuestionById } = useQuestions();
-
-  const [isLoading, setIsLoading] = useState(true);
-  const [question, setQuestion] = useState(null);
+  const { getQuestionById, getQuestionsByFilter, isLoading: isBankLoading, subjects } = useQuestions();
+  const question = getQuestionById(questionId) || null;
+  const isLoading = !question && isBankLoading;
 
   // Inputs
   const [userAnswer, setUserAnswer] = useState('');
   const [userCode, setUserCode] = useState('');
   const [result, setResult] = useState(null); // 'correct' | 'wrong' | null
 
-  // Compiler Execution States (Judge0)
+  // AI evaluator states
   const [isCompiling, setIsCompiling] = useState(false);
   const [compilerOutput, setCompilerOutput] = useState(null);
 
-  // Bugsy Agent & Judge0 Modal states
+  // Bugsy agent states
   const [isBugsyOpen, setIsBugsyOpen] = useState(false);
-  const [isJudge0ModalOpen, setIsJudge0ModalOpen] = useState(false);
+
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [weakTopicNotice, setWeakTopicNotice] = useState(null);
   const [styleReport, setStyleReport] = useState(null);
@@ -94,6 +89,9 @@ export default function QuestionPage() {
   const [isConsoleOpen, setIsConsoleOpen] = useState(true);
   const [leftTab, setLeftTab] = useState('description'); // 'description' | 'hints' | 'walkthrough' | 'discussion'
   const [edgecasesList, setEdgecasesList] = useState([]);
+  const [likedIds, setLikedIds] = useState(() => new Set());
+  const [showSolution, setShowSolution] = useState(false);
+  const gutterRef = useRef(null);
 
   // Live problem timer
   useEffect(() => {
@@ -104,18 +102,18 @@ export default function QuestionPage() {
     return () => clearInterval(interval);
   }, [questionId]);
 
-  // Load question details
+  // Reset workspace whenever the question changes (or arrives after the bank loads)
   useEffect(() => {
-    setIsLoading(true);
-    const timer = setTimeout(() => {
-      const q = getQuestionById(questionId);
-      setQuestion(q);
+    let cancelled = false;
+    {
+      const q = question;
       setUserAnswer('');
       setResult(null);
       setCompilerOutput(null);
       setStyleReport(null);
       setShowHints(false);
       setShowExplanation(false);
+      setShowSolution(false);
       setCopied(false);
       setActiveTab('question');
       setLeftTab('description');
@@ -137,6 +135,7 @@ export default function QuestionPage() {
 
         // Fetch Bugsy edgecases to populate testcase tabs
         getBugsyEdgecases(q).then((cases) => {
+          if (cancelled) return;
           setEdgecasesList(cases || []);
           if (cases && cases.length > 0 && cases[0].stdin) {
             setCustomStdin(cases[0].stdin);
@@ -145,11 +144,13 @@ export default function QuestionPage() {
           }
         });
       }
-      setIsLoading(false);
-    }, 120);
+    }
+    return () => { cancelled = true; };
+  }, [questionId, question?.id]);
 
-    return () => clearTimeout(timer);
-  }, [questionId]);
+  useEffect(() => {
+    if (question?.title) document.title = `${question.title} · FASTudy`;
+  }, [question?.title]);
 
   const formatTimer = (secs) => {
     const m = Math.floor(secs / 60).toString().padStart(2, '0');
@@ -163,6 +164,7 @@ export default function QuestionPage() {
     let commentChannel = null;
 
     async function loadQuestionComments() {
+      if (!isSupabaseConfigured) { setCommentsList([]); return; }
       try {
         const { data, error } = await supabase
           .from('comments')
@@ -171,11 +173,7 @@ export default function QuestionPage() {
           .order('created_at', { ascending: true });
 
         if (isMounted) {
-          if (!error && data && data.length > 0) {
-            setCommentsList(data);
-          } else {
-            setCommentsList(getCommentsByQuestionId(questionId));
-          }
+          setCommentsList(!error && data ? data : []);
         }
 
         const channelName = `comments_stream_${questionId}_${Date.now()}`;
@@ -203,7 +201,7 @@ export default function QuestionPage() {
 
         commentChannel.subscribe();
       } catch (err) {
-        if (isMounted) setCommentsList(getCommentsByQuestionId(questionId));
+        if (isMounted) setCommentsList([]);
       }
     }
 
@@ -239,13 +237,13 @@ export default function QuestionPage() {
   const isSaved = isBookmarked(question.id);
 
   // Navigation
-  const sameSubcatQuestions = questions.filter(
-    (q) =>
-      q.subjectId === question.subjectId &&
-      q.categoryId === question.categoryId &&
-      q.subcategoryId === question.subcategoryId
-  );
+  const sameSubcatQuestions = getQuestionsByFilter(question.subjectId, question.categoryId, question.subcategoryId);
   const localIndex = sameSubcatQuestions.findIndex((q) => q.id === questionId);
+  const subjectObj = subjects.find((s) => s.id === question.subjectId);
+  const subjectName = subjectObj?.shortName;
+  const topicName = subjectObj?.categories
+    .find((c) => c.id === question.categoryId)
+    ?.subcategories.find((s) => s.id === question.subcategoryId)?.name;
   const prevQ = sameSubcatQuestions[localIndex - 1];
   const nextQ = sameSubcatQuestions[localIndex + 1];
   const questionTypeLabel = {
@@ -257,6 +255,7 @@ export default function QuestionPage() {
 
   const triggerCelebration = () => {
     confetti({
+      disableForReducedMotion: true,
       particleCount: 70,
       spread: 60,
       origin: { y: 0.7 },
@@ -281,12 +280,18 @@ export default function QuestionPage() {
     }
   };
 
-  // Submit Answer for Dry Runs & Integer Inputs
+  // Submit Answer for Dry Runs & Integer Inputs (whitespace-insensitive per line; numeric-aware)
+  const normalizeAnswer = (value = '') =>
+    value.replace(/\r\n/g, '\n').split('\n').map((line) => line.trim().replace(/\s+/g, ' ')).join('\n').trim();
   const handleAnswerSubmit = () => {
-    const trimmedAnswer = userAnswer.trim();
-    const trimmedExpected = question.expectedOutput?.trim();
+    const trimmedAnswer = normalizeAnswer(userAnswer);
+    const trimmedExpected = normalizeAnswer(question.expectedOutput || '');
+    const numericMatch =
+      question.type === 'math_input' && trimmedAnswer !== '' && !Number.isNaN(Number(trimmedAnswer)) &&
+      Number(trimmedAnswer) === Number(trimmedExpected);
 
-    if (trimmedAnswer === trimmedExpected) {
+    if (!trimmedAnswer) return;
+    if (trimmedAnswer === trimmedExpected || numericMatch) {
       setResult('correct');
       triggerCelebration();
       markQuestionSolved();
@@ -342,9 +347,10 @@ export default function QuestionPage() {
     if (isCorrect) {
       setResult('correct');
     } else if (res.success) {
-      setResult('wrong');
+      // Without a sample output there is nothing to compare a plain run against.
+      setResult(expectedTrimmed ? 'wrong' : null);
     } else {
-      setResult('compile_error');
+      setResult(res.compile_output || /compil/i.test(res.status) ? 'compile_error' : 'error');
     }
   };
 
@@ -377,32 +383,31 @@ export default function QuestionPage() {
       setResult('wrong');
       recordAttempt(question.id, false, userCode);
     } else {
-      setResult('compile_error');
+      setResult(res.compile_output || /compil/i.test(res.status) ? 'compile_error' : 'error');
+      if (res.status === 'Evaluator Offline' || res.status === 'Evaluation Unavailable') return;
+      recordAttempt(question.id, false, userCode);
     }
 
+    // Submit evaluates one verdict; the full edge-case matrix runs from the Bugsy drawer.
     recordBugsyEvaluation({
       question,
       userCode,
       timeTakenSeconds: elapsedSeconds,
-      testSummary: {
-        totalTests: Math.max(1, edgecasesList.length),
-        passedTests: isCorrect ? Math.max(1, edgecasesList.length) : 0,
-      },
+      testSummary: { totalTests: 1, passedTests: isCorrect ? 1 : 0 },
       styleReport: style,
       user,
     });
   };
 
-  // Legacy compile alias for any remaining callbacks
-  const handleCompileRun = handleRunCode;
 
   const handleCopyStatement = () => {
     const textToCopy = `${question.title}\n\n${
       question.statement || question.description || ''
     }\n\n${question.code || question.latexExpression || ''}`;
-    navigator.clipboard.writeText(textToCopy);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    navigator.clipboard?.writeText(textToCopy).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }).catch(() => {});
   };
 
 
@@ -444,19 +449,17 @@ export default function QuestionPage() {
     }
   };
 
+  // One like per comment per browser session; prevents inflating counts by repeat clicks.
   const handleLikeComment = async (commentId) => {
-    setCommentsList((prev) =>
-      prev.map((c) => (c.id === commentId ? { ...c, likes: (c.likes || 0) + 1 } : c))
-    );
-    try {
-      const target = commentsList.find((c) => c.id === commentId);
-      if (target) {
-        await supabase
-          .from('comments')
-          .update({ likes: (target.likes || 0) + 1 })
-          .eq('id', commentId);
-      }
-    } catch {}
+    if (likedIds.has(commentId)) return;
+    const target = commentsList.find((c) => c.id === commentId);
+    if (!target) return;
+    const nextLikes = (target.likes || 0) + 1;
+    setLikedIds((prev) => new Set(prev).add(commentId));
+    setCommentsList((prev) => prev.map((c) => (c.id === commentId ? { ...c, likes: nextLikes } : c)));
+    if (!isSupabaseConfigured || String(commentId).startsWith('c_')) return;
+    const { error } = await supabase.from('comments').update({ likes: nextLikes }).eq('id', commentId);
+    if (error) console.warn('Like not saved:', error.message);
   };
 
   const handleDeleteComment = async (commentId) => {
@@ -477,318 +480,240 @@ export default function QuestionPage() {
      LEETCODE-STYLE SPLIT VIEW — code_submit questions only
      ================================================================ */
   if (question.type === 'code_submit') {
+    const backTo = `/practice/${question.subjectId}/${question.categoryId}/${question.subcategoryId}`;
+    const lineCount = Math.max(1, userCode.split('\n').length);
+    const verdict = {
+      correct: { cls: 'ok', icon: <CheckCircle2 size={16} />, text: 'Accepted' },
+      wrong: { cls: 'bad', icon: <XCircle size={16} />, text: 'Wrong answer' },
+      compile_error: { cls: 'bad', icon: <XCircle size={16} />, text: 'Compilation error' },
+      error: { cls: 'warn', icon: <AlertTriangle size={16} />, text: compilerOutput?.status || 'Not evaluated' },
+    }[result] || { cls: 'neutral', icon: <Terminal size={16} />, text: 'Ran successfully' };
+    const tabs = [
+      { key: 'description', label: 'Problem' },
+      { key: 'hints', label: 'Hints', count: question.hints?.length || 0 },
+      { key: 'walkthrough', label: 'Solution' },
+      { key: 'discussion', label: 'Discussion', count: commentsList.length },
+    ];
+
     return (
-      <div className="lc-page">
-        {/* ── Top navigation bar ── */}
-        <div className="lc-topbar">
-          <div className="lc-topbar-left">
-            <Link to="/practice" className="lc-back-link"><ChevronLeft size={14} /><span>Problems</span></Link>
-            <div className="question-nav-controls">
-              <button className="btn-icon" disabled={!prevQ} onClick={() => prevQ && navigate(`/question/${prevQ.id}`)} title="Previous"><ChevronLeft size={14} /></button>
-              <span className="question-nav-index">{localIndex + 1}/{sameSubcatQuestions.length}</span>
-              <button className="btn-icon" disabled={!nextQ} onClick={() => nextQ && navigate(`/question/${nextQ.id}`)} title="Next"><ChevronRight size={14} /></button>
+      <div className="cw">
+        <header className="cw-bar">
+          <div className="cw-bar-left">
+            <Link to={backTo} className="cw-back" title="Back to problem list"><ChevronLeft size={16} /><span>{topicName || 'Problems'}</span></Link>
+            <div className="cw-pager">
+              <button disabled={!prevQ} onClick={() => prevQ && navigate(`/question/${prevQ.id}`)} aria-label="Previous problem"><ChevronLeft size={15} /></button>
+              <span>{localIndex + 1} / {sameSubcatQuestions.length}</span>
+              <button disabled={!nextQ} onClick={() => nextQ && navigate(`/question/${nextQ.id}`)} aria-label="Next problem"><ChevronRight size={15} /></button>
             </div>
           </div>
-
-          <div className="lc-topbar-center">
-            <span className="lc-problem-title-sm">{question.title}</span>
+          <div className="cw-bar-right">
+            <span className="cw-timer" title="Time on this problem"><Clock size={13} />{formatTimer(elapsedSeconds)}</span>
+            <button className={`cw-icon-btn${isSaved ? ' on' : ''}`} onClick={handleToggleBookmark} title={isSaved ? 'Saved' : 'Save for later'} aria-label="Bookmark">
+              <Bookmark size={15} fill={isSaved ? 'currentColor' : 'none'} />
+            </button>
+            <button className="cw-ghost" onClick={handleAskAI}><Bot size={15} /><span>Ask AI</span></button>
           </div>
+        </header>
 
-          <div className="lc-topbar-right">
-            <div className="live-timer-badge" title="Active Problem Timer"><Clock size={13} /><span>{formatTimer(elapsedSeconds)}</span></div>
-            <button className="btn-bugsy-trigger" onClick={() => setIsBugsyOpen(true)} title="Ask Bugsy TA"><Bug size={14} /><span>Bugsy</span></button>
-            <button className={`btn-secondary ${isSaved ? 'active' : ''}`} onClick={handleToggleBookmark} title={isSaved ? 'Remove Bookmark' : 'Save Question'}><Bookmark size={14} fill={isSaved ? 'currentColor' : 'none'} /></button>
-            <button className="btn-secondary" onClick={handleCopyStatement} title="Copy Statement">{copied ? <Check size={14} /> : <Copy size={14} />}</button>
-            <button className="btn-secondary btn-ai" onClick={handleAskAI} title="Ask AI Tutor"><Bot size={14} /></button>
-          </div>
-        </div>
-
-        {/* ── Split workspace ── */}
-        <div className="lc-split">
-
-          {/* ═══════ LEFT PANEL — Problem Description ═══════ */}
-          <div className="lc-left">
-            <div className="lc-left-tabs">
-              {['description','hints','walkthrough','discussion'].map((t) => (
-                <button key={t} className={`lc-left-tab ${leftTab === t ? 'active' : ''}`} onClick={() => setLeftTab(t)}>
-                  {t === 'description' ? 'Description' : t === 'hints' ? 'Hints' : t === 'walkthrough' ? 'Walkthrough' : 'Discussion'}
+        <div className="cw-split">
+          <section className="cw-left">
+            <nav className="cw-tabs" role="tablist">
+              {tabs.map((t) => (
+                <button key={t.key} role="tab" aria-selected={leftTab === t.key} className={leftTab === t.key ? 'active' : ''} onClick={() => setLeftTab(t.key)}>
+                  {t.label}{t.count ? <span className="cw-count">{t.count}</span> : null}
                 </button>
               ))}
-            </div>
+            </nav>
 
-            <div className="lc-left-body">
+            <div className="cw-left-body">
               {leftTab === 'description' && (
-                <>
-                  <div className="lc-title-block">
-                    <h1 className="lc-title">{question.title}</h1>
-                    <div className="lc-meta-row">
-                      <span className={`diff-badge diff-${(question.difficulty || 'easy').toLowerCase()}`}>{(question.difficulty || 'Easy').toUpperCase()}</span>
-                      <span className="lc-type-pill">{questionTypeLabel}</span>
-                      {isSolved && <span className="solved-pill"><CheckCircle2 size={12} /><span>Solved</span></span>}
-                    </div>
+                <article className="cw-problem">
+                  <h1>{question.title}</h1>
+                  <div className="cw-meta">
+                    <span className={`diff-badge diff-${(question.difficulty || 'easy').toLowerCase()}`}>{question.difficulty || 'easy'}</span>
+                    {isSolved && <span className="cw-solved"><CheckCircle2 size={13} /> Solved</span>}
                   </div>
-
-                  {/* Weak topic alert */}
                   {weakTopicNotice && (
-                    <div className="bugsy-inline-alert">
-                      <AlertTriangle size={14} color="#d29922" />
-                      <div className="alert-content"><strong>Bugsy:</strong> {weakTopicNotice.successRate}% success on <strong>{weakTopicNotice.topic}</strong>. Watch boundaries & edge values!</div>
-                    </div>
+                    <p className="cw-note"><AlertTriangle size={13} /> You’ve found <strong>{weakTopicNotice.topic}</strong> tricky before ({weakTopicNotice.successRate}% success). Watch the edge cases.</p>
                   )}
-
-                  {/* Problem statement */}
-                  <div className="lc-statement">
-                    <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
-                      {question.statement || question.description || ''}
-                    </ReactMarkdown>
+                  <div className="cw-statement">
+                    <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{question.statement || question.description || ''}</ReactMarkdown>
                   </div>
-
-                  {/* Expected output */}
                   {question.expectedOutput && (
-                    <div className="lc-expected">
-                      <span className="lc-expected-label">Expected Sample Output</span>
-                      <pre className="lc-expected-pre">{question.expectedOutput}</pre>
-                    </div>
+                    <>
+                      <h3 className="cw-h3">Example output</h3>
+                      <pre className="cw-pre">{question.expectedOutput}</pre>
+                    </>
                   )}
-
-                  {/* Constraints / FAST lab rules */}
-                  <div className="lc-constraints">
-                    <h4>Constraints (FAST PF-Lab)</h4>
-                    <ul>
-                      <li>No STL containers (<code>vector</code>, <code>string</code>, <code>map</code>, etc.)</li>
-                      <li>Use only basic I/O: <code>cin</code>, <code>cout</code>, <code>printf</code>, <code>scanf</code></li>
-                      <li>Avoid <code>goto</code>, <code>global variables</code> unless specified</li>
-                      <li>Input bounds: values fit in <code>int</code> unless stated otherwise</li>
-                    </ul>
-                  </div>
-
-                  {/* Topic tags */}
-                  {question.tags && question.tags.length > 0 && (
-                    <div className="lc-tags">
-                      {question.tags.map((t, i) => <span key={i} className="concept-tag">{t}</span>)}
-                    </div>
-                  )}
-
-                  {/* Visualization */}
-                  {question.visualization && (
-                    <VisualizationView visualization={question.visualization} questionId={question.id} />
-                  )}
-                </>
+                  <p className="cw-rules">PF-lab rules: no STL containers or <code>&lt;algorithm&gt;</code>, no <code>auto</code>, lambdas or classes. Use <code>cin</code>/<code>cout</code> or <code>printf</code>/<code>scanf</code>.</p>
+                  {question.visualization && <VisualizationView visualization={question.visualization} questionId={question.id} />}
+                </article>
               )}
 
               {leftTab === 'hints' && (
-                <div className="lc-hints-body">
-                  {question.hints && question.hints.length > 0 ? (
-                    question.hints.map((hint, i) => (
-                      <div key={i} className="hint-card"><span className="hint-num">Hint {i + 1}:</span><span>{hint}</span></div>
-                    ))
-                  ) : (
-                    <p className="lc-empty-tab">No hints available for this problem.</p>
-                  )}
+                <div className="cw-list">
+                  {question.hints?.length ? question.hints.map((hint, i) => (
+                    <details key={i} className="cw-hint">
+                      <summary>Hint {i + 1}</summary>
+                      <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{hint}</ReactMarkdown>
+                    </details>
+                  )) : <p className="cw-empty">No hints for this problem. Try <b>Ask AI</b> for a nudge.</p>}
                 </div>
               )}
 
               {leftTab === 'walkthrough' && (
-                <div className="lc-walkthrough-body">
-                  {question.explanation ? (
-                    <>
-                      <h4 className="explanation-title">Walkthrough</h4>
-                      <p>{question.explanation}</p>
-                    </>
-                  ) : (
-                    <p className="lc-empty-tab">No walkthrough available yet.</p>
+                <div className="cw-list">
+                  {question.explanation && (
+                    <div className="cw-statement"><ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{question.explanation}</ReactMarkdown></div>
                   )}
+                  {question.solutionCode ? (
+                    showSolution ? (
+                      <>
+                        <CodeBlock code={question.solutionCode} language="cpp" />
+                        <button className="cw-ghost cw-mt" onClick={() => setShowSolution(false)}><EyeOff size={14} /> Hide solution</button>
+                      </>
+                    ) : (
+                      <div className="cw-reveal">
+                        <p>Try it yourself first. Reveal the reference solution when you’re stuck or want to compare.</p>
+                        <button className="cw-ghost" onClick={() => setShowSolution(true)}><Eye size={14} /> Reveal solution</button>
+                      </div>
+                    )
+                  ) : !question.explanation && <p className="cw-empty">No solution available yet.</p>}
                 </div>
               )}
 
               {leftTab === 'discussion' && (
-                <div className="lc-discussion-body">
-                  <div className="comments-flow">
-                    {commentsList.length === 0 && <div className="lc-empty-tab">No comments yet. Be the first to discuss!</div>}
-                    {commentsList.map((c) => {
-                      const isOwner = (user && c.user_id === user.id) || c.username === profile.username;
-                      const dateDisplay = c.created_at || c.createdAt;
-                      return (
-                        <div key={c.id} className="comment-bubble">
-                          <div className="comment-top">
-                            <span className="comment-author">{c.username}</span>
-                            <span className="comment-time">{dateDisplay ? new Date(dateDisplay).toLocaleDateString() : 'Just now'}</span>
-                          </div>
-                          <p className="comment-text">{c.content}</p>
-                          <div className="comment-bottom">
-                            <button className="btn-like" onClick={() => handleLikeComment(c.id)}><ThumbsUp size={12} /><span>{c.likes || 0}</span></button>
-                            {isOwner && <button className="btn-comment-delete" onClick={() => handleDeleteComment(c.id)} title="Delete"><Trash2 size={12} /></button>}
-                          </div>
+                <div className="cw-list">
+                  {commentsList.length === 0 && <p className="cw-empty">No comments yet. Start the discussion.</p>}
+                  {commentsList.map((c) => {
+                    const isOwner = Boolean(user && c.user_id ? c.user_id === user.id : String(c.id).startsWith('c_'));
+                    const when = c.created_at || c.createdAt;
+                    return (
+                      <div key={c.id} className="cw-comment">
+                        <div className="cw-comment-top"><strong>{c.username}</strong><span>{when ? new Date(when).toLocaleDateString() : 'Just now'}</span></div>
+                        <p>{c.content}</p>
+                        <div className="cw-comment-actions">
+                          <button onClick={() => handleLikeComment(c.id)} className={likedIds.has(c.id) ? 'on' : ''}><ThumbsUp size={12} /> {c.likes || 0}</button>
+                          {isOwner && <button onClick={() => handleDeleteComment(c.id)} aria-label="Delete comment"><Trash2 size={12} /></button>}
                         </div>
-                      );
-                    })}
-                  </div>
-                  <div className="comment-post-box" style={{ marginTop: 12 }}>
-                    <textarea className="comment-textarea" value={newComment} onChange={(e) => setNewComment(e.target.value)} placeholder="Add a comment…" rows={2} />
-                    <button className="btn-primary" onClick={handleAddComment} disabled={!newComment.trim()}><Send size={14} /><span>Post</span></button>
+                      </div>
+                    );
+                  })}
+                  <div className="cw-comment-box">
+                    <textarea value={newComment} onChange={(e) => setNewComment(e.target.value)} placeholder="Add a comment…" rows={2} />
+                    <button className="cw-primary" onClick={handleAddComment} disabled={!newComment.trim()}><Send size={13} /> Post</button>
                   </div>
                 </div>
               )}
             </div>
-          </div>
+          </section>
 
-          {/* ═══════ RIGHT PANEL — Code Editor + Console ═══════ */}
-          <div className="lc-right">
-            {/* Editor header */}
-            <div className="lc-editor-header">
-              <span className="editor-lang-tag">C++ (Bugsy AI Evaluator)</span>
-              <div className="lc-editor-actions">
-                <button className="btn-secondary btn-sm" onClick={handleResetCode} title="Reset to starter code"><RotateCcw size={13} /><span>Reset</span></button>
-              </div>
+          <section className="cw-right">
+            <div className="cw-editor-head">
+              <span>C++</span>
+              <button className="cw-icon-btn" onClick={handleResetCode} title="Reset to starter code" aria-label="Reset code"><RotateCcw size={14} /></button>
             </div>
 
-            {/* Code textarea */}
-            <div className="lc-editor-wrap">
+            <div className="cw-editor">
+              <div className="cw-gutter" ref={gutterRef} aria-hidden="true">
+                {Array.from({ length: lineCount }, (_, i) => <span key={i}>{i + 1}</span>)}
+              </div>
               <textarea
-                className="lc-code-textarea"
                 value={userCode}
                 onChange={(e) => { setUserCode(e.target.value); setResult(null); }}
                 onKeyDown={handleCodeKeyDown}
+                onScroll={(e) => { if (gutterRef.current) gutterRef.current.scrollTop = e.target.scrollTop; }}
                 spellCheck="false"
-                placeholder="// Write your C/C++ solution here…"
+                aria-label="Code editor"
+                placeholder="// Write your C++ solution here"
               />
             </div>
 
-            {/* ── Console drawer ── */}
-            <div className={`lc-console ${isConsoleOpen ? 'open' : 'collapsed'}`}>
-              <div className="lc-console-tabs-bar">
-                <button className="lc-console-toggle" onClick={() => setIsConsoleOpen(!isConsoleOpen)}>
-                  {isConsoleOpen ? <ChevronDown size={14} /> : <ChevronUp size={14} />}
-                  <Terminal size={13} />
-                  <span>Console</span>
+            <div className={`cw-console${isConsoleOpen ? '' : ' closed'}`}>
+              <div className="cw-console-head">
+                {[{ key: 'testcase', label: 'Input' }, { key: 'result', label: 'Result' }].map((t) => (
+                  <button key={t.key} className={consoleTab === t.key && isConsoleOpen ? 'active' : ''} onClick={() => { setConsoleTab(t.key); setIsConsoleOpen(true); }}>
+                    {t.label}
+                    {t.key === 'result' && result && <span className={`cw-dot ${verdict.cls}`} />}
+                  </button>
+                ))}
+                <button className="cw-console-toggle" onClick={() => setIsConsoleOpen((v) => !v)} aria-label={isConsoleOpen ? 'Collapse console' : 'Expand console'}>
+                  {isConsoleOpen ? <ChevronDown size={15} /> : <ChevronUp size={15} />}
                 </button>
-                {isConsoleOpen && (
-                  <div className="lc-console-tabs">
-                    {[{ key: 'testcase', label: 'Testcase' }, { key: 'result', label: 'Result' }, { key: 'bugsy', label: 'Bugsy Rubric' }].map(({ key, label }) => (
-                      <button key={key} className={`lc-console-tab ${consoleTab === key ? 'active' : ''}`} onClick={() => setConsoleTab(key)}>{label}</button>
-                    ))}
-                  </div>
-                )}
               </div>
 
               {isConsoleOpen && (
-                <div className="lc-console-body">
-                  {/* ── Testcase / stdin tab ── */}
+                <div className="cw-console-body">
                   {consoleTab === 'testcase' && (
-                    <div className="lc-testcase-panel">
-                      <div className="lc-case-pills">
+                    <>
+                      <div className="cw-cases">
                         {edgecasesList.map((_, i) => (
-                          <button key={i} className={`lc-case-pill ${activeTestcaseIdx === i ? 'active' : ''}`} onClick={() => { setActiveTestcaseIdx(i); setCustomStdin(edgecasesList[i]?.stdin || ''); }}>
-                            Case {i + 1}
-                          </button>
+                          <button key={i} className={activeTestcaseIdx === i ? 'active' : ''} onClick={() => { setActiveTestcaseIdx(i); setCustomStdin(edgecasesList[i]?.stdin || ''); }}>Case {i + 1}</button>
                         ))}
-                        <button className={`lc-case-pill ${activeTestcaseIdx === -1 ? 'active' : ''}`} onClick={() => { setActiveTestcaseIdx(-1); setCustomStdin(''); }}>
-                          + Custom
-                        </button>
+                        <button className={activeTestcaseIdx === -1 ? 'active' : ''} onClick={() => { setActiveTestcaseIdx(-1); setCustomStdin(''); }}>Custom</button>
                       </div>
-                      <label className="lc-stdin-label">stdin</label>
                       <textarea
-                        className="lc-stdin-textarea"
+                        className="cw-stdin"
                         value={customStdin}
                         onChange={(e) => { setCustomStdin(e.target.value); setActiveTestcaseIdx(-1); }}
-                        placeholder="Enter input values here (one per line)…"
-                        rows={4}
+                        placeholder="Program input (stdin), one value per line"
+                        rows={3}
                       />
-                    </div>
+                    </>
                   )}
 
-                  {/* ── Result tab ── */}
                   {consoleTab === 'result' && (
-                    <div className="lc-result-panel">
-                      {isCompiling && <div className="lc-compiling"><div className="lc-spinner" /><span>Running…</span></div>}
-
-                      {!isCompiling && !compilerOutput && <p className="lc-empty-tab">Run or submit your code to see results.</p>}
-
-                      {!isCompiling && compilerOutput && (
-                        <>
-                          <div className={`lc-verdict ${result === 'correct' ? 'accepted' : result === 'wrong' ? 'wrong-answer' : result === 'compile_error' ? 'error' : ''}`}>
-                            {result === 'correct' && <><CheckCircle2 size={16} /><span>Accepted</span></>}
-                            {result === 'wrong' && <><XCircle size={16} /><span>Wrong Answer</span></>}
-                            {result === 'compile_error' && <><XCircle size={16} /><span>Compilation Error</span></>}
-                            {!result && <span>Executed</span>}
-                          </div>
-
-                          <div className="lc-runtime-row">
-                            <span>Runtime: <strong>{compilerOutput.time || '—'}s</strong></span>
-                            <span>Memory: <strong>{compilerOutput.memory || '—'} KB</strong></span>
-                          </div>
-
-                          {compilerOutput.stdout && (
-                            <div className="lc-output-section">
-                              <span className="lc-output-label">stdout</span>
-                              <pre className="lc-output-pre">{compilerOutput.stdout}</pre>
-                            </div>
-                          )}
-
-                          {compilerOutput.stderr && (
-                            <div className="lc-output-section">
-                              <span className="lc-output-label lc-label-err">stderr</span>
-                              <pre className="lc-output-pre lc-pre-err">{compilerOutput.stderr}</pre>
-                            </div>
-                          )}
-
-                          {compilerOutput.compile_output && (
-                            <div className="lc-output-section">
-                              <span className="lc-output-label lc-label-err">Compiler Output</span>
-                              <pre className="lc-output-pre lc-pre-err">{compilerOutput.compile_output}</pre>
-                            </div>
-                          )}
-                        </>
-                      )}
-                    </div>
-                  )}
-
-                  {/* ── Bugsy rubric tab ── */}
-                  {consoleTab === 'bugsy' && (
-                    <div className="lc-bugsy-panel">
-                      {styleReport ? (
-                        <>
-                          <div className="lc-bugsy-score-row">
-                            <span>🐛 PF-Lab Score: <strong>{styleReport.score}/100</strong></span>
-                            <span className={`style-status-pill ${styleReport.isBeginnerCompliant ? 'pill-compliant' : 'pill-warning'}`}>
-                              {styleReport.isBeginnerCompliant ? 'Compliant' : 'Violations'}
-                            </span>
-                          </div>
-                          <p className="lc-bugsy-critique">{styleReport.critique}</p>
-                          <button className="btn-secondary btn-xs" onClick={() => setIsBugsyOpen(true)}>Open Full Bugsy Drawer</button>
-                        </>
-                      ) : (
-                        <p className="lc-empty-tab">Run your code first — Bugsy will evaluate PF-lab compliance after execution.</p>
-                      )}
-                    </div>
+                    isCompiling ? (
+                      <div className="cw-running"><span className="cw-spinner" /> Evaluating your code…</div>
+                    ) : !compilerOutput ? (
+                      <p className="cw-empty">Press <b>Run</b> to test with the input, or <b>Submit</b> to check your answer.</p>
+                    ) : (
+                      <div className="cw-result">
+                        <div className={`cw-verdict ${verdict.cls}`}>{verdict.icon}<span>{verdict.text}</span></div>
+                        {compilerOutput.aiFeedback?.feedback && <p className="cw-feedback">{compilerOutput.aiFeedback.feedback}</p>}
+                        {compilerOutput.stdout && <><label>Output</label><pre className="cw-pre">{compilerOutput.stdout}</pre></>}
+                        {(compilerOutput.compile_output || compilerOutput.stderr) && (
+                          <><label>Errors</label><pre className="cw-pre cw-pre-err">{compilerOutput.compile_output || compilerOutput.stderr}</pre></>
+                        )}
+                        {styleReport && (
+                          <p className="cw-style">
+                            PF-lab style <strong>{styleReport.score}/100</strong>
+                            {styleReport.violations.length > 0 && <> · {styleReport.violations.map((v) => v.rule).join(', ')}</>}
+                          </p>
+                        )}
+                      </div>
+                    )
                   )}
                 </div>
               )}
             </div>
 
-            {/* ── Sticky footer action bar ── */}
-            <div className="lc-footer">
-              <button className="lc-footer-console-btn" onClick={() => setIsConsoleOpen(!isConsoleOpen)}>
-                <Terminal size={14} />
-                <span>Console</span>
-              </button>
-              <div className="lc-footer-actions">
-                <button className="btn-secondary lc-run-btn" onClick={handleRunCode} disabled={isCompiling}>
-                  <Play size={14} />
-                  <span>{isCompiling ? 'Running…' : 'Run Code'}</span>
-                </button>
-                <button className="btn-primary lc-submit-btn" onClick={handleSubmitCode} disabled={isCompiling}>
-                  <span>{isCompiling ? 'Judging…' : 'Submit'}</span>
-                </button>
+            <footer className="cw-actions">
+              <button className="cw-ghost" onClick={() => setIsBugsyOpen(true)} title="Run all edge-case tests and a style review"><Bug size={15} /><span>Review with Bugsy</span></button>
+              <div className="cw-actions-main">
+                <button className="cw-secondary" onClick={handleRunCode} disabled={isCompiling}><Play size={14} /> Run</button>
+                <button className="cw-primary" onClick={handleSubmitCode} disabled={isCompiling}>{isCompiling ? 'Checking…' : 'Submit'}</button>
               </div>
-            </div>
-          </div>
+            </footer>
+          </section>
         </div>
 
-        {/* Drawers & Modals */}
         <AiTutorDrawer question={question} isOpen={isAiDrawerOpen} onClose={() => setIsAiDrawerOpen(false)} />
-        <BugsyDrawer isOpen={isBugsyOpen} onClose={() => setIsBugsyOpen(false)} question={question} userCode={userCode} timeSpentSeconds={elapsedSeconds} onEvaluationCompleted={({ testSummary, styleReport: rep }) => { setStyleReport(rep); if (testSummary?.passedTests === testSummary?.totalTests && testSummary?.totalTests > 0) { setResult('correct'); triggerCelebration(); markQuestionSolved(); } }} />
-        <Judge0Modal isOpen={isJudge0ModalOpen} onClose={() => setIsJudge0ModalOpen(false)} />
+        <BugsyDrawer
+          isOpen={isBugsyOpen}
+          onClose={() => setIsBugsyOpen(false)}
+          question={question}
+          userCode={userCode}
+          timeSpentSeconds={elapsedSeconds}
+          onEvaluationCompleted={({ testSummary, styleReport: rep }) => {
+            setStyleReport(rep);
+            if (testSummary?.totalTests > 0 && testSummary.passedTests === testSummary.totalTests) {
+              setResult('correct');
+              triggerCelebration();
+              markQuestionSolved();
+            }
+          }}
+        />
       </div>
     );
   }
@@ -798,6 +723,9 @@ export default function QuestionPage() {
      ================================================================ */
   return (
     <div className="question-page-container">
+      <Link to={`/practice/${question.subjectId}/${question.categoryId}/${question.subcategoryId}`} className="question-back-link">
+        <ChevronLeft size={14} /><span>{subjectName ? `${subjectName} · ` : ''}{topicName || 'Problems'}</span>
+      </Link>
       {/* Top Bar Navigation */}
       <div className="question-header">
         <div className="question-nav-controls">
@@ -871,7 +799,7 @@ export default function QuestionPage() {
           {/* TYPE 1: DRY RUNS */}
           {question.type === 'dry_run' && (
             <>
-              <CodeBlock code={question.code.replace(/\\n/g, '\n')} language="c" />
+              <CodeBlock code={(question.code || '').replace(/\\n/g, '\n')} language="c" />
               <div className="answer-box">
                 <div className="answer-header-row">
                   <label className="answer-label">Expected Output (Exact Match)</label>
@@ -1032,10 +960,10 @@ export default function QuestionPage() {
 
           {showHints && (
             <div className="hint-card-list">
-              {question.hints.map((hint, i) => (
+              {(question.hints || []).map((hint, i) => (
                 <div key={i} className="hint-card">
                   <span className="hint-num">Hint {i + 1}:</span>
-                  <span>{hint}</span>
+                  <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{hint}</ReactMarkdown>
                 </div>
               ))}
             </div>
@@ -1044,7 +972,9 @@ export default function QuestionPage() {
           {showExplanation && (
             <div className="explanation-card">
               <h4 className="explanation-title">Explanation & Theoretical Walkthrough</h4>
-              <p>{question.explanation}</p>
+              {question.explanation
+                ? <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{question.explanation}</ReactMarkdown>
+                : <p>No walkthrough available yet.</p>}
             </div>
           )}
         </div>
@@ -1056,7 +986,7 @@ export default function QuestionPage() {
               <div className="empty-state">No comments yet. Share your evaluation logic!</div>
             )}
             {commentsList.map((c) => {
-              const isOwner = (user && c.user_id === user.id) || c.username === profile.username;
+              const isOwner = Boolean(user && c.user_id ? c.user_id === user.id : String(c.id).startsWith('c_'));
               const dateDisplay = c.created_at || c.createdAt;
               return (
                 <div key={c.id} className="comment-bubble">
@@ -1135,11 +1065,6 @@ export default function QuestionPage() {
         }}
       />
 
-      {/* Judge0 Setup Modal */}
-      <Judge0Modal
-        isOpen={isJudge0ModalOpen}
-        onClose={() => setIsJudge0ModalOpen(false)}
-      />
     </div>
   );
 }

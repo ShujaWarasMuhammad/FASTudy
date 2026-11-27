@@ -18,39 +18,9 @@ FASTudy is a dedicated learning and practice platform for FAST NUCES students, c
 
 ---
 
-## ⚡ How to Set Up Judge0 for C/C++ Code Execution
+## 🤖 Code Evaluation
 
-FASTudy compiles and runs C/C++ code against test suites and Bugsy edge cases. Three configuration options are supported:
-
-### Option 1: Free Public Judge0 CE (Default — Zero Config Needed)
-- FASTudy is pre-configured to use the free public Judge0 CE endpoint: `https://ce.judge0.com`.
-- If the public endpoint is busy or rate-limited, FASTudy automatically and seamlessly falls back to the **Piston Code Execution Engine** (`https://emkc.org`).
-- **Setup**: None! It works out of the box.
-
-### Option 2: RapidAPI Judge0 (Personal API Key & High Quota)
-1. Go to [RapidAPI Judge0 CE](https://rapidapi.com/hermanzdosilovic/api/judge0-ce).
-2. Sign up for a free plan and copy your `X-RapidAPI-Key`.
-3. Add it to your `.env.local` file:
-   ```env
-   VITE_JUDGE0_API_URL=https://judge0-ce.p.rapidapi.com
-   VITE_JUDGE0_API_KEY=your_rapidapi_key_here
-   VITE_JUDGE0_API_HOST=judge0-ce.p.rapidapi.com
-   ```
-4. Or enter it directly in the app via the **Judge0 Config** button in the code editor top bar!
-
-### Option 3: Self-Hosted Judge0 via Docker (Unlimited Local Execution)
-If you prefer running a 100% offline or local compiler:
-1. Clone the Judge0 repository:
-   ```bash
-   git clone https://github.com/judge0/judge0.git
-   cd judge0
-   docker-compose up -d db redis
-   docker-compose up -d
-   ```
-2. In FASTudy `.env.local`:
-   ```env
-   VITE_JUDGE0_API_URL=http://localhost:2358
-   ```
+C/C++ submissions are evaluated by Bugsy through Google Gemini (`VITE_GEMINI_API_KEY`, model overridable with `VITE_GEMINI_MODEL`, default `gemini-2.5-flash`). Output, runtime and memory are AI estimates, not a real compiler run. If the key is missing or the API is unreachable, only static PF-lab checks run and the submission is **not** marked as accepted.
 
 ---
 
@@ -104,3 +74,14 @@ The old dummy questions have been completely cleaned out. FASTudy now features a
    ```bash
    npm run data:check
    ```
+
+---
+
+## 🚀 Deploying (Vercel / Netlify)
+
+1. Build command `npm run build`, output directory `dist`.
+2. Set the env vars from `.env.example` in the host dashboard (`VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `VITE_GEMINI_API_KEY`).
+3. In Supabase → Authentication → URL Configuration, add your deployed URL to the allowed redirect URLs.
+4. SPA routing is preconfigured: `vercel.json` (Vercel) and `public/_redirects` (Netlify).
+
+**Local mode:** without Supabase variables the app still runs, using the bundled question bank and guest progress stored in the browser. That's useful for an offline demo. Without a Gemini key the AI tutor and code evaluation show a clear "unavailable" message.

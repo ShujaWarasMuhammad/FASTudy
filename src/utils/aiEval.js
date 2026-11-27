@@ -2,7 +2,7 @@
 // Uses Gemini to analyze C/C++ code against the problem statement
 // and returns structured feedback matching the Judge0 response shape.
 
-const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
+import { GEMINI_API_KEY, GEMINI_MODEL, generateGeminiText } from './geminiClient';
 
 /**
  * Evaluates student C/C++ code using Gemini AI.
@@ -12,7 +12,7 @@ const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
  * @param {object} question     – The question object { title, statement, expectedOutput, ... }
  * @param {string} stdin        – Custom stdin provided by the student
  */
-export async function evaluateCodeWithAI(sourceCode, question = {}, stdin = '') {
+export async function evaluateCodeWithAI(sourceCode, question = {}, stdin = '', expectedBehavior = '') {
   if (!sourceCode || !sourceCode.trim()) {
     return {
       success: false,
@@ -29,43 +29,31 @@ export async function evaluateCodeWithAI(sourceCode, question = {}, stdin = '') 
 
   if (!GEMINI_API_KEY) {
     // Offline heuristic fallback
-    return offlineHeuristic(sourceCode, question, stdin);
+    return offlineHeuristic(sourceCode);
   }
 
-  const prompt = buildPrompt(sourceCode, question, stdin);
+  const prompt = buildPrompt(sourceCode, question, stdin, expectedBehavior);
 
   try {
-    const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ role: 'user', parts: [{ text: prompt }] }],
-          generationConfig: { temperature: 0.2, maxOutputTokens: 1024 },
-        }),
-      }
+    const raw = await generateGeminiText(
+      [{ role: 'user', parts: [{ text: prompt }] }],
+      { temperature: 0.2, maxOutputTokens: 2048, responseMimeType: 'application/json' }
     );
-
-    if (!res.ok) throw new Error(`Gemini HTTP ${res.status}`);
-
-    const body = await res.json();
-    const raw = body.candidates?.[0]?.content?.parts?.[0]?.text || '';
-    return parseAIResponse(raw, sourceCode);
+    return parseAIResponse(raw);
   } catch (err) {
-    console.warn('AI eval failed, falling back to heuristic:', err);
-    return offlineHeuristic(sourceCode, question, stdin);
+    console.warn('AI eval failed, falling back to static checks:', err);
+    return offlineHeuristic(sourceCode);
   }
 }
 
-function buildPrompt(code, question, stdin) {
+function buildPrompt(code, question, stdin, expectedBehavior) {
   return `You are Bugsy, an expert FAST NUCES Programming Fundamentals lab TA.
 Evaluate this student's C/C++ code against the problem below.
 
 PROBLEM: ${question.title || 'Code Exercise'}
 STATEMENT: ${question.statement || question.description || 'Write a C++ program.'}
 EXPECTED OUTPUT: ${question.expectedOutput || 'Not specified'}
-STUDENT INPUT (stdin): ${stdin || '(none)'}
+STUDENT INPUT (stdin): ${stdin || '(none)'}${expectedBehavior ? `\nEXPECTED BEHAVIOUR FOR THIS INPUT: ${expectedBehavior}\n(Judge the verdict against this behaviour, not the sample output.)` : ''}
 
 STUDENT CODE:
 \`\`\`cpp
@@ -92,7 +80,7 @@ Respond ONLY with a JSON object (no markdown, no explanation outside JSON):
 }`;
 }
 
-function parseAIResponse(raw, code) {
+function parseAIResponse(raw) {
   try {
     // Strip markdown code fences if present
     const cleaned = raw.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
@@ -100,7 +88,7 @@ function parseAIResponse(raw, code) {
 
     const verdict = parsed.verdict || 'Unknown';
     const isAccepted = verdict === 'Accepted';
-    const isCompileError = verdict === 'Compilation Error';
+
 
     return {
       success: isAccepted,
@@ -108,58 +96,55 @@ function parseAIResponse(raw, code) {
       stdout: parsed.stdout || '',
       stderr: parsed.stderr || '',
       compile_output: parsed.compile_output || '',
-      time: parsed.time || '0.08',
-      memory: parsed.memory || '1024',
-      compiler: 'Bugsy AI (Gemini)',
+      time: parsed.time || '',
+      memory: parsed.memory || '',
+      compiler: `Bugsy AI (${GEMINI_MODEL})`,
       aiFeedback: {
         feedback: parsed.feedback || '',
-        score: parsed.score ?? 80,
+        score: Number.isFinite(parsed.score) ? parsed.score : null,
         pfLabViolations: parsed.pfLabViolations || [],
       },
     };
   } catch {
-    // If JSON parse fails, do a best-effort heuristic from the raw text
-    const isAccepted = /accepted|correct|passed/i.test(raw);
+    // Unparseable reply: never guess a verdict from free text.
     return {
-      success: isAccepted,
-      status: isAccepted ? 'Accepted' : 'Reviewed by AI',
+      success: false,
+      status: 'Evaluation Unavailable',
       stdout: '',
-      stderr: '',
+      stderr: 'The AI evaluator returned an unreadable response. Please run again.',
       compile_output: '',
-      time: '0.10',
-      memory: '1024',
-      compiler: 'Bugsy AI (Gemini)',
-      aiFeedback: { feedback: raw.slice(0, 400), score: 70, pfLabViolations: [] },
+      time: '',
+      memory: '',
+      compiler: `Bugsy AI (${GEMINI_MODEL})`,
+      aiFeedback: { feedback: raw.slice(0, 400), score: null, pfLabViolations: [] },
     };
   }
 }
 
-function offlineHeuristic(code, question, stdin) {
-  const c = code.toLowerCase();
+function offlineHeuristic(code) {
+  // Without the AI service the code cannot be executed or judged, so only static
+  // PF-lab rule checks are reported and the submission is never marked accepted.
   const violations = [];
   if (/#include\s*<vector>/i.test(code)) violations.push('vector used (banned)');
   if (/#include\s*<algorithm>/i.test(code)) violations.push('algorithm header (banned)');
-  if (/\bauto\s+[a-zA-Z_]/i.test(code)) violations.push('auto keyword (banned)');
-  if (/std::sort|sort\s*\(/i.test(code)) violations.push('std::sort (banned)');
-
-  const hasMain = /int\s+main/.test(c);
-  const hasCout = /cout|printf/.test(c);
-  const score = Math.max(0, 100 - violations.length * 25);
+  if (/\bauto\s+[a-zA-Z_]/.test(code)) violations.push('auto keyword (banned)');
+  if (/\bstd::sort\b|(?<![\w.])sort\s*\(/.test(code)) violations.push('std::sort (banned)');
+  const hasMain = /\bint\s+main\s*\(/.test(code);
 
   return {
-    success: hasMain && hasCout && violations.length === 0,
-    status: violations.length > 0 ? 'PF-Lab Violation' : (hasMain ? 'Accepted (Heuristic)' : 'Compilation Error'),
-    stdout: hasMain && hasCout ? '[AI offline — output simulated]' : '',
-    stderr: !hasMain ? 'Missing int main() function.' : '',
+    success: false,
+    status: 'Evaluator Offline',
+    stdout: '',
+    stderr: hasMain ? '' : 'Missing int main() function.',
     compile_output: '',
-    time: '0.05',
-    memory: '1024',
-    compiler: 'Bugsy Offline Heuristic',
+    time: '',
+    memory: '',
+    compiler: 'Static checks only',
     aiFeedback: {
-      feedback: violations.length > 0
-        ? `PF-Lab violations found: ${violations.join(', ')}. Remove these for lab compliance.`
-        : (hasMain ? 'Code structure looks correct. Connect to internet for full AI evaluation.' : 'Missing main() function.'),
-      score,
+      feedback: `The AI evaluator is unavailable (check VITE_GEMINI_API_KEY and your connection), so the code was not run. ${
+        violations.length ? `Static checks found: ${violations.join(', ')}.` : 'Static PF-lab checks found no banned constructs.'
+      }`,
+      score: null,
       pfLabViolations: violations,
     },
   };

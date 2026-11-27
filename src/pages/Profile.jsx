@@ -66,7 +66,7 @@ export default function Profile() {
   } = useProfile();
 
   const { user, isGuest } = useAuth();
-  const { questions } = useQuestions();
+  const { questions, subjects } = useQuestions();
 
   const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'bookmarks' | 'history'
   const [historyFilter, setHistoryFilter] = useState('all'); // 'all' | 'correct' | 'incorrect'
@@ -122,15 +122,13 @@ export default function Profile() {
     const totalQuestionsCount = questions.length || 1;
     const totalSolvesCount = solvedQuestions.length;
 
-    // By Subject
-    const pfTotal = questions.filter((q) => q.subjectId === 'pf').length || 1;
-    const pfSolved = solvedQuestions.filter((id) => questions.find((q) => q.id === id)?.subjectId === 'pf').length;
-
-    const calcTotal = questions.filter((q) => q.subjectId === 'calculus').length || 1;
-    const calcSolved = solvedQuestions.filter((id) => questions.find((q) => q.id === id)?.subjectId === 'calculus').length;
-
-    const phyTotal = questions.filter((q) => q.subjectId === 'physics').length || 1;
-    const phySolved = solvedQuestions.filter((id) => questions.find((q) => q.id === id)?.subjectId === 'physics').length;
+    // By Subject (derived from the live subject list)
+    const solvedSet = new Set(solvedQuestions);
+    const bySubject = subjects.map((s) => {
+      const subjectQs = questions.filter((q) => q.subjectId === s.id);
+      const solved = subjectQs.filter((q) => solvedSet.has(q.id)).length;
+      return { id: s.id, name: s.name, solved, total: subjectQs.length, pct: subjectQs.length ? Math.round((solved / subjectQs.length) * 100) : 0 };
+    });
 
     // By Difficulty
     const easyTotal = questions.filter((q) => q.difficulty === 'easy').length || 1;
@@ -147,15 +145,13 @@ export default function Profile() {
     return {
       totalQuestionsCount,
       totalSolvesCount,
-      pf: { solved: pfSolved, total: pfTotal, pct: Math.round((pfSolved / pfTotal) * 100) },
-      calc: { solved: calcSolved, total: calcTotal, pct: Math.round((calcSolved / calcTotal) * 100) },
-      phy: { solved: phySolved, total: phyTotal, pct: Math.round((phySolved / phyTotal) * 100) },
+      bySubject,
       easy: { solved: easySolved, total: easyTotal },
       med: { solved: medSolved, total: medTotal },
       hard: { solved: hardSolved, total: hardTotal },
       activeDays,
     };
-  }, [questions, solvedQuestions, submissions]);
+  }, [questions, subjects, solvedQuestions, submissions]);
 
   // Bookmarked questions details
   const bookmarkedQuestions = useMemo(() => {
@@ -172,7 +168,7 @@ export default function Profile() {
   }, [submissionHistory, historyFilter]);
 
   const weeklyGoal = 5;
-  const weekProgress = Math.min(sessionStats.currentStreak, weeklyGoal);
+  const weekProgress = Math.min(sessionStats.activeDaysThisWeek, weeklyGoal);
 
   // Determine provider display badge
   const provider = oAuthDetails?.provider || 'none';
@@ -223,15 +219,7 @@ export default function Profile() {
               <RefreshCw size={14} className={isSyncingManual ? 'spin-icon' : ''} />
               <span>{isSyncingManual ? 'Syncing...' : 'Sync Now'}</span>
             </button>
-          ) : (
-            <button
-              className="btn-secondary profile-sync-btn"
-              onClick={() => setIsAuthModalOpen(true)}
-            >
-              <LogIn size={14} />
-              <span>Connect Account</span>
-            </button>
-          )}
+          ) : null}
           <Link to="/practice" className="btn-primary profile-practice-link">
             <BookOpen size={15} />
             <span>Continue practice</span>
@@ -558,7 +546,7 @@ export default function Profile() {
               </div>
               <p className="eyebrow">THIS WEEK</p>
               <h2>Keep a steady pace</h2>
-              <p>Complete one problem on five days this week. Consistent practice builds mastery.</p>
+              <p>Practice on {weeklyGoal} different days this week. Consistent practice builds mastery.</p>
               <div className="goal-progress-label">
                 <span>{weekProgress} / {weeklyGoal} days</span>
                 <span>{Math.round((weekProgress / weeklyGoal) * 100)}%</span>
@@ -589,35 +577,17 @@ export default function Profile() {
                 <h3>Course coverage</h3>
               </div>
               <div className="subject-progress-list">
-                <div className="subject-progress-row">
-                  <div className="subject-info-col">
-                    <span className="subject-title-name">Programming Fundamentals (PF)</span>
-                    <span className="subject-count-tag">{stats.pf.solved} / {stats.pf.total}</span>
+                {stats.bySubject.map((s) => (
+                  <div key={s.id} className="subject-progress-row">
+                    <div className="subject-info-col">
+                      <span className="subject-title-name">{s.name}</span>
+                      <span className="subject-count-tag">{s.solved} / {s.total}</span>
+                    </div>
+                    <div className="progress-bar-bg">
+                      <div className="progress-bar-fill" style={{ width: `${s.pct}%` }} />
+                    </div>
                   </div>
-                  <div className="progress-bar-bg">
-                    <div className="progress-bar-fill" style={{ width: `${stats.pf.pct}%` }} />
-                  </div>
-                </div>
-
-                <div className="subject-progress-row">
-                  <div className="subject-info-col">
-                    <span className="subject-title-name">Calculus & Analytical Geometry</span>
-                    <span className="subject-count-tag">{stats.calc.solved} / {stats.calc.total}</span>
-                  </div>
-                  <div className="progress-bar-bg">
-                    <div className="progress-bar-fill" style={{ width: `${stats.calc.pct}%` }} />
-                  </div>
-                </div>
-
-                <div className="subject-progress-row">
-                  <div className="subject-info-col">
-                    <span className="subject-title-name">Applied Physics</span>
-                    <span className="subject-count-tag">{stats.phy.solved} / {stats.phy.total}</span>
-                  </div>
-                  <div className="progress-bar-bg">
-                    <div className="progress-bar-fill" style={{ width: `${stats.phy.pct}%` }} />
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
 

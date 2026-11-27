@@ -2,7 +2,7 @@
   "id": "pf",
   "name": "Programming Fundamentals",
   "shortName": "PF",
-  "description": "C/C++ fundamentals, logic building, nested loops, arrays, strings, and live compilation with Judge0 & Bugsy AI",
+  "description": "C/C++ fundamentals, logic building, nested loops, arrays, strings, and AI code review with Bugsy",
   "categories": [
     {
       "id": "lab10-tasks",

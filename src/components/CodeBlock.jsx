@@ -52,7 +52,7 @@ export default function CodeBlock({ code, language = 'cpp', showCopy = true, fil
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(code);
+    navigator.clipboard?.writeText(code).catch(() => {});
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };

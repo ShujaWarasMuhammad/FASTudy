@@ -1,20 +1,17 @@
 import { Link, useParams } from 'react-router-dom';
 import { ChevronRight, ChevronDown, Folder, ArrowLeft, BookOpen } from 'lucide-react';
 import { useState } from 'react';
-import { subjects, questions } from '../data/questionBank';
+import { useQuestions } from '../context/QuestionsContext';
 import { useProfile } from '../context/ProfileContext';
 
 export default function Sidebar({ subjectId }) {
   const params = useParams();
   const { solvedQuestions } = useProfile();
+  const { subjects, questions } = useQuestions();
   const subject = subjects.find((item) => item.id === subjectId);
-  const [expanded, setExpanded] = useState({
-    'dry-runs': true,
-    'logic-building': true,
-    'bug-hunting': true,
-    limits: true,
-    mechanics: true,
-  });
+  // Categories start expanded; only explicit collapses are tracked.
+  const [collapsed, setCollapsed] = useState({});
+  const expanded = Object.fromEntries((subject?.categories || []).map((c) => [c.id, !collapsed[c.id]]));
 
   if (!subject) return null;
 
@@ -23,7 +20,7 @@ export default function Sidebar({ subjectId }) {
   const coverage = subjectQuestions.length ? Math.round((solved / subjectQuestions.length) * 100) : 0;
 
   const toggle = (id) => {
-    setExpanded((previous) => ({ ...previous, [id]: !previous[id] }));
+    setCollapsed((previous) => ({ ...previous, [id]: !previous[id] }));
   };
 
   return (
@@ -73,6 +70,7 @@ export default function Sidebar({ subjectId }) {
                   >
                     <span className="sub-bullet">•</span>
                     <span>{subcategory.name}</span>
+                    <span className="sub-count">{questions.filter((q) => q.subjectId === subject.id && q.categoryId === category.id && q.subcategoryId === subcategory.id).length}</span>
                   </Link>
                 ))}
               </div>

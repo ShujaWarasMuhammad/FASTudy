@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { supabase } from '../config/supabase';
+import { supabase, isSupabaseConfigured } from '../config/supabase';
 
 const AuthContext = createContext();
 
@@ -112,7 +112,14 @@ export function AuthProvider({ children }) {
     };
   }, []);
 
+  const notConfigured = () => {
+    const message = 'Cloud accounts are not configured on this deployment. Continue as a guest to try FASTudy.';
+    setAuthError(message);
+    return { data: null, error: { message } };
+  };
+
   const signInWithOAuth = async (provider = 'google', redirectPath = '') => {
+    if (!isSupabaseConfigured) return notConfigured();
     setAuthError(null);
     try {
       const targetPath = redirectPath || `${window.location.pathname}${window.location.search}`;
@@ -156,6 +163,7 @@ export function AuthProvider({ children }) {
   };
 
   const signInWithEmail = async (email, password) => {
+    if (!isSupabaseConfigured) return notConfigured();
     setAuthError(null);
     const res = await supabase.auth.signInWithPassword({ email, password });
     if (res.error) setAuthError(res.error.message);
@@ -163,6 +171,7 @@ export function AuthProvider({ children }) {
   };
 
   const signUpWithEmail = async (email, password) => {
+    if (!isSupabaseConfigured) return notConfigured();
     setAuthError(null);
     const res = await supabase.auth.signUp({
       email,
@@ -198,7 +207,7 @@ export function AuthProvider({ children }) {
     localStorage.removeItem('fastudy_guest_session');
     setUser(null);
     setSession(null);
-    await supabase.auth.signOut();
+    if (isSupabaseConfigured) await supabase.auth.signOut().catch((err) => console.warn("Sign-out error:", err));
   };
 
   const userDetails = getOAuthUserDetails(user);

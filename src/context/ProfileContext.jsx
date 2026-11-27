@@ -1,10 +1,15 @@
-import { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
+import { createContext, useContext, useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { supabase } from '../config/supabase';
 import { useAuth, getOAuthUserDetails } from './AuthContext';
+import { localDateKey, newId } from '../utils/dates'; // activity is bucketed by local calendar day
 
 const ProfileContext = createContext();
 
 const LOCAL_PROGRESS_KEY = 'fastudy_local_progress_v1';
+
+
+// Identity of an attempt: its id, plus a timestamp key that ignores "Z" vs "+00:00" formatting.
+const attemptKeys = (h) => [h.id, `${h.questionId}_${new Date(h.createdAt).getTime()}`].filter(Boolean);
 
 const DEFAULT_PROFILE = {
   id: 'guest_user',
@@ -55,18 +60,18 @@ function calculateStreaks(submissionsMap) {
 
   let currentStreak = 0;
   let checkDate = new Date();
-  let checkStr = checkDate.toISOString().split('T')[0];
+  let checkStr = localDateKey(checkDate);
 
   // If no activity today, verify if active yesterday
   if (!submissionsMap[checkStr]) {
     checkDate.setDate(checkDate.getDate() - 1);
-    checkStr = checkDate.toISOString().split('T')[0];
+    checkStr = localDateKey(checkDate);
   }
 
   while (submissionsMap[checkStr] && submissionsMap[checkStr] > 0) {
     currentStreak++;
     checkDate.setDate(checkDate.getDate() - 1);
-    checkStr = checkDate.toISOString().split('T')[0];
+    checkStr = localDateKey(checkDate);
   }
 
   let longestStreak = 0;
@@ -106,6 +111,9 @@ export function ProfileProvider({ children }) {
   const [submissionHistory, setSubmissionHistory] = useState(initialLocal?.submissionHistory || []);
 
   const [isProfileLoading, setIsProfileLoading] = useState(true);
+  // Latest history for realtime de-duplication (read inside subscription callbacks).
+  const historyRef = useRef(submissionHistory);
+  useEffect(() => { historyRef.current = submissionHistory; }, [submissionHistory]);
   const [syncStatus, setSyncStatus] = useState('idle'); // 'idle' | 'syncing' | 'synced' | 'offline'
   const [lastSyncedAt, setLastSyncedAt] = useState(null);
   const [syncNotice, setSyncNotice] = useState(null);
@@ -202,7 +210,9 @@ export function ProfileProvider({ children }) {
       // If user signed in via OAuth and has an OAuth avatar, keep it handy
       if (userProfile && oAuthMeta?.avatarUrl && (!userProfile.avatar_url || userProfile.avatar_url.includes('dicebear'))) {
         userProfile.avatar_url = oAuthMeta.avatarUrl;
-        supabase.from('profiles').update({ avatar_url: oAuthMeta.avatarUrl }).eq('id', user.id);
+        // Query builders are lazy: they only run when awaited/then'd.
+        supabase.from('profiles').update({ avatar_url: oAuthMeta.avatarUrl }).eq('id', user.id)
+          .then(({ error }) => { if (error) console.warn('Avatar sync failed:', error); });
       }
 
       setProfile(userProfile);
@@ -250,7 +260,7 @@ export function ProfileProvider({ children }) {
 
       if (dbSubs && !subError) {
         dbSubs.forEach((s) => {
-          const dateStr = s.created_at.split('T')[0];
+          const dateStr = localDateKey(s.created_at);
           mergedSubsMap[dateStr] = (mergedSubsMap[dateStr] || 0) + 1;
           if (s.is_correct) {
             mergedSolvedSet.add(s.question_id);
@@ -266,14 +276,15 @@ export function ProfileProvider({ children }) {
       }
 
       // Check for local guest attempts to merge into Supabase
-      const remoteAttemptIds = new Set(mergedHistoryList.map((h) => `${h.questionId}_${h.createdAt}`));
+      const remoteAttemptIds = new Set(mergedHistoryList.flatMap(attemptKeys));
       const unsyncedAttempts = (local?.submissionHistory || []).filter(
-        (h) => !remoteAttemptIds.has(`${h.questionId}_${h.createdAt}`) && h.questionId
+        (h) => h.questionId && !attemptKeys(h).some((k) => remoteAttemptIds.has(k))
       );
 
       if (unsyncedAttempts.length > 0) {
         try {
           const payloads = unsyncedAttempts.map((h) => ({
+            ...(/^[0-9a-f-]{36}$/i.test(h.id || '') ? { id: h.id } : {}),
             user_id: user.id,
             question_id: h.questionId,
             submitted_answer: String(h.submittedAnswer || ''),
@@ -281,11 +292,12 @@ export function ProfileProvider({ children }) {
             created_at: h.createdAt || new Date().toISOString(),
           }));
 
-          await supabase.from('submissions').insert(payloads);
+          const { error: pushError } = await supabase.from('submissions').insert(payloads);
+          if (pushError) throw pushError;
 
           // Update merged structures
           unsyncedAttempts.forEach((h) => {
-            const dateStr = (h.createdAt || new Date().toISOString()).split('T')[0];
+            const dateStr = localDateKey(h.createdAt || new Date());
             mergedSubsMap[dateStr] = (mergedSubsMap[dateStr] || 0) + 1;
             if (h.isCorrect) {
               mergedSolvedSet.add(h.questionId);
@@ -361,12 +373,41 @@ export function ProfileProvider({ children }) {
           }
         }
       )
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'submissions', filter: `user_id=eq.${user.id}` },
+        ({ new: s }) => {
+          // Attempts made on another device/tab. Our own inserts carry a client id and are skipped.
+          if (historyRef.current.some((h) => h.id === s.id)) return;
+          const entry = { id: s.id, questionId: s.question_id, submittedAnswer: s.submitted_answer, isCorrect: s.is_correct, createdAt: s.created_at };
+          historyRef.current = [entry, ...historyRef.current];
+          const dateKey = localDateKey(s.created_at);
+          setSubmissionHistory((prev) => (prev.some((h) => h.id === s.id) ? prev : [entry, ...prev].slice(0, 200)));
+          setSubmissions((m) => ({ ...m, [dateKey]: (m[dateKey] || 0) + 1 }));
+          if (s.is_correct) setSolvedQuestions((q) => (q.includes(s.question_id) ? q : [...q, s.question_id]));
+        }
+      )
       .subscribe();
 
     return () => {
       supabase.removeChannel(realtimeChannel);
     };
   }, [user, isGuest, performSync]);
+
+  // Keep multiple open tabs in sync (local progress is the shared cache for guests and signed-in users).
+  useEffect(() => {
+    const onStorage = (e) => {
+      if (e.key !== LOCAL_PROGRESS_KEY || !e.newValue) return;
+      const next = loadLocalProgress();
+      if (!next) return;
+      setSubmissions(next.submissions);
+      setSolvedQuestions(next.solvedQuestions);
+      setBookmarks(next.bookmarks);
+      setSubmissionHistory(next.submissionHistory);
+    };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, []);
 
   // Update Profile (CRUD)
   const updateProfile = async (updatedFields) => {
@@ -391,7 +432,7 @@ export function ProfileProvider({ children }) {
 
   // Record every evaluated attempt
   const recordAttempt = async (questionId, isCorrect, answer = '') => {
-    const todayKey = new Date().toISOString().split('T')[0];
+    const todayKey = localDateKey();
     const newCount = (submissions[todayKey] || 0) + 1;
     const nextSubs = { ...submissions, [todayKey]: newCount };
     setSubmissions(nextSubs);
@@ -403,13 +444,13 @@ export function ProfileProvider({ children }) {
     }
 
     const newHistoryEntry = {
-      id: `sub_${Date.now()}`,
+      id: newId(),
       questionId,
       submittedAnswer: answer,
       isCorrect,
       createdAt: new Date().toISOString(),
     };
-    const nextHistory = [newHistoryEntry, ...submissionHistory.slice(0, 49)];
+    const nextHistory = [newHistoryEntry, ...submissionHistory.slice(0, 199)];
     setSubmissionHistory(nextHistory);
 
     // Persist locally
@@ -418,12 +459,15 @@ export function ProfileProvider({ children }) {
     // Sync to Supabase if authenticated
     if (user && !isGuest && !user.id.startsWith('guest_')) {
       try {
-        await supabase.from('submissions').insert({
+        const { error: insertError } = await supabase.from('submissions').insert({
+          id: newHistoryEntry.id,
           user_id: user.id,
           question_id: questionId,
           submitted_answer: answer,
           is_correct: isCorrect,
+          created_at: newHistoryEntry.createdAt,
         });
+        if (insertError) throw insertError;
 
         // Update streaks and XP in profiles
         const { currentStreak, longestStreak } = calculateStreaks(nextSubs);
@@ -493,6 +537,13 @@ export function ProfileProvider({ children }) {
     const xp = totalSolves * 75 + currentStreak * 25;
     const level = Math.floor(xp / 300) + 1;
     const nextLevelXP = level * 300;
+    // Distinct active days in the current Mon–Sun week
+    const weekStart = new Date();
+    weekStart.setHours(0, 0, 0, 0);
+    weekStart.setDate(weekStart.getDate() - ((weekStart.getDay() + 6) % 7));
+    const activeDaysThisWeek = Object.keys(submissions).filter(
+      (d) => submissions[d] > 0 && new Date(`${d}T00:00:00`) >= weekStart
+    ).length;
     const currentLevelBaseXP = (level - 1) * 300;
     const levelProgress = Math.min(
       100,
@@ -507,6 +558,7 @@ export function ProfileProvider({ children }) {
       level,
       nextLevelXP,
       levelProgress,
+      activeDaysThisWeek,
     };
   }, [submissions, solvedQuestions]);
 

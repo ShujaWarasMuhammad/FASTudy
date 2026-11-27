@@ -9,59 +9,11 @@ import {
 } from '../utils/chronos';
 import { getBugsyAnalytics } from '../utils/bugsy';
 import { useAuth } from '../context/AuthContext';
+import AiResponseContent from '../components/AiResponseContent';
+import { SLOT_STARTS_MIN, SLOT_ENDS_MIN, SLOT_LABELS_START, SLOT_LABELS_END, SUBJECT_COLORS, TIMETABLE_DATA, TIMETABLE_META, TIMETABLE_ENTRIES, DAYS_SHORT, WEEKDAYS } from '../data/timetable';
 import {
   Bus, Home, Send, Bot, Bell, Plus, Trash2, Clock, Calendar, GraduationCap,
 } from 'lucide-react';
-
-// ─── BSE-1C timetable data (matches the uploaded HTML exactly) ───────────────
-const SLOT_STARTS_MIN = [525,555,585,615,645,675,705,735,765,790,825,855,885,910,940,970];
-const SLOT_ENDS_MIN   = [555,585,610,645,675,700,735,765,790,825,855,885,910,940,970,1000];
-const SLOT_LABELS_START = ['8:45','9:15','9:45','10:15','10:45','11:15','11:45','12:15','12:45','1:10','1:45','2:15','2:45','3:10','3:40','4:10'];
-const SLOT_LABELS_END   = ['9:15','9:45','10:10','10:45','11:15','11:40','12:15','12:45','1:10','1:45','2:15','2:45','3:10','3:40','4:10','4:40'];
-
-const SUBJECT_COLORS = {
-  prog:  '#3b9be0',
-  calc:  '#4fb3cf',
-  ict:   '#7f8fe6',
-  phys:  '#2a6fb8',
-  chin:  '#5cc4b5',
-  eng:   '#7fb4ee',
-  ideo:  '#9fb3d1',
-};
-
-// [startSlot(1-based), span, colorKey, code, name, teacher, room, ?isLab, ?group]
-const TIMETABLE_DATA = [
-  { day: 'Mon', cells: [
-    [1,3,'prog','CS1002','Programming Fundamentals','Ms. Naba Rahim','Room 1'],
-    [4,3,'calc','MT1003','Calculus and Analytical Geometry','Ms. Hadiqa Iqbal','Room 1'],
-    [8,2,'ict','Seminar','ICT Seminar','Mr. Umer Zahoor / Ms. Areesha Faisal','Auditorium'],
-    [11,6,'prog','CL1002','Programming Fundamentals, Lab','Ms. Areesha Faisal','Lab 10','lab'],
-  ]},
-  { day: 'Tue', cells: [
-    [1,3,'prog','CS1002','Programming Fundamentals','Ms. Naba Rahim','Room 1'],
-    [5,2,'chin','SS2033','Chinese Language','Dr. Areeba Sundas','Room 3'],
-    [7,4,'ict','CL1000','Introduction to ICT','Mr. Umer Zahoor','Lab 10','lab'],
-    [11,3,'phys','NS1001','Applied Physics','Mr. Mohsin Hameed','Room 3'],
-    [14,3,'calc','MT1003','Calculus and Analytical Geometry','Ms. Hadiqa Iqbal','Room 3'],
-  ]},
-  { day: 'Wed', cells: [
-    [4,3,'eng','SL1012','Functional English, Lab','Mr. Talha Akbar','Lab 10','lab','Group 2'],
-    [9,2,'chin','SS2033','Chinese Language','Dr. Areeba Sundas','Room 3'],
-    [14,3,'phys','NS1001','Applied Physics','Mr. Mohsin Hameed','Room 1'],
-  ]},
-  { day: 'Thu', cells: [
-    [4,3,'eng','SL1012','Functional English, Lab','Mr. Talha Akbar','Lab 10','lab','Group 2'],
-    [8,2,'ideo','SS1013','Ideology and Constitution of Pakistan','Ms. Shahnaz Parveen','Room 3'],
-    [15,2,'eng','SS1012','Functional English','Mr. Khalid Mehmood','Room 2'],
-  ]},
-  { day: 'Fri', cells: [
-    [1,2,'eng','SS1012','Functional English','Mr. Khalid Mehmood','Room 1'],
-    [3,2,'ideo','SS1013','Ideology and Constitution of Pakistan','Ms. Shahnaz Parveen','Room 1'],
-  ]},
-];
-
-const DAYS_SHORT = ['Mon','Tue','Wed','Thu','Fri'];
-const WEEKDAYS   = ['Monday','Tuesday','Wednesday','Thursday','Friday'];
 
 function fmt24(totalMins) {
   return `${String(Math.floor(totalMins/60)).padStart(2,'0')}:${String(totalMins%60).padStart(2,'0')}`;
@@ -78,7 +30,7 @@ function useClock() {
 }
 
 // ─── Faithful timetable grid replica ─────────────────────────────────────────
-function TimetableGrid({ gcrPosts }) {
+function TimetableGrid({ gcrPosts, dailySchedule, selectedDay }) {
   const now     = useClock();
   const [is24, setIs24] = useState(true);
   const dow     = now.getDay();
@@ -132,8 +84,8 @@ function TimetableGrid({ gcrPosts }) {
       {/* Header */}
       <div className="tt-head">
         <div className="tt-head-left">
-          <div className="tt-title">BSE-1C</div>
-          <div className="tt-subtitle">Dept of Software Engineering, FAST-NU · Fall 2026 · effective Sep 14</div>
+          <div className="tt-title">{TIMETABLE_META.section}</div>
+          <div className="tt-subtitle">{TIMETABLE_META.department} · {TIMETABLE_META.term} · effective {TIMETABLE_META.effectiveFrom}</div>
         </div>
         <div className="tt-head-right">
           <div className="tt-clock" onClick={() => setIs24(v => !v)} title="Click to toggle 12/24h">
@@ -176,7 +128,7 @@ function TimetableGrid({ gcrPosts }) {
               </div>
               <div className="tt-row-cells">
                 {row.cells.map((c, ci) => {
-                  const [startSlot, span, colorKey, code, name, teacher, room, extra, group] = c;
+                  const [startSlot, span, colorKey, , name, teacher, room, , group] = c;
                   const bg = SUBJECT_COLORS[colorKey] || '#888';
                   const isActive = isToday && activeSlotIdx >= startSlot-1 && activeSlotIdx < startSlot-1+span;
                   return (
@@ -206,6 +158,16 @@ function TimetableGrid({ gcrPosts }) {
           </span>
         ))}
       </div>
+      <section className="tt-chronos-strip" aria-label={`Chronos plan for ${selectedDay}`}>
+        <div className="tt-chronos-strip-head"><Bot size={15}/> Chronos plan · {selectedDay}</div>
+        <div className="tt-chronos-slots">
+          {dailySchedule.map((slot, i) => (
+            <div key={`${slot.time}-${i}`} className={`tt-chronos-slot tt-chronos-${slot.type}`} title={slot.description}>
+              <span>{slot.time}</span><strong>{slot.title.replace(/^\S+\s/, '')}</strong>
+            </div>
+          ))}
+        </div>
+      </section>
     </div>
   );
 }
@@ -229,13 +191,13 @@ export default function Planner() {
   const chatEndRef = useRef(null);
 
   const bugsyStats       = useMemo(() => getBugsyAnalytics(), []);
-  const primaryWeakTopic = bugsyStats.weakTopics[0]?.topic || 'Nested Loops & Arrays';
+  const primaryWeakTopic = bugsyStats.weakTopics[0]?.topic || null;
 
   const dailySchedule = useMemo(() =>
     generateAdaptiveSchedule({
       residenceStatus: chronosData.residenceStatus,
       commuteDurationMinutes: chronosData.commuteDurationMinutes,
-      timetable: chronosData.timetable,
+      timetable: TIMETABLE_ENTRIES,
       gcrPosts: chronosData.gcrPosts,
       targetDay: selectedDay,
     }),
@@ -246,7 +208,7 @@ export default function Planner() {
   const saveAndSet = updated => { setChronosData(updated); saveChronosData(updated); };
 
   const handleToggleResidence = status =>
-    saveAndSet({ ...chronosData, residenceStatus: status, commuteDurationMinutes: status==='day_scholar'?45:5 });
+    saveAndSet({ ...chronosData, residenceStatus: status, commuteDurationMinutes: status==='day_scholar'?60:5 });
 
   const handleAddGcrPost = e => {
     e.preventDefault();
@@ -281,7 +243,7 @@ export default function Planner() {
           <span className="planner-logo">⏳</span>
           <div>
             <div className="planner-title">Chronos</div>
-            <div className="planner-subtitle">AI Academic Planner · FAST NUCES BSE-1C</div>
+            <div className="planner-subtitle">AI Academic Planner · FAST NUCES {TIMETABLE_META.section}</div>
           </div>
         </div>
 
@@ -298,8 +260,8 @@ export default function Planner() {
         </div>
 
         <div className="planner-bugsy-strip">
-          🐛 Bugsy focus: <strong>{primaryWeakTopic}</strong>
-          <Link to="/practice?subject=pf" className="planner-practice-link">Practice →</Link>
+          🐛 Bugsy focus: <strong>{primaryWeakTopic || 'No weak topics yet'}</strong>
+          <Link to="/practice/pf" className="planner-practice-link">Practice →</Link>
         </div>
       </div>
 
@@ -320,7 +282,10 @@ export default function Planner() {
       {/* ══ TIMETABLE ══ */}
       {activeTab === 'timetable' && (
         <div className="planner-timetable-panel">
-          <TimetableGrid gcrPosts={chronosData.gcrPosts} />
+          <div className="plan-day-nav plan-day-nav-main">
+            {WEEKDAYS.map(d => <button key={d} className={`plan-day-pill${selectedDay===d?' active':''}`} onClick={() => setSelectedDay(d)}>{d.slice(0,3)}</button>)}
+          </div>
+          <TimetableGrid gcrPosts={chronosData.gcrPosts} dailySchedule={dailySchedule} selectedDay={selectedDay} />
         </div>
       )}
 
@@ -341,15 +306,15 @@ export default function Planner() {
                 <div className="plan-slot-content">
                   <div className="plan-slot-title">{slot.title}</div>
                   <div className="plan-slot-desc">{slot.description}</div>
-                  {slot.topic && <Link to="/practice?subject=pf" className="plan-slot-link">Open in FASTudy →</Link>}
+                  {slot.type === 'study_bugsy' && <Link to="/practice/pf" className="plan-slot-link">Open in FASTudy →</Link>}
                 </div>
               </div>
             ))}
           </div>
           <div className="plan-commute-note">
             {chronosData.residenceStatus==='day_scholar'
-              ? '🚌 Day Scholar: 45 min university bus commute each way. Campus is located outside city limits.'
-              : '🚶 Hostelite: 5 min walk, maximising your evening free & study blocks.'}
+              ? `🚌 Day Scholar: commute time is blocked in your plan.`
+              : `🚶 Hostelite: ${chronosData.commuteDurationMinutes} min walk, more evening study time.`}
           </div>
         </div>
       )}
@@ -425,7 +390,7 @@ export default function Planner() {
             {chronosData.chatHistory.map((msg,idx) => (
               <div key={idx} className={`chat-row ${msg.role==='user'?'chat-user':'chat-agent'}`}>
                 {msg.role==='agent' && <div className="chat-ava">⏳</div>}
-                <div className="chat-bbl">{msg.text}</div>
+                <div className="chat-bbl">{msg.role === 'agent' ? <AiResponseContent text={msg.text} /> : msg.text}</div>
               </div>
             ))}
             {isChatSending && (

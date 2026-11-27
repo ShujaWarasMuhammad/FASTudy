@@ -1,10 +1,11 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight, BookOpen, CheckCircle2, Layers3 } from 'lucide-react';
-import { subjects, questions } from '../data/questionBank';
+import { useQuestions } from '../context/QuestionsContext';
 import { useProfile } from '../context/ProfileContext';
 
 export default function SubjectPicker() {
   const { solvedQuestions } = useProfile();
+  const { subjects, questions } = useQuestions();
 
   return (
     <div className="page-container course-directory-page">

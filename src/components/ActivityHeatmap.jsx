@@ -1,105 +1,90 @@
 import { useMemo } from 'react';
+import { localDateKey } from '../utils/dates';
 
+const WEEKS = 26; // ~6 months
+const DAY_LABELS = ['', 'Mon', '', 'Wed', '', 'Fri', ''];
+
+const level = (count) => (count === 0 ? 0 : count <= 1 ? 1 : count <= 3 ? 2 : count <= 6 ? 3 : 4);
+
+/**
+ * Activity heatmap. `submissions` maps local YYYY-MM-DD keys to attempt counts
+ * (the same keys ProfileContext writes), so cells always line up with recorded activity.
+ */
 export default function ActivityHeatmap({ submissions = {} }) {
-  // Generate the last 16 weeks (112 days) of data
-  const { weeks, monthLabels, totalCount } = useMemo(() => {
+  const { weeks, months, total, activeDays } = useMemo(() => {
     const today = new Date();
-    const daysToShow = 119; // 17 weeks
-    const startDate = new Date(today);
-    startDate.setDate(today.getDate() - daysToShow + 1);
+    today.setHours(12, 0, 0, 0); // midday avoids DST edge cases when stepping days
+    const todayKey = localDateKey(today);
 
-    // Adjust to starting Sunday/Monday
-    const dayOfWeek = startDate.getDay();
-    startDate.setDate(startDate.getDate() - dayOfWeek);
+    const start = new Date(today);
+    start.setDate(start.getDate() - start.getDay() - (WEEKS - 1) * 7); // Sunday, WEEKS-1 weeks ago
 
-    const allDays = [];
-    let curr = new Date(startDate);
-    let total = 0;
+    const cols = [];
+    const monthMarks = [];
+    let sum = 0;
+    let active = 0;
+    const cursor = new Date(start);
 
-    while (curr <= today || allDays.length % 7 !== 0) {
-      const dateStr = curr.toISOString().split('T')[0];
-      const count = submissions[dateStr] || 0;
-      total += count;
-      allDays.push({
-        date: dateStr,
-        count,
-        day: curr.getDay(),
-        month: curr.toLocaleString('default', { month: 'short' }),
-        dayNum: curr.getDate(),
-      });
-      curr.setDate(curr.getDate() + 1);
-    }
-
-    // Split into weeks of 7 days
-    const weekGroups = [];
-    for (let i = 0; i < allDays.length; i += 7) {
-      weekGroups.push(allDays.slice(i, i + 7));
-    }
-
-    // Generate monthly labels
-    const months = [];
-    let lastMonth = '';
-    weekGroups.forEach((week, wIdx) => {
-      const firstDay = week[0];
-      if (firstDay && firstDay.month !== lastMonth) {
-        months.push({ text: firstDay.month, index: wIdx });
-        lastMonth = firstDay.month;
+    for (let w = 0; w < WEEKS; w++) {
+      const col = [];
+      for (let d = 0; d < 7; d++) {
+        const key = localDateKey(cursor);
+        const future = key > todayKey;
+        const count = future ? 0 : submissions[key] || 0;
+        if (!future) { sum += count; if (count > 0) active++; }
+        if (cursor.getDate() === 1 || (w === 0 && d === 0)) {
+          monthMarks.push({ week: w, label: cursor.toLocaleString(undefined, { month: 'short' }) });
+        }
+        col.push({
+          key,
+          count,
+          future,
+          isToday: key === todayKey,
+          label: cursor.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' }),
+        });
+        cursor.setDate(cursor.getDate() + 1);
       }
-    });
-
-    return { weeks: weekGroups, monthLabels: months, totalCount: total };
+      cols.push(col);
+    }
+    // Drop a leading partial-month label if the next one is too close to fit.
+    if (monthMarks.length > 1 && monthMarks[1].week - monthMarks[0].week < 2) monthMarks.shift();
+    return { weeks: cols, months: monthMarks, total: sum, activeDays: active };
   }, [submissions]);
-
-  const getColorClass = (count) => {
-    if (count === 0) return 'heat-empty';
-    if (count <= 2) return 'heat-level-1';
-    if (count <= 5) return 'heat-level-2';
-    if (count <= 8) return 'heat-level-3';
-    return 'heat-level-4';
-  };
 
   return (
     <div className="heatmap-container">
       <div className="heatmap-header">
-        <span className="heatmap-title">Contribution & Dry Run Heatmap</span>
-        <span className="heatmap-count">{totalCount} solves in last 4 months</span>
-      </div>
-
-      <div className="heatmap-month-labels">
-        {monthLabels.map((m, idx) => (
-          <span
-            key={idx}
-            className="heatmap-month-label"
-            style={{ left: `${(m.index / weeks.length) * 100}%` }}
-          >
-            {m.text}
-          </span>
-        ))}
+        <span className="heatmap-title">Practice heatmap</span>
+        <span className="heatmap-count">
+          {total} {total === 1 ? 'attempt' : 'attempts'} · {activeDays} active {activeDays === 1 ? 'day' : 'days'}
+        </span>
       </div>
 
       <div className="heatmap-grid-scroll">
-        <div className="heatmap-grid">
-          {weeks.map((week, wIdx) => (
-            <div key={wIdx} className="heatmap-col">
-              {week.map((day) => (
-                <div
-                  key={day.date}
-                  className={`heatmap-cell ${getColorClass(day.count)}`}
-                  title={`${day.date}: ${day.count} solves`}
-                />
-              ))}
-            </div>
-          ))}
+        <div className="hm">
+          <div className="hm-months" style={{ gridTemplateColumns: `28px repeat(${WEEKS}, 1fr)` }}>
+            {months.map((m) => (
+              <span key={`${m.week}-${m.label}`} style={{ gridColumnStart: m.week + 2 }}>{m.label}</span>
+            ))}
+          </div>
+          <div className="hm-grid" style={{ gridTemplateColumns: `28px repeat(${WEEKS}, 1fr)` }}>
+              {DAY_LABELS.map((d, i) => <span key={`d${i}`} className="hm-day">{d}</span>)}
+              {weeks.map((col) =>
+                col.map((day) => (
+                  <div
+                    key={day.key}
+                    className={`hm-cell hm-l${level(day.count)}${day.future ? ' hm-future' : ''}${day.isToday ? ' hm-today' : ''}`}
+                    title={day.future ? day.label : `${day.label}: ${day.count} ${day.count === 1 ? 'attempt' : 'attempts'}`}
+                  />
+                ))
+              )}
+          </div>
         </div>
       </div>
 
       <div className="heatmap-legend">
         <span>Less</span>
-        <div className="heatmap-cell heat-empty" />
-        <div className="heatmap-cell heat-level-1" />
-        <div className="heatmap-cell heat-level-2" />
-        <div className="heatmap-cell heat-level-3" />
-        <div className="heatmap-cell heat-level-4" />
+        {[0, 1, 2, 3, 4].map((l) => <div key={l} className={`hm-cell hm-l${l}`} />)}
         <span>More</span>
       </div>
     </div>

@@ -253,19 +253,18 @@ function renderBlockTokens(tokens, keyPrefix = 'blk') {
 export default function AiResponseContent({ text }) {
   if (!text) return null;
 
+  let tokens = null;
   try {
-    const tokens = marked.lexer(text);
-    return (
-      <div className="ai-response-content">
-        {renderBlockTokens(tokens)}
-      </div>
-    );
+    tokens = marked.lexer(text);
   } catch (err) {
     console.warn('AiResponseContent markdown lexer fallback:', err);
+  }
+  if (!tokens) {
     return (
       <div className="ai-response-content fallback-raw" style={{ whiteSpace: 'pre-wrap' }}>
         {text}
       </div>
     );
   }
+  return <div className="ai-response-content">{renderBlockTokens(tokens)}</div>;
 }
